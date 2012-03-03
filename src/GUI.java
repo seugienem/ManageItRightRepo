@@ -60,7 +60,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-//test 1
+
 
 public class GUI extends JFrame {
 	private JTextField textField1_EventName;
@@ -580,14 +580,5 @@ public class GUI extends JFrame {
 		return 0;
 	}
     
-	public static void main(String[] args) {
-        
-        GUI tp = new GUI();
-        tp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        tp.setSize(800, 600);
-        tp.setMinimumSize(new Dimension(800, 600));
-        tp.setMaximumSize(new Dimension(800, 600));
-        tp.setVisible(true);
-        
-    }
+	
 }
