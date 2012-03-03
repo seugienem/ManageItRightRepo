@@ -55,6 +55,7 @@ public class DataManager {
 			writer.write(startDateAndTime + "\n");
 			writer.write(endDateAndTime + "\n");
 			writer.write(event.getEventBudget() + "\n");
+			writer.write(event.getEventType().toString() + "\n");
 			writer.write(event.getEventDescription() + "\n");
 			
 			writer.write("programme" + timeStamp + "\n");
@@ -144,6 +145,7 @@ public class DataManager {
 		String guestFileName = "";
 		String suggestFileName = "";
 		float eventBudget = 0;
+		EventType eventType = null;
 
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(new File(main)));
@@ -152,6 +154,7 @@ public class DataManager {
 			startDate = Parser.parseStringToCalendar(reader.readLine());
 			endDate = Parser.parseStringToCalendar(reader.readLine());
 			eventBudget = Float.parseFloat(reader.readLine());
+			eventType = Enum.valueOf(EventType.class, reader.readLine());
 			eventDescription = reader.readLine();
 			
 			//read filenames
@@ -168,7 +171,7 @@ public class DataManager {
 		Vector<Guest> eventGuests = loadGuestList(new File(dir + File.separator + guestFileName));
 		Vector<Hotel> suggest = loadHotels(new File(dir + File.separator + suggestFileName));
 		
-		Event event = new Event(eventName, startDate, endDate, eventBudget, eventGuests, suggest, eventProgramme, eventDescription);
+		Event event = new Event(eventName, startDate, endDate, eventBudget, eventGuests, suggest, eventProgramme, eventType, eventDescription);
 		
 		return event;
 	}

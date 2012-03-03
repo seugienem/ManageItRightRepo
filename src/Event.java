@@ -33,6 +33,13 @@ public class Event {
 		this.eventDescription = eventDescription;
 	}
 
+	public EventType getEventType(){
+		return eventType;
+	}
+	
+	public void setEventType(EventType eventType){
+		this.eventType = eventType;
+	}
 	public String getEventName() {
 		return eventName;
 	}
