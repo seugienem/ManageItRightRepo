@@ -67,7 +67,7 @@ public class GUI extends JFrame {
 	private JTextField textField2_Search;
 	private JTable table3;
 	
-	public GUI() {
+	public GUI() { // GUI
     	
         setTitle("Manage It Right! v0.1");
         final JTabbedPane jtp = new JTabbedPane();
