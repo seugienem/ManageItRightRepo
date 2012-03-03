@@ -60,6 +60,8 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+//test 1
+
 public class GUI extends JFrame {
 	private JTextField textField1_EventName;
 	private JTable table2;
