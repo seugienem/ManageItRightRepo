@@ -191,8 +191,11 @@ public class GUI extends JFrame {
         textField1_EventName = new JTextField();
         textField1_EventName.setBounds(120, 97, 435, 20);
         panel1.add(textField1_EventName);
-        textField1_EventName.setColumns(10);        
+        textField1_EventName.setColumns(10);
         
+        
+        
+        /*
         comboBox1.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {				
@@ -200,7 +203,7 @@ public class GUI extends JFrame {
 				textField1_EventName.setText(str);	// For testing purposes to display chosen event type 
 			}
         });
-       
+       */
         JLabel lbl1_EventDate = new JLabel("Start Date:");
         lbl1_EventDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
         lbl1_EventDate.setBounds(10, 142, 73, 14);
@@ -307,6 +310,19 @@ public class GUI extends JFrame {
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
+        
+        final JLabel lblNewLabel = new JLabel(""); // testing
+        lblNewLabel.setBounds(120, 117, 435, 20);
+        panel1.add(lblNewLabel);
+        
+        textField1_EventName.addActionListener(
+            	new ActionListener() {
+            		public void actionPerformed(ActionEvent e) {
+            			String s = textField1_EventName.getText();
+            			lblNewLabel.setText(s); // testing.
+            		}
+            	}
+            );
         
 // Step 2: Guest List
         JPanel panel2 = new JPanel();
