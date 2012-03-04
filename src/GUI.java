@@ -445,7 +445,6 @@ public class GUI extends JFrame {
         	    return this;
         	}
 		
-    
         }
         
         table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
