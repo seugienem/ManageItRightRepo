@@ -7,6 +7,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FlowLayout;
+import java.awt.Insets;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
@@ -22,7 +24,9 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Choice;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JCheckBox;
 import javax.swing.JSlider;
@@ -41,8 +45,10 @@ import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.JTextArea;
 
 import java.awt.event.ItemEvent;
@@ -55,10 +61,15 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 
 
 
@@ -366,27 +377,9 @@ public class GUI extends JFrame {
         scrollPane.setBounds(10, 70, 600, 370);
         panel3.add(scrollPane);
         
-        Vector<String> columnNames = new Vector<String>(4);
-        columnNames.add("Start Time");
-        columnNames.add("End Time");
-        columnNames.add("Programme");
-        columnNames.add("In-Charge");
-        
-        
-        
-        Vector < Vector <Object> > data =  new Vector < Vector <Object> >();
-        data.add(new Vector<Object>(4));
-        
-        /*
-        data.get(0).add(new Integer(1800));
-        data.get(0).add(new Integer(1900));
-        data.get(0).add("Arrival of Guests");
-        data.get(0).add("Taeyeon");
-        for (int i=0; i<15; i++)
-        	data.add(new Vector<Object>(4));
-        */
-        
-        table3 = new JTable(data,columnNames);
+        //This portion is to initialize the Jtable
+        final DefaultTableModel model = new DefaultTableModel();
+        table3 =new JTable(model);
         table3.setFont(new Font("Tahoma", Font.PLAIN, 12));
         table3.setPreferredScrollableViewportSize(new Dimension(600,370));
         table3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -394,7 +387,16 @@ public class GUI extends JFrame {
         scrollPane.setViewportView(table3);
         table3.setColumnSelectionAllowed(true);
         table3.setCellSelectionEnabled(true);
+        table3.setAutoCreateRowSorter(true);
+        
+        //Adding column names
         TableColumn column = null;
+        model.addColumn("Start Time");
+        model.addColumn("End Time");
+        model.addColumn("Programme");
+        model.addColumn("In-Charge");
+        
+        //Setting column width
         for (int i = 0; i < 4; i++) {
             column = table3.getColumnModel().getColumn(i);         
             if (i == 2) {
@@ -404,25 +406,82 @@ public class GUI extends JFrame {
             }
         }
         
+        model.addRow(new Vector<Object>(4));
         
+     
+        //Custom renderer for wrapping text in cell       
+        class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
+        	int rowHeight = 0;  // current max row height for this scan           	
+        	
+			public Component getTableCellRendererComponent(
+        	        JTable table,
+        	        Object value,
+        	        boolean isSelected,
+        	        boolean hasFocus,
+        	        int row,
+        	        int column)
+        	{
+				
+			    
+				setText((String) value);
+        	    setWrapStyleWord(true);
+        	    setLineWrap(true);        	           	         	                  
+                
+        	    int colWidth = table.getColumnModel().getColumn(column).getWidth();
+
+        	    
+        	    setSize(new Dimension(colWidth, 1)); 
+
+        	    // get the text area preferred height and add the row margin
+        	    int height = getPreferredSize().height + table.getRowMargin();
+
+        	    // ensure the row height fits the cell with most lines
+        	    if (column == 0 || height > rowHeight) {
+        	        table.setRowHeight(row, height);
+        	        rowHeight = height;
+        	    }
+        	         
+        	    
+        	    return this;
+        	}
+		
+    
+        }
         
-        table3.setRowHeight(25);
-        for (int i = 0; i < table3.getModel().getRowCount(); i++) {
-        	   for (int j = 0; j < table3.getModel().getColumnCount(); j++) {
-        	      DefaultTableCellRenderer renderer =
-        	         (DefaultTableCellRenderer)table3.getCellRenderer(i, j);
-        	      renderer.setHorizontalAlignment(JTextField.CENTER);
-        	   } 
-        	} 
+        table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        
+     
+        
+        //Set the key listener for new row(by pressing 'enter' or 'insert') and next cell(by pressing 'tab')
+        table3.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
+        		} 
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        			model.addRow(new Vector<Object>(4));  
+        		}
+        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+        			int rowNumber = table3.getSelectedRow();
+        			model.removeRow(rowNumber);
+        		}
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        	}
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        	}
+        });
+        
+      
         
         JCheckBox chckbx3_ProgrammeScheduleFinalised = new JCheckBox("Programme Schedule Finalised");
         chckbx3_ProgrammeScheduleFinalised.setBounds(10, 447, 217, 23);
         panel3.add(chckbx3_ProgrammeScheduleFinalised);
         
-        
-        
-        
-        
+      
         
         JButton btn3_Export = new JButton("Export");
         btn3_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
