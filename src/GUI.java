@@ -361,7 +361,7 @@ public class GUI extends JFrame {
         
         final DefaultTableModel modelGuest = new DefaultTableModel(); 
         table2 =new JTable(modelGuest); 
-        JScrollPane scrollPane2 = new JScrollPane(table2);          
+        JScrollPane scrollPane2 = new JScrollPane();          
         scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane2.setBounds(10, 92, 600, 370);
         panel2.add(scrollPane2);
@@ -375,7 +375,7 @@ public class GUI extends JFrame {
         table2.setCellSelectionEnabled(true);
         table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table2.setAutoCreateRowSorter(true);
-        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
                 
         //Adding column names
         TableColumn columnGuest = null;
@@ -585,10 +585,10 @@ public class GUI extends JFrame {
         
 // Step 4: Location Suggestions
         JPanel panel4 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=8>Step 4:<br>Location<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
+        jtp.addTab("<html><body marginwidth=15 marginheight=8>Step 4:<br>Hotel<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
         panel4.setLayout(null);
         
-        JLabel lbl4_LocationSelection = new JLabel("Location Selection");
+        JLabel lbl4_LocationSelection = new JLabel("Hotel Selection");
         lbl4_LocationSelection.setFont(new Font("Tahoma", Font.BOLD, 16));
         lbl4_LocationSelection.setBounds(10, 10, 159, 30);
         panel4.add(lbl4_LocationSelection);
