@@ -1,9 +1,11 @@
 import java.util.*;
+import java.io.*;
 
 //test edit
 // new test
 
-public class Event {
+public class Event implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String eventName;
 	private Calendar startDateAndTime;
 	private Calendar endDateAndTime;

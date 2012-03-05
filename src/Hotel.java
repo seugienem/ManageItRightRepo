@@ -1,7 +1,8 @@
 import java.util.*;
+import java.io.*;
 
-public class Hotel {
-	
+public class Hotel implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String address;	//NEW
 	private int contact;	//NEW
@@ -14,6 +15,7 @@ public class Hotel {
 		
 	}
 	
+	//this constructor needs to be gotten rid of
 	public Hotel(String name, int stars, Vector<Menu> menuList){
 		this.name = name;
 		this.stars = stars;

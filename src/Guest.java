@@ -1,4 +1,10 @@
-public class Guest {
+import java.io.*;
+
+public class Guest implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String emailAddress;
 	private String description;
