@@ -1,3 +1,5 @@
+import gui.ColumnsAutoSizer;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -7,6 +9,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FlowLayout;
+import java.awt.FontMetrics;
 import java.awt.Insets;
 
 import javax.swing.JMenuBar;
@@ -44,8 +47,11 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -70,6 +76,9 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
+import javax.swing.ScrollPaneConstants;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 
@@ -334,12 +343,108 @@ public class GUI extends JFrame {
         btn2_Search.setBounds(536, 58, 77, 23);
         panel2.add(btn2_Search);
         
-        table2 = new JTable();
-        table2.setBounds(10, 92, 603, 353);
-        panel2.add(table2);
+        final DefaultTableModel modelGuest = new DefaultTableModel(); 
+        table2 =new JTable(modelGuest); 
+        JScrollPane scrollPane2 = new JScrollPane(table2);          
+        scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane2.setBounds(10, 92, 600, 370);
+        panel2.add(scrollPane2);
         
+      //This portion is to initialize the Jtable                                     
+        scrollPane2.setViewportView(table2);
+        table2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        table2.setPreferredScrollableViewportSize(new Dimension(600,370));
+        table2.setFillsViewportHeight(true);
+        table2.setColumnSelectionAllowed(true);
+        table2.setCellSelectionEnabled(true);
+        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table2.setAutoCreateRowSorter(true);
+        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                
+        //Adding column names
+        TableColumn columnGuest = null;
+        modelGuest.addColumn("Name");
+        modelGuest.addColumn("Gender");
+        modelGuest.addColumn("Age");
+        modelGuest.addColumn("Description");
+        modelGuest.addColumn("Group");
+        modelGuest.addColumn("Email");
+        modelGuest.addColumn("Contact Number");
+    
+        //Custom renderer for wrapping text in cell       
+        class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
+        	int rowHeight = 0;  // current max row height for this scan           	
+        	
+			public Component getTableCellRendererComponent(
+        	        JTable table,
+        	        Object value,
+        	        boolean isSelected,
+        	        boolean hasFocus,
+        	        int row,
+        	        int column)
+        	{
+					    
+				setText((String) value);
+        	    setWrapStyleWord(true);
+        	    setLineWrap(true);        	           	         	                  
+                
+        	    int colWidth = table.getColumnModel().getColumn(column).getWidth();
+
+        	    
+        	    setSize(new Dimension(colWidth, 1)); 
+
+        	    // get the text area preferred height and add the row margin
+        	    int height = getPreferredSize().height + table.getRowMargin();
+
+        	    // ensure the row height fits the cell with most lines
+        	    if (column == 0 || height > rowHeight) {
+        	        table.setRowHeight(row, height);
+        	        rowHeight = height;
+        	    }
+        	         
+        	    
+        	    return this;
+        	}
+		
+        }
+        
+        modelGuest.addRow(new Vector<Object>(7));
+        table2.getColumnModel().getColumn(0).setPreferredWidth(111);
+        table2.getColumnModel().getColumn(6).setPreferredWidth(110);
+       
+        table2.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+  
+        //This is for auto resizing the columns. Check out ColumnsAutoSizer.java for the methods
+ /*             table2.getModel().addTableModelListener(new TableModelListener() {     
+        	    public void tableChanged(TableModelEvent e) {  
+        	        ColumnsAutoSizer.sizeColumnsToFit(table2);
+          	    }});
+  */   
+        //Set the key listener for new row(by pressing 'enter' or 'insert') and next cell(by pressing 'tab')
+        table2.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
+        		} 
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        			modelGuest.addRow(new Vector<Object>(4));  
+        		}
+        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+        			int rowNumber = table2.getSelectedRow();
+        			modelGuest.removeRow(rowNumber);
+        		}
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        	}
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        	}
+        });
+      
         JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
-        chckbx2_GuestListFinalised.setBounds(10, 452, 140, 23);
+        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
         panel2.add(chckbx2_GuestListFinalised);
         
         JButton btn2_Export = new JButton("Export");
@@ -373,79 +478,43 @@ public class GUI extends JFrame {
         lbl3_ProgrammeSchedule.setBounds(10, 10, 191, 30);
         panel3.add(lbl3_ProgrammeSchedule);
         
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(10, 70, 600, 370);
-        panel3.add(scrollPane);
+        JScrollPane scrollPane3 = new JScrollPane();
+        scrollPane3.setBounds(10, 70, 600, 370);
+        panel3.add(scrollPane3);
         
         //This portion is to initialize the Jtable
-        final DefaultTableModel model = new DefaultTableModel();
-        table3 =new JTable(model);
+        final DefaultTableModel modelProgramme = new DefaultTableModel();
+        table3 =new JTable(modelProgramme);
         table3.setFont(new Font("Tahoma", Font.PLAIN, 12));
         table3.setPreferredScrollableViewportSize(new Dimension(600,370));
         table3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table3.setFillsViewportHeight(true);
-        scrollPane.setViewportView(table3);
+        scrollPane3.setViewportView(table3);
         table3.setColumnSelectionAllowed(true);
         table3.setCellSelectionEnabled(true);
         table3.setAutoCreateRowSorter(true);
         
         //Adding column names
-        TableColumn column = null;
-        model.addColumn("Start Time");
-        model.addColumn("End Time");
-        model.addColumn("Programme");
-        model.addColumn("In-Charge");
+        TableColumn columnProgramme = null;
+        modelProgramme.addColumn("Start Time");
+        modelProgramme.addColumn("End Time");
+        modelProgramme.addColumn("Programme");
+        modelProgramme.addColumn("In-Charge");
         
         //Setting column width
         for (int i = 0; i < 4; i++) {
-            column = table3.getColumnModel().getColumn(i);         
+        	columnProgramme = table3.getColumnModel().getColumn(i);         
             if (i == 2) {
-                column.setPreferredWidth(250); //third column is bigger
+            	columnProgramme.setPreferredWidth(250); //third column is bigger
             } else {
-                column.setPreferredWidth(15);
+            	columnProgramme.setPreferredWidth(15);
             }
         }
         
-        model.addRow(new Vector<Object>(4));
+        modelProgramme.addRow(new Vector<Object>(4));
         
      
-        //Custom renderer for wrapping text in cell       
-        class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
-        	int rowHeight = 0;  // current max row height for this scan           	
-        	
-			public Component getTableCellRendererComponent(
-        	        JTable table,
-        	        Object value,
-        	        boolean isSelected,
-        	        boolean hasFocus,
-        	        int row,
-        	        int column)
-        	{
-				
-			    
-				setText((String) value);
-        	    setWrapStyleWord(true);
-        	    setLineWrap(true);        	           	         	                  
-                
-        	    int colWidth = table.getColumnModel().getColumn(column).getWidth();
-
-        	    
-        	    setSize(new Dimension(colWidth, 1)); 
-
-        	    // get the text area preferred height and add the row margin
-        	    int height = getPreferredSize().height + table.getRowMargin();
-
-        	    // ensure the row height fits the cell with most lines
-        	    if (column == 0 || height > rowHeight) {
-        	        table.setRowHeight(row, height);
-        	        rowHeight = height;
-        	    }
-        	         
-        	    
-        	    return this;
-        	}
-		
-        }
+       
         
         table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
         
@@ -459,11 +528,11 @@ public class GUI extends JFrame {
         			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			model.addRow(new Vector<Object>(4));  
+        			modelProgramme.addRow(new Vector<Object>(4));  
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table3.getSelectedRow();
-        			model.removeRow(rowNumber);
+        			modelProgramme.removeRow(rowNumber);
         		}
         	}
         	@Override
