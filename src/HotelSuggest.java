@@ -113,7 +113,7 @@ public class HotelSuggest {
 		if(hotelList == null){
 			String path = System.getProperty("user.dir");
 			File hotelFile = new File(path + File.separator + "Data" + File.separator + "hotelData");
-			this.setHotelList(dataM.loadHotels(hotelFile));
+			this.setHotelList(dataM.importHotels(hotelFile));
 		}
 		
 		//Calculate hotel budget

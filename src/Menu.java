@@ -1,6 +1,7 @@
+import java.io.*;
 
-public class Menu {
-
+public class Menu implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private DayType dayType;
 	private MealType mealType;
 	private MenuType menuType;
