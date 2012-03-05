@@ -1,5 +1,5 @@
-import java.io.File;
 import java.util.*;
+import java.io.*;
 
 public class HotelSuggest {
 	
@@ -85,20 +85,20 @@ public class HotelSuggest {
 	
 	private DayType getDayType(Calendar startDate){
 		int day = startDate.get(Calendar.DAY_OF_WEEK); 
-		DayType daytype = DayType.NORMAL;
+		DayType daytype = null;
 		
 		switch(day){
-			case 1:
-			case 6:
-			case 7:
-				daytype =  DayType.FRI_SUN; //FRI THRU TO SUNDAY
-				break;
-			case 2:							//MONDAY 
-			case 3:							//THRU 
-			case 4:							//TO
-			case 5: 						//THURSDAY
-				daytype = DayType.NORMAL;
-				break;
+		case 1:
+		case 6:
+		case 7:
+			daytype =  DayType.FRI_SUN; //FRI THRU TO SUNDAY
+			break;
+		case 2:							//MONDAY 
+		case 3:							//THRU 
+		case 4:							//TO
+		case 5: 						//THURSDAY
+			daytype = DayType.NORMAL;
+			break;
 		}
 
 		return daytype;

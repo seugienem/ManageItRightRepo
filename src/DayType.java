@@ -1,4 +1,5 @@
 
 public enum DayType {
-    NORMAL, FRI_SUN
+    NORMAL, 
+    FRI_SUN
 }
