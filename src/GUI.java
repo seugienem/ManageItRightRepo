@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import java.awt.Choice;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -47,6 +48,8 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -83,7 +86,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
 
-public class GUI extends JFrame implements FocusListener{
+public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
 	
 	private JTextField textField1_EventName;
 	private JTable table2;
@@ -98,10 +101,14 @@ public class GUI extends JFrame implements FocusListener{
 	private JComboBox<String> comboBox1;
 	private JDateChooser dateChooser1_StartDate;
 	private JSpinner spinner1_StartTimeH;
+	private JFormattedTextField spinner1_StartTimeH_TextField;
 	private JSpinner spinner1_StartTimeM;
+	private JFormattedTextField spinner1_StartTimeM_TextField;
 	private JDateChooser dateChooser1_EndDate;
 	private JSpinner spinner1_EndTimeH;
+	private JFormattedTextField spinner1_EndTimeH_TextField;
 	private JSpinner spinner1_EndTimeM;
+	private JFormattedTextField spinner1_EndTimeM_TextField;
 	private JTextArea textArea1_EventDescription;
 	private JTabbedPane jtp;
 	
@@ -253,7 +260,7 @@ public class GUI extends JFrame implements FocusListener{
         comboBox1.addItem("Talk / Speech");
         comboBox1.addItem("Wedding");
         comboBox1.addItem("Workshop");
-        
+        comboBox1.addFocusListener(this);
         
         JLabel lbl1_EventName = new JLabel("Event Name:");
         lbl1_EventName.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -265,6 +272,7 @@ public class GUI extends JFrame implements FocusListener{
         panel1.add(textField1_EventName);
         textField1_EventName.setColumns(10);
         textField1_EventName.addFocusListener(this);
+        
         /*
         comboBox1.addItemListener(new ItemListener() {
 			@Override
@@ -283,6 +291,8 @@ public class GUI extends JFrame implements FocusListener{
         dateChooser1_StartDate.setDateFormatString("d MMM, yyyy");
         dateChooser1_StartDate.setBounds(120, 142, 117, 20);
         panel1.add(dateChooser1_StartDate);
+        dateChooser1_StartDate.addPropertyChangeListener(this);
+
         
         JLabel lbl1_StartTime = new JLabel("Start Time:");
         lbl1_StartTime.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -298,6 +308,9 @@ public class GUI extends JFrame implements FocusListener{
         spinner1_StartTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_StartTimeH.setBounds(357, 140, 40, 20);
         panel1.add(spinner1_StartTimeH);
+        spinner1_StartTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeH.getEditor()).getTextField();
+        spinner1_StartTimeH_TextField.addFocusListener(this);
+        
         
         JLabel lbl1_StartTimeM = new JLabel("M");
         lbl1_StartTimeM.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -308,6 +321,8 @@ public class GUI extends JFrame implements FocusListener{
         spinner1_StartTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_StartTimeM.setBounds(417, 140, 40, 20);
         panel1.add(spinner1_StartTimeM);
+        spinner1_StartTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeM.getEditor()).getTextField();
+        spinner1_StartTimeM_TextField.addFocusListener(this);
         
         JLabel lbl1_EndDate = new JLabel("End Date:");
         lbl1_EndDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -318,6 +333,8 @@ public class GUI extends JFrame implements FocusListener{
         dateChooser1_EndDate.setDateFormatString("d MMM, yyyy");
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
         panel1.add(dateChooser1_EndDate);
+        dateChooser1_EndDate.addPropertyChangeListener(this);
+        
         
         JLabel lbl1_EndTime = new JLabel("End Time:");
         lbl1_EndTime.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -333,6 +350,8 @@ public class GUI extends JFrame implements FocusListener{
         spinner1_EndTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_EndTimeH.setBounds(357, 182, 40, 20);
         panel1.add(spinner1_EndTimeH);
+        spinner1_EndTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeH.getEditor()).getTextField();
+        spinner1_EndTimeH_TextField.addFocusListener(this);
         
         JLabel label1_EndTimeM = new JLabel("M");
         label1_EndTimeM.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -343,6 +362,8 @@ public class GUI extends JFrame implements FocusListener{
         spinner1_EndTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_EndTimeM.setBounds(417, 182, 40, 20);
         panel1.add(spinner1_EndTimeM);
+        spinner1_EndTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeM.getEditor()).getTextField();
+        spinner1_EndTimeM_TextField.addFocusListener(this);
         
         JLabel lbl1_EventDescription = new JLabel("Event Description:");
         lbl1_EventDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -370,6 +391,7 @@ public class GUI extends JFrame implements FocusListener{
         textField1_budget.setColumns(10);
         textField1_budget.setBounds(120, 409, 117, 20);
         panel1.add(textField1_budget);
+        textField1_budget.addFocusListener(this);
         
         JButton btn1_Next = new JButton("Next");
         btn1_Next.addMouseListener(new MouseAdapter() {
@@ -482,8 +504,6 @@ public class GUI extends JFrame implements FocusListener{
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Export.setBounds(11, 490, 80, 30);
 	        panel2.add(btn2_Export);
-	        btn2_Export.setActionCommand("export_guest");
-	        btn2_Export.addActionListener(new EventHandler());
 	        
 	        JButton btn2_Load = new JButton("Load");
 	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -717,14 +737,43 @@ public class GUI extends JFrame implements FocusListener{
 	public void focusLost(FocusEvent e){
 		Object obj = e.getSource();
 		if(obj == textField1_EventName){
-			System.out.println(((JTextField)obj).getText());
+			System.out.println(textField1_EventName.getText());
 		}
-		if(obj == textArea1_EventDescription){
-			System.out.println(((JTextArea)obj).getText());
-		}		
-	
+		else if(obj == textArea1_EventDescription){
+			System.out.println(textArea1_EventDescription.getText());
+		}	
+		else if(obj == comboBox1){
+			System.out.println(comboBox1.getSelectedItem());
+		}
+		else if(obj == spinner1_StartTimeH_TextField){
+			System.out.println(spinner1_StartTimeH.getValue());
+		}
+		else if(obj == spinner1_StartTimeM_TextField){
+			System.out.println(spinner1_StartTimeM.getValue());
+		}
+		else if(obj == spinner1_EndTimeH_TextField){
+			System.out.println(spinner1_EndTimeH.getValue());
+		}
+		else if(obj == spinner1_EndTimeM_TextField){
+			System.out.println(spinner1_EndTimeM.getValue());
+		}
+		else if(obj == textField1_budget){
+			System.out.println(textField1_budget.getText());
+		}
 	}
 	
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+		Object obj = e.getSource();
+		
+		if(obj == dateChooser1_StartDate){
+			System.out.println(dateChooser1_StartDate);
+		}
+		else if(obj == dateChooser1_EndDate){
+			System.out.println(dateChooser1_EndDate);
+		}
+		
+	}
 	
     private int getPreferredRowHeight(JTable table, int r, int margin) {
 		// TODO Auto-generated method stub
@@ -769,6 +818,10 @@ public class GUI extends JFrame implements FocusListener{
     	}
 	
     }
+
+	
+
+	
     
 	
 }
