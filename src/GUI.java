@@ -57,6 +57,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.JTextArea;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -82,12 +84,25 @@ import java.beans.PropertyChangeEvent;
 
 
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements FocusListener{
 	private JTextField textField1_EventName;
 	private JTable table2;
 	private JTextField textField1_budget;
 	private JTextField textField2_Search;
 	private JTable table3;
+	private JTextPane textPane0_EventName;
+	private JLabel lbl0_Step1;
+	private JLabel lbl0_Step2;
+	private JLabel lbl0_Step3;
+	private JLabel lbl0_Step4;
+	private JComboBox<String> comboBox1;
+	private JDateChooser dateChooser1_StartDate;
+	private JSpinner spinner1_StartTimeH;
+	private JSpinner spinner1_StartTimeM;
+	private JDateChooser dateChooser1_EndDate;
+	private JSpinner spinner1_EndTimeH;
+	private JSpinner spinner1_EndTimeM;
+	private JTextArea textArea1_EventDescription;
 	
 	public GUI() {
     	
@@ -131,29 +146,29 @@ public class GUI extends JFrame {
         panel0.setLayout(null);
         panel0.add(lbl0_Overview);
         
-        JTextPane textPane0_EventName = new JTextPane();
+        textPane0_EventName = new JTextPane();
         textPane0_EventName.setEditable(false);
         textPane0_EventName.setText("Event Name");
         textPane0_EventName.setFont(new Font("Tahoma", Font.PLAIN, 16));
         textPane0_EventName.setBounds(136, 11, 504, 30);
         panel0.add(textPane0_EventName);
         
-        JLabel lbl0_Step1 = new JLabel("Event details are not completed.");
+        lbl0_Step1 = new JLabel("Event details are not completed.");
         lbl0_Step1.setForeground(Color.RED);
         lbl0_Step1.setBounds(10, 52, 630, 30);
         panel0.add(lbl0_Step1);
         
-        JLabel lbl0_Step2 = new JLabel("Guest List is empty.");
+        lbl0_Step2 = new JLabel("Guest List is empty.");
         lbl0_Step2.setForeground(Color.RED);
         lbl0_Step2.setBounds(10, 116, 630, 30);
         panel0.add(lbl0_Step2);
         
-        JLabel lbl0_Step3 = new JLabel("Programme Schedule is not finalised.");
+        lbl0_Step3 = new JLabel("Programme Schedule is not finalised.");
         lbl0_Step3.setForeground(Color.RED);
         lbl0_Step3.setBounds(10, 181, 630, 30);
         panel0.add(lbl0_Step3);
         
-        JLabel lbl0_Step4 = new JLabel("Location not chosen.");
+        lbl0_Step4 = new JLabel("Location not chosen.");
         lbl0_Step4.setForeground(Color.RED);
         lbl0_Step4.setBounds(10, 249, 630, 30);
         panel0.add(lbl0_Step4);
@@ -176,7 +191,7 @@ public class GUI extends JFrame {
         lbl1_EventType.setBounds(10, 59, 100, 14);
         panel1.add(lbl1_EventType);
                   
-        final JComboBox<String> comboBox1 = new JComboBox<String>();
+        comboBox1 = new JComboBox<String>();
         comboBox1.setBounds(120, 56, 195, 20);
         panel1.add(comboBox1);
         comboBox1.addItem("Select Event Type...");
@@ -201,6 +216,10 @@ public class GUI extends JFrame {
         textField1_EventName.setBounds(120, 97, 435, 20);
         panel1.add(textField1_EventName);
         textField1_EventName.setColumns(10);
+        textField1_EventName.addFocusListener(this);
+        		
+    	
+   
         
         
         
@@ -218,7 +237,7 @@ public class GUI extends JFrame {
         lbl1_EventDate.setBounds(10, 142, 73, 14);
         panel1.add(lbl1_EventDate);
         
-        JDateChooser dateChooser1_StartDate = new JDateChooser();
+        dateChooser1_StartDate = new JDateChooser();
         dateChooser1_StartDate.setDateFormatString("d MMM, yyyy");
         dateChooser1_StartDate.setBounds(120, 142, 117, 20);
         panel1.add(dateChooser1_StartDate);
@@ -233,7 +252,7 @@ public class GUI extends JFrame {
         lbl1_StartTimeH.setBounds(342, 142, 14, 14);
         panel1.add(lbl1_StartTimeH);
         
-        JSpinner spinner1_StartTimeH = new JSpinner();
+        spinner1_StartTimeH = new JSpinner();
         spinner1_StartTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_StartTimeH.setBounds(357, 140, 40, 20);
         panel1.add(spinner1_StartTimeH);
@@ -243,7 +262,7 @@ public class GUI extends JFrame {
         lbl1_StartTimeM.setBounds(401, 143, 14, 14);
         panel1.add(lbl1_StartTimeM);
         
-        JSpinner spinner1_StartTimeM = new JSpinner();
+        spinner1_StartTimeM = new JSpinner();
         spinner1_StartTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_StartTimeM.setBounds(417, 140, 40, 20);
         panel1.add(spinner1_StartTimeM);
@@ -253,7 +272,7 @@ public class GUI extends JFrame {
         lbl1_EndDate.setBounds(10, 182, 60, 14);
         panel1.add(lbl1_EndDate);
         
-        JDateChooser dateChooser1_EndDate = new JDateChooser();
+        dateChooser1_EndDate = new JDateChooser();
         dateChooser1_EndDate.setDateFormatString("d MMM, yyyy");
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
         panel1.add(dateChooser1_EndDate);
@@ -268,7 +287,7 @@ public class GUI extends JFrame {
         label1_EndTimeH.setBounds(342, 184, 14, 14);
         panel1.add(label1_EndTimeH);
         
-        JSpinner spinner1_EndTimeH = new JSpinner();
+        spinner1_EndTimeH = new JSpinner();
         spinner1_EndTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_EndTimeH.setBounds(357, 182, 40, 20);
         panel1.add(spinner1_EndTimeH);
@@ -278,7 +297,7 @@ public class GUI extends JFrame {
         label1_EndTimeM.setBounds(401, 185, 14, 14);
         panel1.add(label1_EndTimeM);
         
-        JSpinner spinner1_EndTimeM = new JSpinner();
+        spinner1_EndTimeM = new JSpinner();
         spinner1_EndTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_EndTimeM.setBounds(417, 182, 40, 20);
         panel1.add(spinner1_EndTimeM);
@@ -292,11 +311,12 @@ public class GUI extends JFrame {
         scrollPane1.setBounds(120, 220, 435, 171);
         panel1.add(scrollPane1);
         
-        JTextArea textArea1_EventDescription = new JTextArea();
+        textArea1_EventDescription = new JTextArea();
         scrollPane1.setViewportView(textArea1_EventDescription);
         textArea1_EventDescription.setDragEnabled(true);
         textArea1_EventDescription.setLineWrap(true);
         textArea1_EventDescription.setWrapStyleWord(true);
+        textArea1_EventDescription.addFocusListener(this);
         
         JLabel lbl1_Budget = new JLabel("Budget:          $");
         lbl1_Budget.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -319,19 +339,7 @@ public class GUI extends JFrame {
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
-        
-        final JLabel lblNewLabel = new JLabel(""); // testing
-        lblNewLabel.setBounds(120, 117, 435, 20);
-        panel1.add(lblNewLabel);
-        
-        textField1_EventName.addActionListener(
-            	new ActionListener() {
-            		public void actionPerformed(ActionEvent e) {
-            			String s = textField1_EventName.getText();
-            			lblNewLabel.setText(s); // testing.
-            		}
-            	}
-            );
+
         
 // Step 2: Guest List
         JPanel panel2 = new JPanel();
@@ -467,6 +475,8 @@ public class GUI extends JFrame {
         btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn2_Export.setBounds(11, 490, 80, 30);
         panel2.add(btn2_Export);
+        btn2_Export.setActionCommand("export_guest");
+        btn2_Export.addActionListener(new EventHandler());
         
         JButton btn2_Load = new JButton("Load");
         btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -717,6 +727,21 @@ public class GUI extends JFrame {
         
         
     }
+	
+	public void focusGained(FocusEvent e){
+		
+	}
+	
+	public void focusLost(FocusEvent e){
+		Object obj = e.getSource();
+		if(obj == textField1_EventName){
+			System.out.println(((JTextField)obj).getText());
+		}
+		if(obj == textArea1_EventDescription){
+			System.out.println(((JTextArea)obj).getText());
+		}		
+	
+	}
 	
     private int getPreferredRowHeight(JTable table, int r, int margin) {
 		// TODO Auto-generated method stub
