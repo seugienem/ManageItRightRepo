@@ -13,7 +13,7 @@ public class Event implements Serializable{
 	private Vector<Hotel> suggestedHotels;
 	private Vector<Programme> programmeSchedule;
 	private EventType eventType;
-	private float eventBudget;
+	private double eventBudget;
 	private String eventDescription;
 	
 	public Event(){
@@ -98,11 +98,11 @@ public class Event implements Serializable{
 		this.programmeSchedule = programmeSchedule;
 	}
 
-	public float getEventBudget() {
+	public double getEventBudget() {
 		return eventBudget;
 	}
 
-	public void setEventBudget(float eventBudget) {
+	public void setEventBudget(double eventBudget) {
 		this.eventBudget = eventBudget;
 	}
 
