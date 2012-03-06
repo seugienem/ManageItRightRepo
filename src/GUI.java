@@ -90,16 +90,16 @@ import java.io.File;
 
 public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
 	private JFileChooser fileChooser;
-	private JTextField textField1_EventName;
-	private JTable table2;
-	private JTextField textField1_budget;
-	private JTextField textField2_Search;
-	private JTable table3;
-	private JTextPane textPane0_EventName;
+	private JTabbedPane jtp;
 	private JLabel lbl0_Step1;
 	private JLabel lbl0_Step2;
 	private JLabel lbl0_Step3;
 	private JLabel lbl0_Step4;
+	private JTextPane textPane0_EventName;
+	
+	//GUI1 objects
+	private JTextField textField1_EventName;
+	private JTextField textField1_budget;
 	private JComboBox<String> comboBox1;
 	private JDateChooser dateChooser1_StartDate;
 	private JSpinner spinner1_StartTimeH;
@@ -112,8 +112,33 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JSpinner spinner1_EndTimeM;
 	private JFormattedTextField spinner1_EndTimeM_TextField;
 	private JTextArea textArea1_EventDescription;
-	private JTabbedPane jtp;
 	
+	//GUI2 objects
+	private JButton btn2_Export;
+	private JButton btn2_Load;
+	private JButton btn2_Next;
+	private JButton btn2_Search;
+	private JTable table2;
+	private JTextField textField2_Search;
+	
+	//GUI3 objects
+	private JButton btn3_Export;
+	private JButton btn3_Next;
+	private JTable table3;
+	private JCheckBox chckbx3_ProgrammeScheduleFinalised;
+	
+	//GUI4 objects
+	private JButton btn4_Suggest;
+	private JButton btn4_Next;
+	private JTextPane textPane4_HotelDetails;
+	private JList list4;
+	private JSlider slider4;
+	private JTextPane textPane4_Guests;
+	private JTextPane textPane4_Budget;
+	private JCheckBox chckbx4_3Star;
+	private JCheckBox chckbx4_4Star;
+	private JCheckBox chckbx4_5Star;
+	private JCheckBox chckbx4_6Star;
 	
 	public GUI() {
     	
@@ -218,6 +243,14 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         JButton btn0_Load = new JButton("Load");
         btn0_Load.setBounds(450, 490, 80, 30);
         btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn0_Load.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+	        	JFrame frame = new JFrame();
+				fileChooser = new JFileChooser();
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+        	}
+        });
         
         JButton btn0_Continue = new JButton("Continue");
         btn0_Continue.addMouseListener(new MouseAdapter() {
@@ -449,6 +482,10 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	        panel2.add(lbl2_GuestList);
 	        
 	        JButton btn2_AddContact = new JButton("Add Contact");
+	        btn2_AddContact.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent arg0) {
+	        	}
+	        });
 	        
 	        btn2_AddContact.setFont(new Font("Tahoma", Font.PLAIN, 12));
 	        btn2_AddContact.setBounds(10, 58, 119, 23);
@@ -460,7 +497,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	        panel2.add(textField2_Search);
 	        textField2_Search.setColumns(10);
 	        
-	        JButton btn2_Search = new JButton("Search");
+	        btn2_Search = new JButton("Search");
 	        btn2_Search.setFont(new Font("Tahoma", Font.PLAIN, 12));
 	        btn2_Search.setBounds(536, 58, 77, 23);
 	        panel2.add(btn2_Search);
@@ -537,17 +574,17 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
 	        panel2.add(chckbx2_GuestListFinalised);
 	        
-	        JButton btn2_Export = new JButton("Export");
+	        btn2_Export = new JButton("Export");
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Export.setBounds(11, 490, 80, 30);
 	        panel2.add(btn2_Export);
 	        
-	        JButton btn2_Load = new JButton("Load");
+	        btn2_Load = new JButton("Load");
 	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Load.setBounds(460, 490, 80, 30);
 	        panel2.add(btn2_Load);
 	        
-	        JButton btn2_Next = new JButton("Next");
+	        btn2_Next = new JButton("Next");
 	        btn2_Next.addMouseListener(new MouseAdapter() {
 	        	@Override
 	        	public void mouseClicked(MouseEvent e) {
@@ -638,18 +675,18 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         
       
         
-        JCheckBox chckbx3_ProgrammeScheduleFinalised = new JCheckBox("Programme Schedule Finalised");
+        chckbx3_ProgrammeScheduleFinalised = new JCheckBox("Programme Schedule Finalised");
         chckbx3_ProgrammeScheduleFinalised.setBounds(10, 447, 217, 23);
         panel3.add(chckbx3_ProgrammeScheduleFinalised);
         
       
         
-        JButton btn3_Export = new JButton("Export");
+        btn3_Export = new JButton("Export");
         btn3_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Export.setBounds(460, 490, 80, 30);
         panel3.add(btn3_Export);
         
-        JButton btn3_Next = new JButton("Next");
+        btn3_Next = new JButton("Next");
         btn3_Next.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
@@ -677,27 +714,27 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         lbl4_Preference.setBounds(10, 42, 82, 20);
         panel4.add(lbl4_Preference);
         
-        JCheckBox chckbx4_6Star = new JCheckBox("6 Star");
+        chckbx4_6Star = new JCheckBox("6 Star");
         chckbx4_6Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
         chckbx4_6Star.setBounds(89, 42, 65, 20);
         panel4.add(chckbx4_6Star);
         
-        JCheckBox chckbx4_5Star = new JCheckBox("5 Star");
+        chckbx4_5Star = new JCheckBox("5 Star");
         chckbx4_5Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
         chckbx4_5Star.setBounds(171, 42, 65, 20);
         panel4.add(chckbx4_5Star);
         
-        JCheckBox chckbx4_4Star = new JCheckBox("4 Star");
+        chckbx4_4Star = new JCheckBox("4 Star");
         chckbx4_4Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
         chckbx4_4Star.setBounds(248, 43, 65, 20);
         panel4.add(chckbx4_4Star);
         
-        JCheckBox chckbx4_3Star = new JCheckBox("3 Star");
+        chckbx4_3Star = new JCheckBox("3 Star");
         chckbx4_3Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
         chckbx4_3Star.setBounds(329, 42, 65, 20);
         panel4.add(chckbx4_3Star);
         
-        JTextPane textPane4_Guests = new JTextPane();
+        textPane4_Guests = new JTextPane();
         textPane4_Guests.setEditable(false);
         textPane4_Guests.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
         textPane4_Guests.setBounds(533, 42, 107, 20);
@@ -708,7 +745,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         lbl4_BudgetRatio.setBounds(10, 109, 82, 20);
         panel4.add(lbl4_BudgetRatio);
         
-        JSlider slider4 = new JSlider();
+        slider4 = new JSlider();
         slider4.setPaintLabels(true);
         slider4.setPaintTicks(true);
         slider4.setMinorTickSpacing(5);
@@ -718,13 +755,13 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         slider4.setBounds(102, 101, 421, 45);
         panel4.add(slider4);
         
-        JTextPane textPane4_Budget = new JTextPane();
+        textPane4_Budget = new JTextPane();
         textPane4_Budget.setEditable(false);
         textPane4_Budget.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
         textPane4_Budget.setBounds(533, 109, 107, 20);
         panel4.add(textPane4_Budget);
         
-        JButton btn4_Suggest = new JButton("Suggest");
+        btn4_Suggest = new JButton("Suggest");
         btn4_Suggest.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Suggest.setBounds(550, 167, 90, 30);
         panel4.add(btn4_Suggest);
@@ -739,7 +776,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         scrollPane4.setBounds(6, 16, 216, 226);
         panel4_SuggestedList.add(scrollPane4);
         
-        JList list4 = new JList();
+        list4 = new JList();
         list4.setModel(new AbstractListModel() {
         	String[] values = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
         	public int getSize() {
@@ -752,17 +789,27 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         list4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         scrollPane4.setViewportView(list4);
         
-        JTextPane textPane4_HotelDetails = new JTextPane();
+        textPane4_HotelDetails = new JTextPane();
         textPane4_HotelDetails.setEditable(false);
         textPane4_HotelDetails.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
         textPane4_HotelDetails.setBounds(250, 220, 379, 250);
         panel4.add(textPane4_HotelDetails);
         
-        JButton btn4_Next = new JButton("Next");
+        btn4_Next = new JButton("Next");
         btn4_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Next.setBounds(560, 490, 80, 30);
         panel4.add(btn4_Next);
 	}
+	
+	/*
+	 * Overrides for all export and import buttons in GUI
+	 */
+	class ExportImportButtons implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object obj = e.getSource();
+		}
+	};
 	
 	/*
 	 * FocusListener Override
@@ -854,4 +901,6 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
     	}
 	
     }
+
+	
 }
