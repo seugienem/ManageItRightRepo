@@ -1,5 +1,3 @@
-import gui.ColumnsAutoSizer;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -79,6 +77,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import javax.swing.ScrollPaneConstants;
+
+import java.beans.EventHandler;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
@@ -395,6 +395,7 @@ public class GUI extends JFrame implements FocusListener{
 	        panel2.add(lbl2_GuestList);
 	        
 	        JButton btn2_AddContact = new JButton("Add Contact");
+	        
 	        btn2_AddContact.setFont(new Font("Tahoma", Font.PLAIN, 12));
 	        btn2_AddContact.setBounds(10, 58, 119, 23);
 	        panel2.add(btn2_AddContact);
@@ -412,8 +413,9 @@ public class GUI extends JFrame implements FocusListener{
 	        
 	        final DefaultTableModel modelGuest = new DefaultTableModel(); 
 	        table2 =new JTable(modelGuest); 
-	        JScrollPane scrollPane2 = new JScrollPane();          
-	        scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+	        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	        table2.getTableHeader().setReorderingAllowed(false);
+	        JScrollPane scrollPane2 = new JScrollPane(table2);
 	        scrollPane2.setBounds(10, 92, 600, 370);
 	        panel2.add(scrollPane2);
 	        
@@ -426,7 +428,7 @@ public class GUI extends JFrame implements FocusListener{
 	        table2.setCellSelectionEnabled(true);
 	        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	        table2.setAutoCreateRowSorter(true);
-	        table2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+	        
 	                
 	        //Adding column names
 	        TableColumn columnGuest = null;
@@ -440,17 +442,20 @@ public class GUI extends JFrame implements FocusListener{
 	    
 	        
 	        modelGuest.addRow(new Vector<Object>(7));
-	        table2.getColumnModel().getColumn(0).setPreferredWidth(111);
+	        table2.getColumnModel().getColumn(0).setPreferredWidth(200);
+	        table2.getColumnModel().getColumn(2).setPreferredWidth(30);
+	        table2.getColumnModel().getColumn(3).setPreferredWidth(200);
+	        table2.getColumnModel().getColumn(4).setPreferredWidth(120);
+	        table2.getColumnModel().getColumn(5).setPreferredWidth(200);
 	        table2.getColumnModel().getColumn(6).setPreferredWidth(110);
-	       
-	        table2.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
-	  
-	        //This is for auto resizing the columns. Check out ColumnsAutoSizer.java for the methods
-	 /*             table2.getModel().addTableModelListener(new TableModelListener() {     
-	        	    public void tableChanged(TableModelEvent e) {  
-	        	        ColumnsAutoSizer.sizeColumnsToFit(table2);
-	          	    }});
-	  */   
+	        
+	        btn2_AddContact.addMouseListener(new MouseAdapter() {
+	        	@Override
+	        	public void mouseClicked(MouseEvent e) {
+	        		modelGuest.addRow(new Vector<Object>(7)); 	    	
+	        	}
+	        });
+    
 	        //Set the key listener for new row(by pressing 'enter' or 'insert') and next cell(by pressing 'tab')
 	        table2.addKeyListener(new KeyAdapter() {
 	        	@Override
@@ -459,7 +464,7 @@ public class GUI extends JFrame implements FocusListener{
 	        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
 	        		} 
 	        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-	        			modelGuest.addRow(new Vector<Object>(4));  
+	        			modelGuest.addRow(new Vector<Object>(7));  
 	        		}
 	        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
 	        			int rowNumber = table2.getSelectedRow();
@@ -482,8 +487,6 @@ public class GUI extends JFrame implements FocusListener{
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Export.setBounds(11, 490, 80, 30);
 	        panel2.add(btn2_Export);
-	        btn2_Export.setActionCommand("export_guest");
-	        btn2_Export.addActionListener(new EventHandler());
 	        
 	        JButton btn2_Load = new JButton("Load");
 	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -522,6 +525,7 @@ public class GUI extends JFrame implements FocusListener{
         table3 =new JTable(modelProgramme);
         table3.setFont(new Font("Tahoma", Font.PLAIN, 12));
         table3.setPreferredScrollableViewportSize(new Dimension(600,370));
+        table3.getTableHeader().setReorderingAllowed(false);
         table3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table3.setFillsViewportHeight(true);
         scrollPane3.setViewportView(table3);
