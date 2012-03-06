@@ -10,6 +10,7 @@ import java.awt.FlowLayout;
 import java.awt.FontMetrics;
 import java.awt.Insets;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
@@ -84,10 +85,11 @@ import javax.swing.ScrollPaneConstants;
 import java.beans.EventHandler;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 
 
 public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
-	
+	private JFileChooser fileChooser;
 	private JTextField textField1_EventName;
 	private JTable table2;
 	private JTextField textField1_budget;
@@ -143,12 +145,42 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         
         JMenuItem mntmCreateNewEvent = new JMenuItem("Create New Event");
         mnFile.add(mntmCreateNewEvent);
+        mntmCreateNewEvent.addActionListener(new ActionListener(){
+        	@Override
+        	public void actionPerformed(ActionEvent e){
+        		//what to do when event is created??
+        	}
+        });
         
         JMenuItem mntmLoadEvent = new JMenuItem("Load Event");
         mnFile.add(mntmLoadEvent);
         
+        mntmLoadEvent.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frame = new JFrame();
+				fileChooser = new JFileChooser();
+				fileChooser.showOpenDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				//send file directory to logic
+				//get event object and refresh all fields
+			}
+        });
+        
         JMenuItem mntmSaveEvent = new JMenuItem("Save Event");
         mnFile.add(mntmSaveEvent);
+        
+        mntmSaveEvent.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frame = new JFrame();
+				fileChooser = new JFileChooser();
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				//send file directory to logic
+			}
+        });
+        
         /*
         JSeparator separator = new JSeparator();
         mnFile.add(separator);
@@ -818,16 +850,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
     	        table.setRowHeight(row, height);
     	        rowHeight = height;
     	    }
-    	         
-    	    
     	    return this;
     	}
 	
     }
-
-	
-
-	
-    
-	
 }
