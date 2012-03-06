@@ -83,8 +83,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
 
-
 public class GUI extends JFrame implements FocusListener{
+	
 	private JTextField textField1_EventName;
 	private JTable table2;
 	private JTextField textField1_budget;
@@ -103,17 +103,63 @@ public class GUI extends JFrame implements FocusListener{
 	private JSpinner spinner1_EndTimeH;
 	private JSpinner spinner1_EndTimeM;
 	private JTextArea textArea1_EventDescription;
+	private JTabbedPane jtp;
+	
 	
 	public GUI() {
     	
         setTitle("Manage It Right! v0.1");
-        final JTabbedPane jtp = new JTabbedPane();
+        jtp = new JTabbedPane();
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
         getContentPane().add(jtp, BorderLayout.CENTER);
-    	
-// Overview Tab
-        JPanel panel0 = new JPanel();
+        
+        /*
+         * Drawing of individual tabs
+         */
+    	GUI0();
+    	GUI1();
+    	GUI2();
+    	GUI3();
+    	GUI4();
+        
+    	/*
+    	 * Menu Bar
+    	 */
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        
+        JMenu mnFile = new JMenu("File");
+        mnFile.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        menuBar.add(mnFile);
+        mnFile.setMnemonic(KeyEvent.VK_F);
+        
+        JMenuItem mntmCreateNewEvent = new JMenuItem("Create New Event");
+        mnFile.add(mntmCreateNewEvent);
+        
+        JMenuItem mntmLoadEvent = new JMenuItem("Load Event");
+        mnFile.add(mntmLoadEvent);
+        
+        JMenuItem mntmSaveEvent = new JMenuItem("Save Event");
+        mnFile.add(mntmSaveEvent);
+        /*
+        JSeparator separator = new JSeparator();
+        mnFile.add(separator);
+        
+        JMenuItem mntmExit = new JMenuItem("Exit");
+        mntmExit.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		System.exit(0);
+        	}
+        });
+        mnFile.add(mntmExit);
+        */
+    }
+	
+	
+	private void GUI0(){
+		JPanel panel0 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Overview</body></html>", null, panel0, null);
         
         JLabel lbl0_Overview = new JLabel("Overview");
@@ -175,9 +221,11 @@ public class GUI extends JFrame implements FocusListener{
         panel0.add(btn0_New);
         panel0.add(btn0_Load);
         panel0.add(btn0_Continue);
-        
-// Step 1: Event Details
-        JPanel panel1 = new JPanel();
+	}
+	
+	
+	private void GUI1(){
+		JPanel panel1 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 1:<br>Event Details</body></html>", null, panel1, "Manage the event details.");
         panel1.setLayout(null);
         
@@ -217,12 +265,6 @@ public class GUI extends JFrame implements FocusListener{
         panel1.add(textField1_EventName);
         textField1_EventName.setColumns(10);
         textField1_EventName.addFocusListener(this);
-        		
-    	
-   
-        
-        
-        
         /*
         comboBox1.addItemListener(new ItemListener() {
 			@Override
@@ -339,163 +381,130 @@ public class GUI extends JFrame implements FocusListener{
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
-
-        
-// Step 2: Guest List
-        JPanel panel2 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 2:<br>Guest List</body></html>", null, panel2, "Manage the list of guests attending the event.");
-        panel2.setLayout(null);
-        
-        JLabel lbl2_GuestList = new JLabel("Guest List");
-        lbl2_GuestList.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lbl2_GuestList.setBounds(10, 10, 81, 30);
-        panel2.add(lbl2_GuestList);
-        
-        JButton btn2_AddContact = new JButton("Add Contact");
-        btn2_AddContact.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btn2_AddContact.setBounds(10, 58, 119, 23);
-        panel2.add(btn2_AddContact);
-        
-        textField2_Search = new JTextField();
-        textField2_Search.setToolTipText("Search Guest List");
-        textField2_Search.setBounds(351, 60, 175, 20);
-        panel2.add(textField2_Search);
-        textField2_Search.setColumns(10);
-        
-        JButton btn2_Search = new JButton("Search");
-        btn2_Search.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btn2_Search.setBounds(536, 58, 77, 23);
-        panel2.add(btn2_Search);
-        
-        final DefaultTableModel modelGuest = new DefaultTableModel(); 
-        table2 =new JTable(modelGuest); 
-        JScrollPane scrollPane2 = new JScrollPane();          
-        scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane2.setBounds(10, 92, 600, 370);
-        panel2.add(scrollPane2);
-        
-      //This portion is to initialize the Jtable                                     
-        scrollPane2.setViewportView(table2);
-        table2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        table2.setPreferredScrollableViewportSize(new Dimension(600,370));
-        table2.setFillsViewportHeight(true);
-        table2.setColumnSelectionAllowed(true);
-        table2.setCellSelectionEnabled(true);
-        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table2.setAutoCreateRowSorter(true);
-        table2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-                
-        //Adding column names
-        TableColumn columnGuest = null;
-        modelGuest.addColumn("Name");
-        modelGuest.addColumn("Gender");
-        modelGuest.addColumn("Age");
-        modelGuest.addColumn("Description");
-        modelGuest.addColumn("Group");
-        modelGuest.addColumn("Email");
-        modelGuest.addColumn("Contact Number");
-    
-        //Custom renderer for wrapping text in cell       
-        class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
-        	int rowHeight = 0;  // current max row height for this scan           	
-        	
-			public Component getTableCellRendererComponent(
-        	        JTable table,
-        	        Object value,
-        	        boolean isSelected,
-        	        boolean hasFocus,
-        	        int row,
-        	        int column)
-        	{
-					    
-				setText((String) value);
-        	    setWrapStyleWord(true);
-        	    setLineWrap(true);        	           	         	                  
-                
-        	    int colWidth = table.getColumnModel().getColumn(column).getWidth();
-
-        	    
-        	    setSize(new Dimension(colWidth, 1)); 
-
-        	    // get the text area preferred height and add the row margin
-        	    int height = getPreferredSize().height + table.getRowMargin();
-
-        	    // ensure the row height fits the cell with most lines
-        	    if (column == 0 || height > rowHeight) {
-        	        table.setRowHeight(row, height);
-        	        rowHeight = height;
-        	    }
-        	         
-        	    
-        	    return this;
-        	}
-		
-        }
-        
-        modelGuest.addRow(new Vector<Object>(7));
-        table2.getColumnModel().getColumn(0).setPreferredWidth(111);
-        table2.getColumnModel().getColumn(6).setPreferredWidth(110);
-       
-        table2.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
-  
-        //This is for auto resizing the columns. Check out ColumnsAutoSizer.java for the methods
- /*             table2.getModel().addTableModelListener(new TableModelListener() {     
-        	    public void tableChanged(TableModelEvent e) {  
-        	        ColumnsAutoSizer.sizeColumnsToFit(table2);
-          	    }});
-  */   
-        //Set the key listener for new row(by pressing 'enter' or 'insert') and next cell(by pressing 'tab')
-        table2.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyPressed(KeyEvent e) {
-        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
-        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
-        		} 
-        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelGuest.addRow(new Vector<Object>(4));  
-        		}
-        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-        			int rowNumber = table2.getSelectedRow();
-        			modelGuest.removeRow(rowNumber);
-        		}
-        	}
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        	}
-        	@Override
-        	public void keyTyped(KeyEvent e) {
-        	}
-        });
-      
-        JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
-        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
-        panel2.add(chckbx2_GuestListFinalised);
-        
-        JButton btn2_Export = new JButton("Export");
-        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn2_Export.setBounds(11, 490, 80, 30);
-        panel2.add(btn2_Export);
-        btn2_Export.setActionCommand("export_guest");
-        btn2_Export.addActionListener(new EventHandler());
-        
-        JButton btn2_Load = new JButton("Load");
-        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn2_Load.setBounds(460, 490, 80, 30);
-        panel2.add(btn2_Load);
-        
-        JButton btn2_Next = new JButton("Next");
-        btn2_Next.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
-        btn2_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn2_Next.setBounds(560, 490, 80, 30);
-        panel2.add(btn2_Next);
-        
-// Step 3: Programme
-        JPanel panel3 = new JPanel();
+	}
+	
+	
+	private void GUI2(){
+		 JPanel panel2 = new JPanel();
+	        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 2:<br>Guest List</body></html>", null, panel2, "Manage the list of guests attending the event.");
+	        panel2.setLayout(null);
+	        
+	        JLabel lbl2_GuestList = new JLabel("Guest List");
+	        lbl2_GuestList.setFont(new Font("Tahoma", Font.BOLD, 16));
+	        lbl2_GuestList.setBounds(10, 10, 81, 30);
+	        panel2.add(lbl2_GuestList);
+	        
+	        JButton btn2_AddContact = new JButton("Add Contact");
+	        btn2_AddContact.setFont(new Font("Tahoma", Font.PLAIN, 12));
+	        btn2_AddContact.setBounds(10, 58, 119, 23);
+	        panel2.add(btn2_AddContact);
+	        
+	        textField2_Search = new JTextField();
+	        textField2_Search.setToolTipText("Search Guest List");
+	        textField2_Search.setBounds(351, 60, 175, 20);
+	        panel2.add(textField2_Search);
+	        textField2_Search.setColumns(10);
+	        
+	        JButton btn2_Search = new JButton("Search");
+	        btn2_Search.setFont(new Font("Tahoma", Font.PLAIN, 12));
+	        btn2_Search.setBounds(536, 58, 77, 23);
+	        panel2.add(btn2_Search);
+	        
+	        final DefaultTableModel modelGuest = new DefaultTableModel(); 
+	        table2 =new JTable(modelGuest); 
+	        JScrollPane scrollPane2 = new JScrollPane();          
+	        scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+	        scrollPane2.setBounds(10, 92, 600, 370);
+	        panel2.add(scrollPane2);
+	        
+	      //This portion is to initialize the Jtable                                     
+	        scrollPane2.setViewportView(table2);
+	        table2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+	        table2.setPreferredScrollableViewportSize(new Dimension(600,370));
+	        table2.setFillsViewportHeight(true);
+	        table2.setColumnSelectionAllowed(true);
+	        table2.setCellSelectionEnabled(true);
+	        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	        table2.setAutoCreateRowSorter(true);
+	        table2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+	                
+	        //Adding column names
+	        TableColumn columnGuest = null;
+	        modelGuest.addColumn("Name");
+	        modelGuest.addColumn("Gender");
+	        modelGuest.addColumn("Age");
+	        modelGuest.addColumn("Description");
+	        modelGuest.addColumn("Group");
+	        modelGuest.addColumn("Email");
+	        modelGuest.addColumn("Contact Number");
+	    
+	        
+	        modelGuest.addRow(new Vector<Object>(7));
+	        table2.getColumnModel().getColumn(0).setPreferredWidth(111);
+	        table2.getColumnModel().getColumn(6).setPreferredWidth(110);
+	       
+	        table2.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+	  
+	        //This is for auto resizing the columns. Check out ColumnsAutoSizer.java for the methods
+	 /*             table2.getModel().addTableModelListener(new TableModelListener() {     
+	        	    public void tableChanged(TableModelEvent e) {  
+	        	        ColumnsAutoSizer.sizeColumnsToFit(table2);
+	          	    }});
+	  */   
+	        //Set the key listener for new row(by pressing 'enter' or 'insert') and next cell(by pressing 'tab')
+	        table2.addKeyListener(new KeyAdapter() {
+	        	@Override
+	        	public void keyPressed(KeyEvent e) {
+	        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+	        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
+	        		} 
+	        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+	        			modelGuest.addRow(new Vector<Object>(4));  
+	        		}
+	        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+	        			int rowNumber = table2.getSelectedRow();
+	        			modelGuest.removeRow(rowNumber);
+	        		}
+	        	}
+	        	@Override
+	        	public void keyReleased(KeyEvent e) {
+	        	}
+	        	@Override
+	        	public void keyTyped(KeyEvent e) {
+	        	}
+	        });
+	      
+	        JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
+	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
+	        panel2.add(chckbx2_GuestListFinalised);
+	        
+	        JButton btn2_Export = new JButton("Export");
+	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
+	        btn2_Export.setBounds(11, 490, 80, 30);
+	        panel2.add(btn2_Export);
+	        btn2_Export.setActionCommand("export_guest");
+	        btn2_Export.addActionListener(new EventHandler());
+	        
+	        JButton btn2_Load = new JButton("Load");
+	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
+	        btn2_Load.setBounds(460, 490, 80, 30);
+	        panel2.add(btn2_Load);
+	        
+	        JButton btn2_Next = new JButton("Next");
+	        btn2_Next.addMouseListener(new MouseAdapter() {
+	        	@Override
+	        	public void mouseClicked(MouseEvent e) {
+	        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
+	        	}
+	        });
+	        btn2_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
+	        btn2_Next.setBounds(560, 490, 80, 30);
+	        panel2.add(btn2_Next);
+	}
+	
+	
+	private void GUI3(){
+		JPanel panel3 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 3:<br>Programme</body></html>", null, panel3, "Manage the flow of events.");
         panel3.setLayout(null);
         
@@ -592,9 +601,11 @@ public class GUI extends JFrame implements FocusListener{
         btn3_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Next.setBounds(560, 490, 80, 30);
         panel3.add(btn3_Next);
-        
-// Step 4: Location Suggestions
-        JPanel panel4 = new JPanel();
+	}
+	
+	
+	private void GUI4(){
+		JPanel panel4 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=8>Step 4:<br>Hotel<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
         panel4.setLayout(null);
         
@@ -693,45 +704,16 @@ public class GUI extends JFrame implements FocusListener{
         btn4_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Next.setBounds(560, 490, 80, 30);
         panel4.add(btn4_Next);
-        
-// Menu Bar
-        JMenuBar menuBar = new JMenuBar();
-        setJMenuBar(menuBar);
-        
-        JMenu mnFile = new JMenu("File");
-        mnFile.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        menuBar.add(mnFile);
-        mnFile.setMnemonic(KeyEvent.VK_F);
-        
-        JMenuItem mntmCreateNewEvent = new JMenuItem("Create New Event");
-        mnFile.add(mntmCreateNewEvent);
-        
-        JMenuItem mntmLoadEvent = new JMenuItem("Load Event");
-        mnFile.add(mntmLoadEvent);
-        
-        JMenuItem mntmSaveEvent = new JMenuItem("Save Event");
-        mnFile.add(mntmSaveEvent);
-        /*
-        JSeparator separator = new JSeparator();
-        mnFile.add(separator);
-        
-        JMenuItem mntmExit = new JMenuItem("Exit");
-        mntmExit.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		System.exit(0);
-        	}
-        });
-        mnFile.add(mntmExit);
-        */
-        
-        
-    }
+	}
 	
+	/*
+	 * FocusListener Override
+	 */
+	@Override
 	public void focusGained(FocusEvent e){
 		
 	}
-	
+	@Override
 	public void focusLost(FocusEvent e){
 		Object obj = e.getSource();
 		if(obj == textField1_EventName){
@@ -743,10 +725,50 @@ public class GUI extends JFrame implements FocusListener{
 	
 	}
 	
+	
     private int getPreferredRowHeight(JTable table, int r, int margin) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+    
+    /*
+     *Custom renderer for wrapping text in cell
+     */
+    class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
+    	int rowHeight = 0;  // current max row height for this scan           	
+    	
+		public Component getTableCellRendererComponent(
+    	        JTable table,
+    	        Object value,
+    	        boolean isSelected,
+    	        boolean hasFocus,
+    	        int row,
+    	        int column)
+    	{
+				    
+			setText((String) value);
+    	    setWrapStyleWord(true);
+    	    setLineWrap(true);        	           	         	                  
+            
+    	    int colWidth = table.getColumnModel().getColumn(column).getWidth();
+
+    	    
+    	    setSize(new Dimension(colWidth, 1)); 
+
+    	    // get the text area preferred height and add the row margin
+    	    int height = getPreferredSize().height + table.getRowMargin();
+
+    	    // ensure the row height fits the cell with most lines
+    	    if (column == 0 || height > rowHeight) {
+    	        table.setRowHeight(row, height);
+    	        rowHeight = height;
+    	    }
+    	         
+    	    
+    	    return this;
+    	}
+	
+    }
     
 	
 }
