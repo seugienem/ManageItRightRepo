@@ -89,13 +89,14 @@ import java.io.File;
 
 
 public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
-	private JFileChooser fileChooser;
+	private JFileChooser fileChooser = new JFileChooser();
 	private JTabbedPane jtp;
 	private JLabel lbl0_Step1;
 	private JLabel lbl0_Step2;
 	private JLabel lbl0_Step3;
 	private JLabel lbl0_Step4;
 	private JTextPane textPane0_EventName;
+	private JButton btn0_Load;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -184,13 +185,14 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFrame frame = new JFrame();
-				fileChooser = new JFileChooser();
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
 				//send file directory to logic
 				//get event object and refresh all fields
 			}
         });
+        
+        mntmLoadEvent.addActionListener(new ExportImportButtonsListener());
         
         JMenuItem mntmSaveEvent = new JMenuItem("Save Event");
         mnFile.add(mntmSaveEvent);
@@ -199,7 +201,6 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFrame frame = new JFrame();
-				fileChooser = new JFileChooser();
 				fileChooser.showSaveDialog(frame);
 				File file = fileChooser.getSelectedFile();
 				//send file directory to logic
@@ -240,17 +241,10 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn0_New.setBounds(350, 490, 80, 30);
         btn0_New.setFont(new Font("Tahoma", Font.BOLD, 12));
         
-        JButton btn0_Load = new JButton("Load");
+        btn0_Load = new JButton("Load");
         btn0_Load.setBounds(450, 490, 80, 30);
         btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn0_Load.addActionListener(new ActionListener(){
-        	public void actionPerformed(ActionEvent e){
-	        	JFrame frame = new JFrame();
-				fileChooser = new JFileChooser();
-				fileChooser.showSaveDialog(frame);
-				File file = fileChooser.getSelectedFile();
-        	}
-        });
+        btn0_Load.addActionListener(new ExportImportButtonsListener());
         
         JButton btn0_Continue = new JButton("Continue");
         btn0_Continue.addMouseListener(new MouseAdapter() {
@@ -578,11 +572,13 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Export.setBounds(11, 490, 80, 30);
 	        panel2.add(btn2_Export);
+	        btn2_Export.addActionListener(new ExportImportButtonsListener());
 	        
 	        btn2_Load = new JButton("Load");
 	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Load.setBounds(460, 490, 80, 30);
 	        panel2.add(btn2_Load);
+	        btn2_Load.addActionListener(new ExportImportButtonsListener());
 	        
 	        btn2_Next = new JButton("Next");
 	        btn2_Next.addMouseListener(new MouseAdapter() {
@@ -685,6 +681,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn3_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Export.setBounds(460, 490, 80, 30);
         panel3.add(btn3_Export);
+        btn3_Export.addActionListener(new ExportImportButtonsListener());
         
         btn3_Next = new JButton("Next");
         btn3_Next.addMouseListener(new MouseAdapter() {
@@ -804,10 +801,29 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	/*
 	 * Overrides for all export and import buttons in GUI
 	 */
-	class ExportImportButtons implements ActionListener{
+	class ExportImportButtonsListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object obj = e.getSource();
+			JFrame frame = new JFrame();
+			if(obj == btn0_Load){
+				fileChooser.showOpenDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				//send file directory to logic
+			}
+			else if(obj == btn2_Load){
+				fileChooser.showOpenDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				//send file directory to logic
+			}
+			else if(obj == btn2_Export){
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+			}
+			else if(obj == btn3_Export){
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+			}
 		}
 	};
 	
