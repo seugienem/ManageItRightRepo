@@ -219,7 +219,7 @@ public class GUI extends JFrame {
         panel1.add(lbl1_EventDate);
         
         JDateChooser dateChooser1_StartDate = new JDateChooser();
-        dateChooser1_StartDate.setDateFormatString("d MMM, yyyy");
+        dateChooser1_StartDate.setDateFormatString("dd/MM/YYYY");
         dateChooser1_StartDate.setBounds(120, 142, 117, 20);
         panel1.add(dateChooser1_StartDate);
         
@@ -254,7 +254,7 @@ public class GUI extends JFrame {
         panel1.add(lbl1_EndDate);
         
         JDateChooser dateChooser1_EndDate = new JDateChooser();
-        dateChooser1_EndDate.setDateFormatString("d MMM, yyyy");
+        dateChooser1_EndDate.setDateFormatString("dd/MM/YYYY");
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
         panel1.add(dateChooser1_EndDate);
         
@@ -304,7 +304,7 @@ public class GUI extends JFrame {
         panel1.add(lbl1_Budget);
         
         textField1_budget = new JTextField();
-        textField1_budget.setToolTipText("DD/MM/YYYY");
+        textField1_budget.setToolTipText("");
         textField1_budget.setColumns(10);
         textField1_budget.setBounds(120, 409, 117, 20);
         panel1.add(textField1_budget);
