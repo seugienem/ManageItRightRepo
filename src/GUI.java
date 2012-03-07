@@ -101,6 +101,11 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JLabel lbl0_Step4;
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
+	private JMenu mnFile;
+	private JMenuBar menuBar;
+	private JMenuItem mntmCreateNewEvent;
+	private JMenuItem mntmLoadEvent;
+	private JMenuItem mntmSaveEvent;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -166,10 +171,10 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
     	/*
     	 * Menu Bar
     	 */
-        JMenuBar menuBar = new JMenuBar();
+    	menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         
-        JMenu mnFile = new JMenu("File");
+        mnFile = new JMenu("File");
         mnFile.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         menuBar.add(mnFile);
         mnFile.setMnemonic(KeyEvent.VK_F);
@@ -183,34 +188,13 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         	}
         });
         
-        JMenuItem mntmLoadEvent = new JMenuItem("Load Event");
+        mntmLoadEvent = new JMenuItem("Load Event");
         mnFile.add(mntmLoadEvent);
-        
-        mntmLoadEvent.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame();
-				fileChooser.showOpenDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
-				//get event object and refresh all fields
-			}
-        });
-        
         mntmLoadEvent.addActionListener(new ExportImportButtonsListener());
         
-        JMenuItem mntmSaveEvent = new JMenuItem("Save Event");
+        mntmSaveEvent = new JMenuItem("Save Event");
         mnFile.add(mntmSaveEvent);
-        
-        mntmSaveEvent.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame();
-				fileChooser.showSaveDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
-			}
-        });
+        mntmSaveEvent.addActionListener(new ExportImportButtonsListener());
         
         /*
         JSeparator separator = new JSeparator();
@@ -321,7 +305,6 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         comboBox1.addItem("Talk / Speech");
         comboBox1.addItem("Wedding");
         comboBox1.addItem("Workshop");
-        //comboBox1.addFocusListener(this);
         comboBox1.addActionListener(new ComboBox1Listener());
         
         JLabel lbl1_EventName = new JLabel("Event Name:");
@@ -786,6 +769,18 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         panel4.add(btn4_Next);
 	}
 	
+	//refresh all fields
+	void update(){
+		//step 1
+		comboBox1.setSelectedIndex(lg.getEventType());
+		textField1_EventName.setText(lg.getEventName());
+		spinner1_StartTimeH.setValue(lg.getStartTimeH());
+		spinner1_StartTimeM.setValue(lg.getStartTimeM());
+		spinner1_EndTimeH.setValue(lg.getEndTimeH());
+		spinner1_EndTimeM.setValue(lg.getEndTimeM());
+		textArea1_EventDescription.setText(lg.getEventDes());
+		textField1_budget.setText(String.valueOf(lg.getBudget()));
+	}
 	
 	/*
 	 * Overrides for ComboBox1
@@ -824,6 +819,19 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 			else if(obj == btn3_Export){
 				fileChooser.showSaveDialog(frame);
 				File file = fileChooser.getSelectedFile();
+			}
+			else if(obj == mntmLoadEvent){
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				lg.loadEvent(file);
+				update();
+			}
+			else if (obj == mntmSaveEvent){
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				if(file == null)	//no file selected
+					return;
+				lg.saveEvent(file);
 			}
 		}
 	};
@@ -897,6 +905,13 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 		Object obj = e.getSource();
 		
 		if(obj == dateChooser1_StartDate){
+			Date date = dateChooser1_StartDate.getDate();
+			if (date == null)
+				return;
+			System.out.println(date.toString());
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			System.out.println(cal.get(Calendar.MONTH));
 		}
 		else if(obj == dateChooser1_EndDate){
 		}

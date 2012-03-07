@@ -1,12 +1,24 @@
+import java.io.File;
 import java.util.*;
 
 public class Logic {
 	private Event event;
+	private DataManager dm;
 
-	public Logic(Event event){ //logic instance has a Event parameter
+	public Logic(Event event, DataManager dm){ //logic instance has a Event parameter
 		this.event = event;
+		this.dm = dm;
 	}
 
+	//dataManager stuff
+	void saveEvent(File out){
+		dm.save(out, event);
+	}
+	
+	void loadEvent(File in){
+		event = dm.load(in);
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
