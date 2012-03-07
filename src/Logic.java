@@ -4,19 +4,27 @@ import java.util.*;
 public class Logic {
 	private Event event;
 	private DataManager dm;
+	private boolean saved;
 
 	public Logic(Event event, DataManager dm){ //logic instance has a Event parameter
 		this.event = event;
 		this.dm = dm;
+		saved = true;
 	}
 
+	boolean getSavedStatus(){
+		return saved;
+	}
+	
 	//dataManager stuff
 	void saveEvent(File out){
 		dm.save(out, event);
+		saved = true;
 	}
 	
 	void loadEvent(File in){
 		event = dm.load(in);
+		saved = true;
 	}
 	
 	////OVERVIEW TAB\\\\
@@ -98,6 +106,7 @@ public class Logic {
 	////STEP 1: EVENT DETAILS TAB\\\\
 	
 	void setEventType(int eventType){
+		saved = false;
 		EventType eType = null;
 				
 		switch(eventType){
@@ -134,7 +143,6 @@ public class Logic {
 		}
 		
 		event.setEventType(eType);
-		
 	}
 
 	int getEventType(){
@@ -142,10 +150,12 @@ public class Logic {
 	}
 	
 	void setEventName(String name){
+		saved = false;
 		event.setEventName(name);
 	}
 	
 	void setEventStartDate(Calendar date){
+		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
 		if(date == null)
 			return;
@@ -165,6 +175,7 @@ public class Logic {
 	}
 	
 	void setEventEndDate(Date date){
+		saved = false;
 		Calendar endCal = event.getEndDateAndTime();
 		
 		endCal.set(date.getYear(), date.getMonth(), date.getDate());
@@ -183,6 +194,7 @@ public class Logic {
 	}
 	
 	void setStartTimeH(int startH){
+		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
 		
 		startCal.set(Calendar.HOUR_OF_DAY, startH);
@@ -194,6 +206,7 @@ public class Logic {
 	}
 
 	void setStartTimeM(int startM){
+		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
 
 		startCal.set(Calendar.MINUTE, startM);
@@ -205,6 +218,7 @@ public class Logic {
 	}
 
 	void setEndTimeH(int endH){
+		saved = false;
 		Calendar endCal = event.getEndDateAndTime();
 
 		endCal.set(Calendar.HOUR_OF_DAY, endH);
@@ -216,6 +230,7 @@ public class Logic {
 	}
 	
 	void setEndTimeM(int endM){
+		saved = false;
 		Calendar endCal = event.getEndDateAndTime();
 
 		endCal.set(Calendar.MINUTE, endM);
@@ -227,6 +242,7 @@ public class Logic {
 	}
 
 	void setEventDes(String des){
+		saved = false;
 		event.setEventDescription(des);
 	}
 	
@@ -235,6 +251,7 @@ public class Logic {
 	}
 	
 	void setBudget(double budget){
+		saved = false;
 		event.setEventBudget(budget);
 	}
 	

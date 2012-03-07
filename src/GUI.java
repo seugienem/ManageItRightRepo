@@ -28,6 +28,7 @@ import java.awt.Choice;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -184,7 +185,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         mntmCreateNewEvent.addActionListener(new ActionListener(){
         	@Override
         	public void actionPerformed(ActionEvent e){
-        		//what to do when event is created??
+        		jtp.setSelectedIndex(1);
         	}
         });
         
@@ -821,8 +822,22 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 				File file = fileChooser.getSelectedFile();
 			}
 			else if(obj == mntmLoadEvent){
-				fileChooser.showSaveDialog(frame);
+				if(!lg.getSavedStatus()){
+					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
+					if(ans == 0){
+						fileChooser.showSaveDialog(frame);
+						File file = fileChooser.getSelectedFile();
+						if(file == null)
+							return;
+						lg.saveEvent(file);
+					}
+					else if(ans == 2)
+						return;
+				}
+				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
+				if(file == null)
+					return;
 				lg.loadEvent(file);
 				update();
 			}
