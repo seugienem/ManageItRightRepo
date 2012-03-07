@@ -261,26 +261,44 @@ public class Logic {
 		return event.getEventBudget();
 	}
 	
-	void clearHotelSuggestions(){
-		event.setSuggestedHotels(new Vector<Hotel>());
-	}
-	
-	void hotelSuggest(int stars, int ratio){
-		hotelSuggester.setStars(stars);
-		hotelSuggester.setEventBudget(event.getEventBudget());
-		hotelSuggester.setBudgetRatio(ratio);
-		hotelSuggester.setStartDate(event.getStartDateAndTime());
-		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
-		Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
-		event.mergeWithExistingHotels(hotelList);
-	}
-	
-	Vector<String> getSuggestedHotelsNames(){
-		Vector<String> names = new Vector<String>();
-		for(Hotel item : event.getSuggestedHotels()){
-			names.add(item.getName());
+	Vector<Vector<String>> getGuestList(){
+		Vector<Guest> guestList = event.getGuestList();
+		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
+		Vector<String> guestDetail;
+		Guest currGuest;
+		String guestGender = null;
+		
+		for (int i=0; i<guestList.size(); ++i){
+			//Get guest from event guest list
+			currGuest = guestList.get(i);
+			
+			//Parse gender to String
+			switch (currGuest.getGender().ordinal()){
+			case 0:
+				guestGender = "MALE";
+				break;
+			case 1:
+				guestGender = "FEMALE";
+				break;
+			case 2:
+				guestGender = "UNKNOWN";
+				break;
+			}
+
+			//Prepare guestDetail to add to guestVector
+			guestDetail = new Vector<String>();
+			guestDetail.add(currGuest.getName());
+			guestDetail.add(currGuest.getEmailAddress());
+			guestDetail.add(currGuest.getDescription());
+			guestDetail.add(currGuest.getGroup());
+			guestDetail.add(currGuest.getContactNumber());
+			guestDetail.add(guestGender);
+			
+			//Add guestDetail:vector to guestVector:vector of vector
+			guestVector.add(guestDetail);
 		}
-		return names;
+		
+		return guestVector;
 	}
 }	
 

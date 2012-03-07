@@ -52,11 +52,6 @@ public class Event implements Serializable{
 	public void setEventType(EventType eventType){
 		this.eventType = eventType;
 	}
-	
-	public void setEventType(String eventType){
-		this.eventType = Enum.valueOf(EventType.class, eventType);
-	}
-	
 	public String getEventName() {
 		return eventName;
 	}
