@@ -3,9 +3,12 @@ import java.util.*;
 public class Logic {
 
 	private Event event;
+	private DataManager dataM;
 
-	public Logic(Event event){ //logic instance has a Event parameter
+	public Logic(Event event, DataManager dataM){ //logic instance has a Event and DataManager parameter
 		this.event = event;
+		this.dataM = dataM;
+		
 	}
 
 	////OVERVIEW TAB\\\\
@@ -227,6 +230,46 @@ public class Logic {
 	
 	double getBudget(){
 		return event.getEventBudget();
+	}
+	
+	Vector<Vector<String>> getGuestList(){
+		Vector<Guest> guestList = event.getGuestList();
+		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
+		Vector<String> guestDetail;
+		Guest currGuest;
+		String guestGender = null;
+		
+		for (int i=0; i<guestList.size(); ++i){
+			//Get guest from event guest list
+			currGuest = guestList.get(i);
+			
+			//Parse gender to String
+			switch (currGuest.getGender().ordinal()){
+			case 0:
+				guestGender = "MALE";
+				break;
+			case 1:
+				guestGender = "FEMALE";
+				break;
+			case 2:
+				guestGender = "UNKNOWN";
+				break;
+			}
+
+			//Prepare guestDetail to add to guestVector
+			guestDetail = new Vector<String>();
+			guestDetail.add(currGuest.getName());
+			guestDetail.add(currGuest.getEmailAddress());
+			guestDetail.add(currGuest.getDescription());
+			guestDetail.add(currGuest.getGroup());
+			guestDetail.add(currGuest.getContactNumber());
+			guestDetail.add(guestGender);
+			
+			//Add guestDetail:vector to guestVector:vector of vector
+			guestVector.add(guestDetail);
+		}
+		
+		return guestVector;
 	}
 }	
 
