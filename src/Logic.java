@@ -5,11 +5,13 @@ public class Logic {
 	private Event event;
 	private DataManager dm;
 	private boolean saved;
+	private HotelSuggest hotelSuggester;
 
 	public Logic(Event event, DataManager dm){ //logic instance has a Event parameter
 		this.event = event;
 		this.dm = dm;
 		saved = true;
+		hotelSuggester = new HotelSuggest();
 	}
 
 	boolean getSavedStatus(){
@@ -257,6 +259,28 @@ public class Logic {
 	
 	double getBudget(){
 		return event.getEventBudget();
+	}
+	
+	void clearHotelSuggestions(){
+		event.setSuggestedHotels(new Vector<Hotel>());
+	}
+	
+	void hotelSuggest(int stars, int ratio){
+		hotelSuggester.setStars(stars);
+		hotelSuggester.setEventBudget(event.getEventBudget());
+		hotelSuggester.setBudgetRatio(ratio);
+		hotelSuggester.setStartDate(event.getStartDateAndTime());
+		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
+		Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
+		event.mergeWithExistingHotels(hotelList);
+	}
+	
+	Vector<String> getSuggestedHotelsNames(){
+		Vector<String> names = new Vector<String>();
+		for(Hotel item : event.getSuggestedHotels()){
+			names.add(item.getName());
+		}
+		return names;
 	}
 }	
 

@@ -6,13 +6,13 @@ public class HotelSuggest {
 	private Vector<Hotel> hotelList = null;
 	private int stars;
 	private double eventBudget;
-	private double budgetRatio;
+	private int budgetRatio;
 	private Calendar startDate;
 	private MealType eventMealType;
 	private int numberOfGuests; //assume tables of 10pax each
 	
 	//HotelSuggest constructor
-	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	double budgetRatio, Calendar startDate, MealType eventMealType, int numberOfGuests){
+	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, Calendar startDate, MealType eventMealType, int numberOfGuests){
 		this.hotelList = hotelList;
 		this.stars = stars;
 		this.eventBudget = eventBudget;
@@ -23,7 +23,12 @@ public class HotelSuggest {
 	}
 	
 	public HotelSuggest() {
-		// TODO Auto-generated constructor stub
+		stars = 0;
+		eventBudget = 0;
+		budgetRatio = 0;
+		Calendar startDate = Calendar.getInstance();
+		eventMealType = MealType.DINNER;	//WARNING NEED TO BE CHANGED
+		numberOfGuests = 0;
 	}
 
 	//HotelSuggest Getters and Setters
@@ -55,7 +60,7 @@ public class HotelSuggest {
 		return budgetRatio;
 	}
 
-	public void setBudgetRatio(double budgetRatio) {
+	public void setBudgetRatio(int budgetRatio) {
 		this.budgetRatio = budgetRatio;
 	}
 

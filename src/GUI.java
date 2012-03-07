@@ -142,7 +142,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JButton btn4_Suggest;
 	private JButton btn4_Next;
 	private JTextPane textPane4_HotelDetails;
-	private JList list4;
+	private JList<String> list4;
 	private JSlider slider4;
 	private JTextPane textPane4_Guests;
 	private JTextPane textPane4_Budget;
@@ -734,6 +734,26 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn4_Suggest.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Suggest.setBounds(550, 167, 90, 30);
         panel4.add(btn4_Suggest);
+        btn4_Suggest.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		//shld check if guests = 0, if so show warning
+        		lg.clearHotelSuggestions();
+        		int budgetRatio = slider4.getValue();
+        		if(chckbx4_3Star.isSelected()){
+        			lg.hotelSuggest(3, budgetRatio);
+        		}
+        		if(chckbx4_4Star.isSelected()){
+        			lg.hotelSuggest(4, budgetRatio);
+        		}
+        		if(chckbx4_5Star.isSelected()){
+        			lg.hotelSuggest(5, budgetRatio);
+        		}
+        		
+        		//display
+        		list4.removeAll();
+        		list4.setListData(lg.getSuggestedHotelsNames());
+        	}
+        });
         
         JPanel panel4_SuggestedList = new JPanel();
         panel4_SuggestedList.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Suggested List of Hotels", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -745,7 +765,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         scrollPane4.setBounds(6, 16, 216, 226);
         panel4_SuggestedList.add(scrollPane4);
         
-        list4 = new JList();
+        list4 = new JList<String>();
+        /*
         list4.setModel(new AbstractListModel() {
         	String[] values = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
         	public int getSize() {
@@ -756,6 +777,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         	}
         });
         list4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        */
         scrollPane4.setViewportView(list4);
         
         textPane4_HotelDetails = new JTextPane();

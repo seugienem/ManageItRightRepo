@@ -24,6 +24,9 @@ public class Event implements Serializable{
 		eventType = null;
 		eventBudget = 0.0;
 		eventDescription = "";
+		suggestedHotels = new Vector<Hotel>();
+		guestList = new Vector<Guest>();
+		programmeSchedule = new Vector<Programme>();
 	}
 	
 	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
@@ -94,6 +97,9 @@ public class Event implements Serializable{
 		this.guestList = guestList;
 	}
 
+	public void mergeWithExistingHotels(Vector<Hotel> newList){
+		suggestedHotels.addAll(newList);
+	}
 	public Vector<Hotel> getSuggestedHotels() {
 		return suggestedHotels;
 	}
