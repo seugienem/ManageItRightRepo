@@ -2,12 +2,16 @@ import java.io.File;
 import java.util.*;
 
 public class Logic {
+
 	private Event event;
+
 	private DataManager dm;
 	private boolean saved;
 	private HotelSuggest hotelSuggester;
+	private DataManager dataM;
 
-	public Logic(Event event, DataManager dm){ //logic instance has a Event parameter
+
+	public Logic(Event event, DataManager dm){ //logic instance has a Event and DataManager parameter
 		this.event = event;
 		this.dm = dm;
 		saved = true;
@@ -18,15 +22,14 @@ public class Logic {
 		return saved;
 	}
 	
-	//dataManager stuff
 	void saveEvent(File out){
-		dm.save(out, event);
 		saved = true;
+		dm.save(out, event);
 	}
 	
 	void loadEvent(File in){
-		event = dm.load(in);
 		saved = true;
+		dm.load(in);
 	}
 	
 	////OVERVIEW TAB\\\\
@@ -110,7 +113,7 @@ public class Logic {
 	void setEventType(int eventType){
 		saved = false;
 		EventType eType = null;
-				
+		
 		switch(eventType){
 		case 0:
 			eType = EventType.ANNIVERSARY;
@@ -156,17 +159,17 @@ public class Logic {
 		event.setEventName(name);
 	}
 	
-	void setEventStartDate(Calendar date){
+	void setEventStartDate(Date date){
 		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
-		if(date == null)
-			return;
-		startCal.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE));
+		
+		startCal.set(date.getYear(), date.getMonth(), date.getDate());
 		event.setStartDateAndTime(startCal);
 	}
 	
 	Date getEventStartDate(){
-		Calendar startCal = event.getStartDateAndTime();
+		saved = false;
+		Calendar startCal = event.getEndDateAndTime();
 		Date startDate = new Date();
 		
 		startDate.setYear(startCal.get(Calendar.YEAR));
@@ -259,6 +262,28 @@ public class Logic {
 	
 	double getBudget(){
 		return event.getEventBudget();
+	}
+	
+	void clearHotelSuggestions(){
+		event.setSuggestedHotels(new Vector<Hotel>());
+	}
+	
+	void hotelSuggest(int stars, int ratio){
+		hotelSuggester.setStars(stars);
+		hotelSuggester.setEventBudget(event.getEventBudget());
+		hotelSuggester.setBudgetRatio(ratio);
+		hotelSuggester.setStartDate(event.getStartDateAndTime());
+		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
+		Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
+		event.mergeWithExistingHotels(hotelList);
+	}
+	
+	Vector<String> getSuggestedHotelsNames(){
+		Vector<String> names = new Vector<String>();
+		for(Hotel item : event.getSuggestedHotels()){
+			names.add(item.getName());
+		}
+		return names;
 	}
 	
 	Vector<Vector<String>> getGuestList(){
