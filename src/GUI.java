@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -50,6 +51,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -751,6 +753,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         		
         		//display
         		list4.removeAll();
+        		textPane4_HotelDetails.setText("");
         		list4.setListData(lg.getSuggestedHotelsNames());
         	}
         });
@@ -766,19 +769,16 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         panel4_SuggestedList.add(scrollPane4);
         
         list4 = new JList<String>();
-        /*
-        list4.setModel(new AbstractListModel() {
-        	String[] values = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
-        	public int getSize() {
-        		return values.length;
-        	}
-        	public Object getElementAt(int index) {
-        		return values[index];
-        	}
-        });
         list4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        */
         scrollPane4.setViewportView(list4);
+        list4.addListSelectionListener(new ListSelectionListener(){
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Object obj = e.getSource();
+				JList list = (JList)obj;
+				textPane4_HotelDetails.setText(lg.getHotelInformation((String)list.getSelectedValue()));
+			}
+        });
         
         textPane4_HotelDetails = new JTextPane();
         textPane4_HotelDetails.setEditable(false);

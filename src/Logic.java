@@ -284,6 +284,17 @@ public class Logic {
 		return names;
 	}
 	
+	String getHotelInformation(String hotelName){
+		String hotelDetails = "";
+		for(Hotel item : event.getSuggestedHotels()){
+			if(hotelName.equals(item.getName())){
+				hotelDetails = hotelDetails + hotelName + '\n';
+				hotelDetails = hotelDetails + "TO DO FOR Step 4: uncomment HotelSuggest.java guest condition and format the rest of this string";
+			}
+		}
+		return hotelDetails;
+	}
+	
 	Vector<Vector<String>> getGuestList(){
 		Vector<Guest> guestList = event.getGuestList();
 		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();

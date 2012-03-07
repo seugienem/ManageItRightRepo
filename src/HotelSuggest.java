@@ -135,7 +135,7 @@ public class HotelSuggest {
 			numberOfTables = numberOfGuests/10;
 		
 		if(numberOfTables == 0){
-			return new Vector<Hotel>();
+			//return new Vector<Hotel>();
 		}
 		
 		//Generate suggested hotels
