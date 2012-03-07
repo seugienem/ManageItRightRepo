@@ -8,8 +8,6 @@ public class Logic {
 	private DataManager dm;
 	private boolean saved;
 	private HotelSuggest hotelSuggester;
-	private DataManager dataM;
-
 
 	public Logic(Event event, DataManager dm){ //logic instance has a Event and DataManager parameter
 		this.event = event;

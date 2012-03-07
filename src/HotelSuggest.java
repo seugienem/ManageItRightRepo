@@ -123,6 +123,9 @@ public class HotelSuggest {
 		
 		//Calculate hotel budget
 		double hotelBudget = (eventBudget * budgetRatio/100.0);
+		if(hotelBudget == 0){
+			return new Vector<Hotel>();
+		}
 		
 		//Calculate number of tables required 
 		int numberOfTables;
@@ -130,6 +133,10 @@ public class HotelSuggest {
 			numberOfTables = numberOfGuests/10 + 1;
 		else 
 			numberOfTables = numberOfGuests/10;
+		
+		if(numberOfTables == 0){
+			return new Vector<Hotel>();
+		}
 		
 		//Generate suggested hotels
 		Vector<Hotel> suggestedHotels = new Vector<Hotel>();
@@ -149,9 +156,9 @@ public class HotelSuggest {
 					currentMenu = tryMenu.get(j);
 					if (currentMenu.getDayType() == eventDayType && currentMenu.getMealType() == eventMealType){ //if required day and required meal types match offerings
 						
-						if (currentMenu.getPricePerTable()*numberOfTables <= hotelBudget)	//if menu falls within hotel budget
+						if (currentMenu.getPricePerTable()*numberOfTables <= hotelBudget){	//if menu falls within hotel budget
 							selectedMenu.add(currentMenu); 								 	//add to selected menu list
-						
+						}
 					}
 				}
 			
