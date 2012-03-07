@@ -65,6 +65,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -88,7 +90,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 
 
-public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
+public class GUI extends JFrame implements FocusListener, PropertyChangeListener, MouseListener {
 	private JFileChooser fileChooser = new JFileChooser();
 	private JTabbedPane jtp;
 	private JLabel lbl0_Step1;
@@ -235,6 +237,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn0_New.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent arg0) {
+        		// TODO: create new event
+        		// then the next tab is selected.
         		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
         	}
         });
@@ -247,12 +251,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn0_Load.addActionListener(new ExportImportButtonsListener());
         
         JButton btn0_Continue = new JButton("Continue");
-        btn0_Continue.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent arg0) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
+        btn0_Continue.addMouseListener(this);
         btn0_Continue.setBounds(550, 490, 90, 30);
         btn0_Continue.setFont(new Font("Tahoma", Font.BOLD, 12));
         panel0.setLayout(null);
@@ -453,12 +452,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         textField1_budget.addFocusListener(this);
         
         JButton btn1_Next = new JButton("Next");
-        btn1_Next.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
+        btn1_Next.addMouseListener(this);
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
@@ -581,12 +575,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	        btn2_Load.addActionListener(new ExportImportButtonsListener());
 	        
 	        btn2_Next = new JButton("Next");
-	        btn2_Next.addMouseListener(new MouseAdapter() {
-	        	@Override
-	        	public void mouseClicked(MouseEvent e) {
-	        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-	        	}
-	        });
+	        btn2_Next.addMouseListener(this);
 	        btn2_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Next.setBounds(560, 490, 80, 30);
 	        panel2.add(btn2_Next);
@@ -684,12 +673,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn3_Export.addActionListener(new ExportImportButtonsListener());
         
         btn3_Next = new JButton("Next");
-        btn3_Next.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
+        btn3_Next.addMouseListener(this);
         btn3_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Next.setBounds(560, 490, 80, 30);
         panel3.add(btn3_Next);
@@ -828,6 +812,30 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	};
 	
 	/*
+	 * MouseListener
+	 */
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+	}
+	
+	/*
 	 * FocusListener Override
 	 */
 	@Override
@@ -918,5 +926,4 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	
     }
 
-	
 }
