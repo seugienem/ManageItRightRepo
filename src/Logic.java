@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class Logic {
-
 	private Event event;
 
 	public Logic(Event event){ //logic instance has a Event parameter
@@ -88,7 +87,7 @@ public class Logic {
 	
 	void setEventType(int eventType){
 		EventType eType = null;
-		
+				
 		switch(eventType){
 		case 0:
 			eType = EventType.ANNIVERSARY;
@@ -123,6 +122,7 @@ public class Logic {
 		}
 		
 		event.setEventType(eType);
+		
 	}
 
 	int getEventType(){
@@ -133,15 +133,16 @@ public class Logic {
 		event.setEventName(name);
 	}
 	
-	void setEventStartDate(Date date){
+	void setEventStartDate(Calendar date){
 		Calendar startCal = event.getStartDateAndTime();
-		
-		startCal.set(date.getYear(), date.getMonth(), date.getDate());
+		if(date == null)
+			return;
+		startCal.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE));
 		event.setStartDateAndTime(startCal);
 	}
 	
 	Date getEventStartDate(){
-		Calendar startCal = event.getEndDateAndTime();
+		Calendar startCal = event.getStartDateAndTime();
 		Date startDate = new Date();
 		
 		startDate.setYear(startCal.get(Calendar.YEAR));

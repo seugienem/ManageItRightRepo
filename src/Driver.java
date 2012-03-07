@@ -10,8 +10,9 @@ class Driver {
 
 
 public static void main(String[] args) {
-        
-        GUI tp = new GUI();
+		Event eventOnStartUp = new Event();	//must init all variables
+		Logic lg = new Logic(eventOnStartUp);
+        GUI tp = new GUI(lg);
         tp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tp.setSize(800, 600);
         tp.setMinimumSize(new Dimension(800, 600));

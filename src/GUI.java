@@ -89,6 +89,8 @@ import java.io.File;
 
 
 public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
+	private Logic lg;
+	
 	private JFileChooser fileChooser = new JFileChooser();
 	private JTabbedPane jtp;
 	private JLabel lbl0_Step1;
@@ -141,7 +143,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JCheckBox chckbx4_5Star;
 	private JCheckBox chckbx4_6Star;
 	
-	public GUI() {
+	public GUI(Logic lg) {
+		this.lg = lg;
     	
         setTitle("Manage It Right! v0.1");
         jtp = new JTabbedPane();
@@ -319,7 +322,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         comboBox1.addItem("Talk / Speech");
         comboBox1.addItem("Wedding");
         comboBox1.addItem("Workshop");
-        comboBox1.addFocusListener(this);
+        //comboBox1.addFocusListener(this);
+        comboBox1.addActionListener(new ComboBox1Listener());
         
         JLabel lbl1_EventName = new JLabel("Event Name:");
         lbl1_EventName.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -798,6 +802,19 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         panel4.add(btn4_Next);
 	}
 	
+	
+	/*
+	 * Overrides for ComboBox1
+	 */
+	class ComboBox1Listener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			int selectedEventType = ((JComboBox)e.getSource()).getSelectedIndex();
+			lg.setEventType(selectedEventType);
+			System.out.println(comboBox1.getItemAt(lg.getEventType()));
+		}
+	}
+	
 	/*
 	 * Overrides for all export and import buttons in GUI
 	 */
@@ -838,28 +855,32 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	public void focusLost(FocusEvent e){
 		Object obj = e.getSource();
 		if(obj == textField1_EventName){
-			System.out.println(textField1_EventName.getText());
+			lg.setEventName(textField1_EventName.getText());
+			System.out.println(lg.getEventName());
 		}
 		else if(obj == textArea1_EventDescription){
-			System.out.println(textArea1_EventDescription.getText());
-		}	
-		else if(obj == comboBox1){
-			System.out.println(comboBox1.getSelectedItem());
+			lg.setEventDes(textArea1_EventDescription.getText());
+			System.out.println(lg.getEventDes());
 		}
 		else if(obj == spinner1_StartTimeH_TextField){
-			System.out.println(spinner1_StartTimeH.getValue());
+			lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
+			System.out.println(lg.getStartTimeH());
 		}
 		else if(obj == spinner1_StartTimeM_TextField){
-			System.out.println(spinner1_StartTimeM.getValue());
+			lg.setStartTimeM((int)spinner1_StartTimeM.getValue());
+			System.out.println(lg.getStartTimeM());
 		}
 		else if(obj == spinner1_EndTimeH_TextField){
-			System.out.println(spinner1_EndTimeH.getValue());
+			lg.setEndTimeH((int)spinner1_EndTimeH.getValue());
+			System.out.println(lg.getEndTimeH());
 		}
 		else if(obj == spinner1_EndTimeM_TextField){
-			System.out.println(spinner1_EndTimeM.getValue());
+			lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
+			System.out.println(lg.getEndTimeM());
 		}
 		else if(obj == textField1_budget){
-			System.out.println(textField1_budget.getText());
+			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
+			System.out.println(lg.getBudget());
 		}
 	}
 	
@@ -868,10 +889,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 		Object obj = e.getSource();
 		
 		if(obj == dateChooser1_StartDate){
-			System.out.println(dateChooser1_StartDate);
 		}
 		else if(obj == dateChooser1_EndDate){
-			System.out.println(dateChooser1_EndDate);
 		}
 		
 	}

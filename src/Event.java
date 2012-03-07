@@ -17,6 +17,13 @@ public class Event implements Serializable{
 	private String eventDescription;
 	
 	public Event(){
+		//init all variables here
+		eventName = "";
+		startDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
+		endDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
+		eventType = null;
+		eventBudget = 0.0;
+		eventDescription = "";
 	}
 	
 	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
@@ -42,6 +49,11 @@ public class Event implements Serializable{
 	public void setEventType(EventType eventType){
 		this.eventType = eventType;
 	}
+	
+	public void setEventType(String eventType){
+		this.eventType = Enum.valueOf(EventType.class, eventType);
+	}
+	
 	public String getEventName() {
 		return eventName;
 	}
