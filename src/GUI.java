@@ -863,20 +863,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 		}
 	}
 	
-	@Override
-	public void propertyChange(PropertyChangeEvent e) {
-		Object obj = e.getSource();
-		
-		if(obj == dateChooser1_StartDate){
-			System.out.println(dateChooser1_StartDate);
-		}
-		else if(obj == dateChooser1_EndDate){
-			System.out.println(dateChooser1_EndDate);
-		}
-		
-	}
-	
-    private int getPreferredRowHeight(JTable table, int r, int margin) {
+	private int getPreferredRowHeight(JTable table, int r, int margin) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -917,6 +904,12 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
     	}
 	
     }
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 }
