@@ -151,7 +151,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_3Star;
 	private JCheckBox chckbx4_4Star;
 	private JCheckBox chckbx4_5Star;
-	private JCheckBox chckbx4_6Star;
 	
 	public GUI(Logic lg) {
 		this.lg = lg;
@@ -697,24 +696,22 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl4_Preference.setBounds(10, 42, 82, 20);
         panel4.add(lbl4_Preference);
         
-        chckbx4_6Star = new JCheckBox("6 Star");
-        chckbx4_6Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        chckbx4_6Star.setBounds(89, 42, 65, 20);
-        panel4.add(chckbx4_6Star);
-        
         chckbx4_5Star = new JCheckBox("5 Star");
+        chckbx4_5Star.setSelected(true);
         chckbx4_5Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        chckbx4_5Star.setBounds(171, 42, 65, 20);
+        chckbx4_5Star.setBounds(102, 42, 65, 20);
         panel4.add(chckbx4_5Star);
         
         chckbx4_4Star = new JCheckBox("4 Star");
+        chckbx4_4Star.setSelected(true);
         chckbx4_4Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        chckbx4_4Star.setBounds(248, 43, 65, 20);
+        chckbx4_4Star.setBounds(202, 42, 65, 20);
         panel4.add(chckbx4_4Star);
         
         chckbx4_3Star = new JCheckBox("3 Star");
+        chckbx4_3Star.setSelected(true);
         chckbx4_3Star.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        chckbx4_3Star.setBounds(329, 42, 65, 20);
+        chckbx4_3Star.setBounds(302, 42, 65, 20);
         panel4.add(chckbx4_3Star);
         
         textPane4_Guests = new JTextPane();

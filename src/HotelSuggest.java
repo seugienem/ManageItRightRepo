@@ -26,8 +26,8 @@ public class HotelSuggest {
 		stars = 0;
 		eventBudget = 0;
 		budgetRatio = 0;
-		Calendar startDate = Calendar.getInstance();
-		eventMealType = MealType.DINNER;	//WARNING NEED TO BE CHANGED
+		startDate = Calendar.getInstance();
+		eventMealType = MealType.DINNER;	
 		numberOfGuests = 0;
 	}
 
