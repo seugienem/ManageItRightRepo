@@ -379,8 +379,28 @@ public class Logic {
 		String hotelDetails = "";
 		for(Hotel item : event.getSuggestedHotels()){
 			if(hotelName.equals(item.getName())){
+				Vector<Menu> menu = item.getMenuList();
+				
 				hotelDetails = hotelDetails + hotelName + '\n';
-				hotelDetails = hotelDetails + "TO DO FOR Step 4: uncomment HotelSuggest.java guest condition and format the rest of this string";
+				hotelDetails = hotelDetails + "Price(s):" + '\n';
+				
+				for(Menu menuItem : menu){
+					if(menuItem.getMealType() == MealType.LUNCH)
+						hotelDetails = hotelDetails + "Lunch ";
+					else
+						hotelDetails = hotelDetails + "Dinner ";
+					
+					if(menuItem.getMenuType() == MenuType.HIGH)
+						hotelDetails = hotelDetails + "High: $" + menuItem.getPricePerTable() + " per table.\n";
+					else
+						hotelDetails = hotelDetails + "Low: $" + menuItem.getPricePerTable() + " per table.\n";
+				}
+				
+				hotelDetails = hotelDetails + "Address: " + item.getAddress() + "\n";
+				hotelDetails = hotelDetails + "Tel: " + item.getContact() + "\n";
+				hotelDetails = hotelDetails + "Website: " + item.getWebsite() + "\n";
+				hotelDetails = hotelDetails + "Email: " + item.getEmail() + "\n";
+				return hotelDetails;
 			}
 		}
 		return hotelDetails;
