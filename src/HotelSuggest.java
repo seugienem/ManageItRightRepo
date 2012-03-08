@@ -88,6 +88,14 @@ public class HotelSuggest {
 		this.numberOfGuests = numberOfGuests;
 	}
 	
+	private MealType getMealType(){
+		if(startDate.get(Calendar.HOUR) > 15){
+			return MealType.LUNCH;
+		}
+		else
+			return MealType.DINNER;
+	}
+	
 	private DayType getDayType(Calendar startDate){
 		int day = startDate.get(Calendar.DAY_OF_WEEK); 
 		DayType daytype = null;
@@ -112,6 +120,9 @@ public class HotelSuggest {
 	public Vector<Hotel> suggest(DataManager dataM){
 		//Get day of week from start date of event
 		DayType eventDayType = getDayType(startDate);
+		
+		//Get expected meal type based on start time of event
+		this.eventMealType = getMealType();
 		
 		
 		//Read hotelList from DataManager for the first time only
