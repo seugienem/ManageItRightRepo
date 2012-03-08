@@ -93,7 +93,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 
 
-public class GUI extends JFrame implements FocusListener, PropertyChangeListener, MouseListener {
+public class GUI extends JFrame implements FocusListener, MouseListener {
 	private Logic lg;
 	
 	private JFileChooser fileChooser = new JFileChooser();
@@ -336,12 +336,17 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         panel1.add(lbl1_EventDate);
         
         dateChooser1_StartDate = new JDateChooser();
+        dateChooser1_StartDate.addPropertyChangeListener(new PropertyChangeListener() {
+        	public void propertyChange(PropertyChangeEvent evt) {
+        		if (dateChooser1_StartDate.getDate()!= null) {
+					System.out.println( (Date)evt.getNewValue());
+				}
+        	}
+        });
         dateChooser1_StartDate.setDateFormatString("dd/MM/YYYY");
         dateChooser1_StartDate.setBounds(120, 142, 117, 20);
         panel1.add(dateChooser1_StartDate);
-        dateChooser1_StartDate.addPropertyChangeListener(this);
-
-        
+     
         JLabel lbl1_StartTime = new JLabel("Start Time:");
         lbl1_StartTime.setFont(new Font("Tahoma", Font.PLAIN, 12));
         lbl1_StartTime.setBounds(264, 142, 68, 14);
@@ -378,10 +383,17 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         panel1.add(lbl1_EndDate);
         
         dateChooser1_EndDate = new JDateChooser();
+        dateChooser1_EndDate.addPropertyChangeListener(new PropertyChangeListener() {
+        	public void propertyChange(PropertyChangeEvent evt) {
+        		if (dateChooser1_EndDate.getDate()!= null) {
+					System.out.println( (Date)evt.getNewValue());
+				}
+        	}
+        });
         dateChooser1_EndDate.setDateFormatString("dd/MM/YYYY");
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
         panel1.add(dateChooser1_EndDate);
-        dateChooser1_EndDate.addPropertyChangeListener(this);
+
         
         
         JLabel lbl1_EndTime = new JLabel("End Time:");
@@ -937,23 +949,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 		}
 	}
 	
-	@Override
-	public void propertyChange(PropertyChangeEvent e) {
-		Object obj = e.getSource();
-		
-		if(obj == dateChooser1_StartDate){
-			Date date = dateChooser1_StartDate.getDate();
-			if (date == null)
-				return;
-			System.out.println(date.toString());
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
-			System.out.println(cal.get(Calendar.MONTH));
-		}
-		else if(obj == dateChooser1_EndDate){
-		}
-		
-	}
+	
 	
     private int getPreferredRowHeight(JTable table, int r, int margin) {
 		// TODO Auto-generated method stub
