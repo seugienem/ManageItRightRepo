@@ -338,6 +338,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         dateChooser1_StartDate.addPropertyChangeListener(new PropertyChangeListener() {
         	public void propertyChange(PropertyChangeEvent evt) {
         		if (dateChooser1_StartDate.getDate()!= null) {
+        			lg.setEventStartDate((Date)evt.getNewValue());
 					System.out.println( (Date)evt.getNewValue());
 				}
         	}
@@ -747,7 +748,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel4.add(btn4_Suggest);
         btn4_Suggest.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e){
-        		//shld check if guests = 0, if so show warning
         		lg.clearHotelSuggestions();
         		int budgetRatio = slider4.getValue();
         		if(chckbx4_3Star.isSelected()){
@@ -802,7 +802,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	//refresh all fields
-	void update(){
+	void updateAll(){
+		updateStep1();
+	}
+	
+	void updateStep1(){
 		//step 1
 		comboBox1.setSelectedIndex(lg.getEventType());
 		textField1_EventName.setText(lg.getEventName());
@@ -812,6 +816,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		spinner1_EndTimeM.setValue(lg.getEndTimeM());
 		textArea1_EventDescription.setText(lg.getEventDes());
 		textField1_budget.setText(String.valueOf(lg.getBudget()));
+		dateChooser1_StartDate.setDate(lg.getEventStartDate());
+	}
+	
+	void updateStep4(){
+		
 	}
 	
 	/*
@@ -870,7 +879,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				if(file == null)
 					return;
 				lg.loadEvent(file);
-				update();
+				updateAll();
 			}
 			else if (obj == mntmSaveEvent){
 				fileChooser.showSaveDialog(frame);

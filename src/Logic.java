@@ -27,7 +27,7 @@ public class Logic {
 	
 	void loadEvent(File in){
 		saved = true;
-		dm.load(in);
+		event = dm.load(in);
 	}
 	
 	////OVERVIEW TAB\\\\
@@ -366,6 +366,9 @@ public class Logic {
 		for(Hotel item : event.getSuggestedHotels()){
 			names.add(item.getName());
 		}
+		if(names.size() == 0)
+			names.add("No hotels match your criteria!");
+		
 		return names;
 	}
 	
