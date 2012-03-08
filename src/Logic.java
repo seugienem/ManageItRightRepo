@@ -1,13 +1,35 @@
+import java.io.File;
 import java.util.*;
 
 public class Logic {
 
 	private Event event;
 
-	public Logic(Event event){ //logic instance has a Event parameter
+	private DataManager dm;
+	private boolean saved;
+	private HotelSuggest hotelSuggester;
+
+	public Logic(Event event, DataManager dm){ //logic instance has a Event and DataManager parameter
 		this.event = event;
+		this.dm = dm;
+		saved = true;
+		hotelSuggester = new HotelSuggest();
 	}
 
+	boolean getSavedStatus(){
+		return saved;
+	}
+	
+	void saveEvent(File out){
+		saved = true;
+		dm.save(out, event);
+	}
+	
+	void loadEvent(File in){
+		saved = true;
+		dm.load(in);
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
@@ -87,6 +109,7 @@ public class Logic {
 	////STEP 1: EVENT DETAILS TAB\\\\
 	
 	void setEventType(int eventType){
+		saved = false;
 		EventType eType = null;
 		
 		switch(eventType){
@@ -130,10 +153,12 @@ public class Logic {
 	}
 	
 	void setEventName(String name){
+		saved = false;
 		event.setEventName(name);
 	}
 	
 	void setEventStartDate(Date date){
+		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
 		
 		startCal.set(date.getYear(), date.getMonth(), date.getDate());
@@ -141,6 +166,7 @@ public class Logic {
 	}
 	
 	Date getEventStartDate(){
+		saved = false;
 		Calendar startCal = event.getEndDateAndTime();
 		Date startDate = new Date();
 		
@@ -152,6 +178,7 @@ public class Logic {
 	}
 	
 	void setEventEndDate(Date date){
+		saved = false;
 		Calendar endCal = event.getEndDateAndTime();
 		
 		endCal.set(date.getYear(), date.getMonth(), date.getDate());
@@ -170,6 +197,7 @@ public class Logic {
 	}
 	
 	void setStartTimeH(int startH){
+		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
 		
 		startCal.set(Calendar.HOUR_OF_DAY, startH);
@@ -181,6 +209,7 @@ public class Logic {
 	}
 
 	void setStartTimeM(int startM){
+		saved = false;
 		Calendar startCal = event.getStartDateAndTime();
 
 		startCal.set(Calendar.MINUTE, startM);
@@ -192,6 +221,7 @@ public class Logic {
 	}
 
 	void setEndTimeH(int endH){
+		saved = false;
 		Calendar endCal = event.getEndDateAndTime();
 
 		endCal.set(Calendar.HOUR_OF_DAY, endH);
@@ -203,6 +233,7 @@ public class Logic {
 	}
 	
 	void setEndTimeM(int endM){
+		saved = false;
 		Calendar endCal = event.getEndDateAndTime();
 
 		endCal.set(Calendar.MINUTE, endM);
@@ -214,6 +245,7 @@ public class Logic {
 	}
 
 	void setEventDes(String des){
+		saved = false;
 		event.setEventDescription(des);
 	}
 	
@@ -222,11 +254,85 @@ public class Logic {
 	}
 	
 	void setBudget(double budget){
+		saved = false;
 		event.setEventBudget(budget);
 	}
 	
 	double getBudget(){
 		return event.getEventBudget();
+	}
+	
+	void clearHotelSuggestions(){
+		event.setSuggestedHotels(new Vector<Hotel>());
+	}
+	
+	void hotelSuggest(int stars, int ratio){
+		hotelSuggester.setStars(stars);
+		hotelSuggester.setEventBudget(event.getEventBudget());
+		hotelSuggester.setBudgetRatio(ratio);
+		hotelSuggester.setStartDate(event.getStartDateAndTime());
+		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
+		Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
+		event.mergeWithExistingHotels(hotelList);
+	}
+	
+	Vector<String> getSuggestedHotelsNames(){
+		Vector<String> names = new Vector<String>();
+		for(Hotel item : event.getSuggestedHotels()){
+			names.add(item.getName());
+		}
+		return names;
+	}
+	
+	String getHotelInformation(String hotelName){
+		String hotelDetails = "";
+		for(Hotel item : event.getSuggestedHotels()){
+			if(hotelName.equals(item.getName())){
+				hotelDetails = hotelDetails + hotelName + '\n';
+				hotelDetails = hotelDetails + "TO DO FOR Step 4: uncomment HotelSuggest.java guest condition and format the rest of this string";
+			}
+		}
+		return hotelDetails;
+	}
+	
+	Vector<Vector<String>> getGuestList(){
+		Vector<Guest> guestList = event.getGuestList();
+		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
+		Vector<String> guestDetail;
+		Guest currGuest;
+		String guestGender = null;
+		
+		for (int i=0; i<guestList.size(); ++i){
+			//Get guest from event guest list
+			currGuest = guestList.get(i);
+			
+			//Parse gender to String
+			switch (currGuest.getGender().ordinal()){
+			case 0:
+				guestGender = "MALE";
+				break;
+			case 1:
+				guestGender = "FEMALE";
+				break;
+			case 2:
+				guestGender = "UNKNOWN";
+				break;
+			}
+
+			//Prepare guestDetail to add to guestVector
+			guestDetail = new Vector<String>();
+			guestDetail.add(currGuest.getName());
+			guestDetail.add(currGuest.getEmailAddress());
+			guestDetail.add(currGuest.getDescription());
+			guestDetail.add(currGuest.getGroup());
+			guestDetail.add(currGuest.getContactNumber());
+			guestDetail.add(guestGender);
+			
+			//Add guestDetail:vector to guestVector:vector of vector
+			guestVector.add(guestDetail);
+		}
+		
+		return guestVector;
 	}
 }	
 

@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -28,6 +29,7 @@ import java.awt.Choice;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -49,6 +51,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -65,6 +68,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -88,7 +93,9 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 
 
-public class GUI extends JFrame implements FocusListener, PropertyChangeListener{
+public class GUI extends JFrame implements FocusListener, PropertyChangeListener, MouseListener {
+	private Logic lg;
+	
 	private JFileChooser fileChooser = new JFileChooser();
 	private JTabbedPane jtp;
 	private JLabel lbl0_Step1;
@@ -97,6 +104,11 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JLabel lbl0_Step4;
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
+	private JMenu mnFile;
+	private JMenuBar menuBar;
+	private JMenuItem mntmCreateNewEvent;
+	private JMenuItem mntmLoadEvent;
+	private JMenuItem mntmSaveEvent;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -132,7 +144,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JButton btn4_Suggest;
 	private JButton btn4_Next;
 	private JTextPane textPane4_HotelDetails;
-	private JList list4;
+	private JList<String> list4;
 	private JSlider slider4;
 	private JTextPane textPane4_Guests;
 	private JTextPane textPane4_Budget;
@@ -141,7 +153,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	private JCheckBox chckbx4_5Star;
 	private JCheckBox chckbx4_6Star;
 	
-	public GUI() {
+	public GUI(Logic lg) {
+		this.lg = lg;
     	
         setTitle("Manage It Right! v0.1");
         jtp = new JTabbedPane();
@@ -161,10 +174,10 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
     	/*
     	 * Menu Bar
     	 */
-        JMenuBar menuBar = new JMenuBar();
+    	menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         
-        JMenu mnFile = new JMenu("File");
+        mnFile = new JMenu("File");
         mnFile.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         menuBar.add(mnFile);
         mnFile.setMnemonic(KeyEvent.VK_F);
@@ -174,38 +187,17 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         mntmCreateNewEvent.addActionListener(new ActionListener(){
         	@Override
         	public void actionPerformed(ActionEvent e){
-        		//what to do when event is created??
+        		jtp.setSelectedIndex(1);
         	}
         });
         
-        JMenuItem mntmLoadEvent = new JMenuItem("Load Event");
+        mntmLoadEvent = new JMenuItem("Load Event");
         mnFile.add(mntmLoadEvent);
-        
-        mntmLoadEvent.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame();
-				fileChooser.showOpenDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
-				//get event object and refresh all fields
-			}
-        });
-        
         mntmLoadEvent.addActionListener(new ExportImportButtonsListener());
         
-        JMenuItem mntmSaveEvent = new JMenuItem("Save Event");
+        mntmSaveEvent = new JMenuItem("Save Event");
         mnFile.add(mntmSaveEvent);
-        
-        mntmSaveEvent.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame();
-				fileChooser.showSaveDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
-			}
-        });
+        mntmSaveEvent.addActionListener(new ExportImportButtonsListener());
         
         /*
         JSeparator separator = new JSeparator();
@@ -235,6 +227,8 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn0_New.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent arg0) {
+        		// TODO: create new event
+        		// then the next tab is selected.
         		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
         	}
         });
@@ -247,12 +241,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn0_Load.addActionListener(new ExportImportButtonsListener());
         
         JButton btn0_Continue = new JButton("Continue");
-        btn0_Continue.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent arg0) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
+        btn0_Continue.addMouseListener(this);
         btn0_Continue.setBounds(550, 490, 90, 30);
         btn0_Continue.setFont(new Font("Tahoma", Font.BOLD, 12));
         panel0.setLayout(null);
@@ -319,7 +308,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         comboBox1.addItem("Talk / Speech");
         comboBox1.addItem("Wedding");
         comboBox1.addItem("Workshop");
-        comboBox1.addFocusListener(this);
+        comboBox1.addActionListener(new ComboBox1Listener());
         
         JLabel lbl1_EventName = new JLabel("Event Name:");
         lbl1_EventName.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -453,12 +442,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         textField1_budget.addFocusListener(this);
         
         JButton btn1_Next = new JButton("Next");
-        btn1_Next.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
+        btn1_Next.addMouseListener(this);
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
@@ -581,12 +565,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	        btn2_Load.addActionListener(new ExportImportButtonsListener());
 	        
 	        btn2_Next = new JButton("Next");
-	        btn2_Next.addMouseListener(new MouseAdapter() {
-	        	@Override
-	        	public void mouseClicked(MouseEvent e) {
-	        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-	        	}
-	        });
+	        btn2_Next.addMouseListener(this);
 	        btn2_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Next.setBounds(560, 490, 80, 30);
 	        panel2.add(btn2_Next);
@@ -684,12 +663,7 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn3_Export.addActionListener(new ExportImportButtonsListener());
         
         btn3_Next = new JButton("Next");
-        btn3_Next.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
-        	}
-        });
+        btn3_Next.addMouseListener(this);
         btn3_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Next.setBounds(560, 490, 80, 30);
         panel3.add(btn3_Next);
@@ -762,6 +736,27 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn4_Suggest.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Suggest.setBounds(550, 167, 90, 30);
         panel4.add(btn4_Suggest);
+        btn4_Suggest.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		//shld check if guests = 0, if so show warning
+        		lg.clearHotelSuggestions();
+        		int budgetRatio = slider4.getValue();
+        		if(chckbx4_3Star.isSelected()){
+        			lg.hotelSuggest(3, budgetRatio);
+        		}
+        		if(chckbx4_4Star.isSelected()){
+        			lg.hotelSuggest(4, budgetRatio);
+        		}
+        		if(chckbx4_5Star.isSelected()){
+        			lg.hotelSuggest(5, budgetRatio);
+        		}
+        		
+        		//display
+        		list4.removeAll();
+        		textPane4_HotelDetails.setText("");
+        		list4.setListData(lg.getSuggestedHotelsNames());
+        	}
+        });
         
         JPanel panel4_SuggestedList = new JPanel();
         panel4_SuggestedList.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Suggested List of Hotels", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -773,18 +768,17 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         scrollPane4.setBounds(6, 16, 216, 226);
         panel4_SuggestedList.add(scrollPane4);
         
-        list4 = new JList();
-        list4.setModel(new AbstractListModel() {
-        	String[] values = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
-        	public int getSize() {
-        		return values.length;
-        	}
-        	public Object getElementAt(int index) {
-        		return values[index];
-        	}
-        });
+        list4 = new JList<String>();
         list4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         scrollPane4.setViewportView(list4);
+        list4.addListSelectionListener(new ListSelectionListener(){
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Object obj = e.getSource();
+				JList list = (JList)obj;
+				textPane4_HotelDetails.setText(lg.getHotelInformation((String)list.getSelectedValue()));
+			}
+        });
         
         textPane4_HotelDetails = new JTextPane();
         textPane4_HotelDetails.setEditable(false);
@@ -796,6 +790,31 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
         btn4_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Next.setBounds(560, 490, 80, 30);
         panel4.add(btn4_Next);
+	}
+	
+	//refresh all fields
+	void update(){
+		//step 1
+		comboBox1.setSelectedIndex(lg.getEventType());
+		textField1_EventName.setText(lg.getEventName());
+		spinner1_StartTimeH.setValue(lg.getStartTimeH());
+		spinner1_StartTimeM.setValue(lg.getStartTimeM());
+		spinner1_EndTimeH.setValue(lg.getEndTimeH());
+		spinner1_EndTimeM.setValue(lg.getEndTimeM());
+		textArea1_EventDescription.setText(lg.getEventDes());
+		textField1_budget.setText(String.valueOf(lg.getBudget()));
+	}
+	
+	/*
+	 * Overrides for ComboBox1
+	 */
+	class ComboBox1Listener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			int selectedEventType = ((JComboBox)e.getSource()).getSelectedIndex();
+			lg.setEventType(selectedEventType);
+			System.out.println(comboBox1.getItemAt(lg.getEventType()));
+		}
 	}
 	
 	/*
@@ -824,8 +843,59 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 				fileChooser.showSaveDialog(frame);
 				File file = fileChooser.getSelectedFile();
 			}
+			else if(obj == mntmLoadEvent){
+				if(!lg.getSavedStatus()){
+					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
+					if(ans == 0){
+						fileChooser.showSaveDialog(frame);
+						File file = fileChooser.getSelectedFile();
+						if(file == null)
+							return;
+						lg.saveEvent(file);
+					}
+					else if(ans == 2)
+						return;
+				}
+				fileChooser.showOpenDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				if(file == null)
+					return;
+				lg.loadEvent(file);
+				update();
+			}
+			else if (obj == mntmSaveEvent){
+				fileChooser.showSaveDialog(frame);
+				File file = fileChooser.getSelectedFile();
+				if(file == null)	//no file selected
+					return;
+				lg.saveEvent(file);
+			}
 		}
 	};
+	
+	/*
+	 * MouseListener
+	 */
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+	}
 	
 	/*
 	 * FocusListener Override
@@ -838,32 +908,54 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	public void focusLost(FocusEvent e){
 		Object obj = e.getSource();
 		if(obj == textField1_EventName){
-			System.out.println(textField1_EventName.getText());
+			lg.setEventName(textField1_EventName.getText());
+			System.out.println(lg.getEventName());
 		}
 		else if(obj == textArea1_EventDescription){
-			System.out.println(textArea1_EventDescription.getText());
-		}	
-		else if(obj == comboBox1){
-			System.out.println(comboBox1.getSelectedItem());
+			lg.setEventDes(textArea1_EventDescription.getText());
+			System.out.println(lg.getEventDes());
 		}
 		else if(obj == spinner1_StartTimeH_TextField){
-			System.out.println(spinner1_StartTimeH.getValue());
+			lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
+			System.out.println(lg.getStartTimeH());
 		}
 		else if(obj == spinner1_StartTimeM_TextField){
-			System.out.println(spinner1_StartTimeM.getValue());
+			lg.setStartTimeM((int)spinner1_StartTimeM.getValue());
+			System.out.println(lg.getStartTimeM());
 		}
 		else if(obj == spinner1_EndTimeH_TextField){
-			System.out.println(spinner1_EndTimeH.getValue());
+			lg.setEndTimeH((int)spinner1_EndTimeH.getValue());
+			System.out.println(lg.getEndTimeH());
 		}
 		else if(obj == spinner1_EndTimeM_TextField){
-			System.out.println(spinner1_EndTimeM.getValue());
+			lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
+			System.out.println(lg.getEndTimeM());
 		}
 		else if(obj == textField1_budget){
-			System.out.println(textField1_budget.getText());
+			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
+			System.out.println(lg.getBudget());
 		}
 	}
 	
-	private int getPreferredRowHeight(JTable table, int r, int margin) {
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+		Object obj = e.getSource();
+		
+		if(obj == dateChooser1_StartDate){
+			Date date = dateChooser1_StartDate.getDate();
+			if (date == null)
+				return;
+			System.out.println(date.toString());
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			System.out.println(cal.get(Calendar.MONTH));
+		}
+		else if(obj == dateChooser1_EndDate){
+		}
+		
+	}
+	
+    private int getPreferredRowHeight(JTable table, int r, int margin) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -905,11 +997,4 @@ public class GUI extends JFrame implements FocusListener, PropertyChangeListener
 	
     }
 
-	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 }

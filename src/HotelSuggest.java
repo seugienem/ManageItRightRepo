@@ -6,13 +6,13 @@ public class HotelSuggest {
 	private Vector<Hotel> hotelList = null;
 	private int stars;
 	private double eventBudget;
-	private double budgetRatio;
+	private int budgetRatio;
 	private Calendar startDate;
 	private MealType eventMealType;
 	private int numberOfGuests; //assume tables of 10pax each
 	
 	//HotelSuggest constructor
-	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	double budgetRatio, Calendar startDate, MealType eventMealType, int numberOfGuests){
+	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, Calendar startDate, MealType eventMealType, int numberOfGuests){
 		this.hotelList = hotelList;
 		this.stars = stars;
 		this.eventBudget = eventBudget;
@@ -23,7 +23,12 @@ public class HotelSuggest {
 	}
 	
 	public HotelSuggest() {
-		// TODO Auto-generated constructor stub
+		stars = 0;
+		eventBudget = 0;
+		budgetRatio = 0;
+		Calendar startDate = Calendar.getInstance();
+		eventMealType = MealType.DINNER;	//WARNING NEED TO BE CHANGED
+		numberOfGuests = 0;
 	}
 
 	//HotelSuggest Getters and Setters
@@ -55,7 +60,7 @@ public class HotelSuggest {
 		return budgetRatio;
 	}
 
-	public void setBudgetRatio(double budgetRatio) {
+	public void setBudgetRatio(int budgetRatio) {
 		this.budgetRatio = budgetRatio;
 	}
 
@@ -118,6 +123,9 @@ public class HotelSuggest {
 		
 		//Calculate hotel budget
 		double hotelBudget = (eventBudget * budgetRatio/100.0);
+		if(hotelBudget == 0){
+			return new Vector<Hotel>();
+		}
 		
 		//Calculate number of tables required 
 		int numberOfTables;
@@ -125,6 +133,10 @@ public class HotelSuggest {
 			numberOfTables = numberOfGuests/10 + 1;
 		else 
 			numberOfTables = numberOfGuests/10;
+		
+		if(numberOfTables == 0){
+			//return new Vector<Hotel>();
+		}
 		
 		//Generate suggested hotels
 		Vector<Hotel> suggestedHotels = new Vector<Hotel>();
@@ -144,9 +156,9 @@ public class HotelSuggest {
 					currentMenu = tryMenu.get(j);
 					if (currentMenu.getDayType() == eventDayType && currentMenu.getMealType() == eventMealType){ //if required day and required meal types match offerings
 						
-						if (currentMenu.getPricePerTable()*numberOfTables <= hotelBudget)	//if menu falls within hotel budget
+						if (currentMenu.getPricePerTable()*numberOfTables <= hotelBudget){	//if menu falls within hotel budget
 							selectedMenu.add(currentMenu); 								 	//add to selected menu list
-						
+						}
 					}
 				}
 			
