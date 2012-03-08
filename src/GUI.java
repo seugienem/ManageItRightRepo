@@ -160,6 +160,30 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
         getContentPane().add(jtp, BorderLayout.CENTER);
+        jtp.addChangeListener(new ChangeListener(){
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Object obj = e.getSource();
+				JTabbedPane pane = (JTabbedPane)obj;
+				switch(pane.getSelectedIndex()){
+				case 0:
+					break;
+				case 1:
+					updateStep1();
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					updateStep4();
+					break;
+				}
+				
+			}
+        	
+        });
         
         /*
          * Drawing of individual tabs
@@ -824,7 +848,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep4(){
-		
+		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
+		textPane4_Budget.setText(Double.toString(lg.getBudget()));
+		list4.setListData(lg.getSuggestedHotelsNames());
 	}
 	
 	/*

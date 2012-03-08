@@ -149,7 +149,10 @@ public class Logic {
 	}
 
 	int getEventType(){
-		return event.getEventType().ordinal();
+		if(event.getEventType() == null)
+			return 0;
+		else
+			return event.getEventType().ordinal();
 	}
 	
 	void setEventName(String name){
