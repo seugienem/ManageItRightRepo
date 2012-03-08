@@ -116,14 +116,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JComboBox<String> comboBox1;
 	private JDateChooser dateChooser1_StartDate;
 	private JSpinner spinner1_StartTimeH;
-	private JFormattedTextField spinner1_StartTimeH_TextField;
+	//private JFormattedTextField spinner1_StartTimeH_TextField;
 	private JSpinner spinner1_StartTimeM;
-	private JFormattedTextField spinner1_StartTimeM_TextField;
+	//private JFormattedTextField spinner1_StartTimeM_TextField;
 	private JDateChooser dateChooser1_EndDate;
 	private JSpinner spinner1_EndTimeH;
-	private JFormattedTextField spinner1_EndTimeH_TextField;
+	//private JFormattedTextField spinner1_EndTimeH_TextField;
 	private JSpinner spinner1_EndTimeM;
-	private JFormattedTextField spinner1_EndTimeM_TextField;
+	//private JFormattedTextField spinner1_EndTimeM_TextField;
 	private JTextArea textArea1_EventDescription;
 	
 	//GUI2 objects
@@ -361,8 +361,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_StartTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_StartTimeH.setBounds(357, 140, 40, 20);
         panel1.add(spinner1_StartTimeH);
-        spinner1_StartTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeH.getEditor()).getTextField();
-        spinner1_StartTimeH_TextField.addFocusListener(this);
+        //spinner1_StartTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeH.getEditor()).getTextField();
+        //spinner1_StartTimeH_TextField.addFocusListener(this);
+        spinner1_StartTimeH.addChangeListener(new SpinnerListeners());
         
         
         JLabel lbl1_StartTimeM = new JLabel("M");
@@ -374,8 +375,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_StartTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_StartTimeM.setBounds(417, 140, 40, 20);
         panel1.add(spinner1_StartTimeM);
-        spinner1_StartTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeM.getEditor()).getTextField();
-        spinner1_StartTimeM_TextField.addFocusListener(this);
+        //spinner1_StartTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeM.getEditor()).getTextField();
+        //spinner1_StartTimeM_TextField.addFocusListener(this);
+        spinner1_StartTimeM.addChangeListener(new SpinnerListeners());
         
         JLabel lbl1_EndDate = new JLabel("End Date:");
         lbl1_EndDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -410,8 +412,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_EndTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_EndTimeH.setBounds(357, 182, 40, 20);
         panel1.add(spinner1_EndTimeH);
-        spinner1_EndTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeH.getEditor()).getTextField();
-        spinner1_EndTimeH_TextField.addFocusListener(this);
+        //spinner1_EndTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeH.getEditor()).getTextField();
+        //spinner1_EndTimeH_TextField.addFocusListener(this);
+        spinner1_EndTimeH.addChangeListener(new SpinnerListeners());
         
         JLabel label1_EndTimeM = new JLabel("M");
         label1_EndTimeM.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -422,8 +425,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_EndTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_EndTimeM.setBounds(417, 182, 40, 20);
         panel1.add(spinner1_EndTimeM);
-        spinner1_EndTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeM.getEditor()).getTextField();
-        spinner1_EndTimeM_TextField.addFocusListener(this);
+        //spinner1_EndTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeM.getEditor()).getTextField();
+        //spinner1_EndTimeM_TextField.addFocusListener(this);
+        spinner1_EndTimeM.addChangeListener(new SpinnerListeners());
         
         JLabel lbl1_EventDescription = new JLabel("Event Description:");
         lbl1_EventDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -835,6 +839,29 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		}
 	}
 	
+	class SpinnerListeners implements ChangeListener{
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			Object obj = e.getSource();
+			if(obj == spinner1_StartTimeH){
+				lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
+				System.out.println(lg.getStartTimeH());
+			}
+			else if(obj == spinner1_StartTimeM){
+				lg.setStartTimeM((int)spinner1_StartTimeM.getValue());
+				System.out.println(lg.getStartTimeM());
+			}
+			else if(obj == spinner1_EndTimeH){
+				lg.setEndTimeH((int)spinner1_EndTimeH.getValue());
+				System.out.println(lg.getEndTimeH());
+			}
+			else if(obj == spinner1_EndTimeM){
+				lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
+				System.out.println(lg.getEndTimeM());
+			}
+		}
+	}
+	
 	/*
 	 * Overrides for all export and import buttons in GUI
 	 */
@@ -933,6 +960,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			lg.setEventDes(textArea1_EventDescription.getText());
 			System.out.println(lg.getEventDes());
 		}
+		/*
 		else if(obj == spinner1_StartTimeH_TextField){
 			lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
 			System.out.println(lg.getStartTimeH());
@@ -949,6 +977,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
 			System.out.println(lg.getEndTimeM());
 		}
+		*/
 		else if(obj == textField1_budget){
 			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
 			System.out.println(lg.getBudget());
