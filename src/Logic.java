@@ -266,6 +266,91 @@ public class Logic {
 		event.setSuggestedHotels(new Vector<Hotel>());
 	}
 	
+	///STEP 2: GUEST LIST\\\\
+	Vector<Vector<String>> getGuestList(){
+		Vector<Guest> guestList = event.getGuestList();
+		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
+		Vector<String> guestDetail;
+		Guest currGuest;
+		String guestGender = null;
+
+		for (int i=0; i<guestList.size(); ++i){
+			//Get guest from event guest list
+			currGuest = guestList.get(i);
+
+			//Parse gender to String
+			switch (currGuest.getGender().ordinal()){
+			case 0:
+				guestGender = "MALE";
+				break;
+			case 1:
+				guestGender = "FEMALE";
+				break;
+			case 2:
+				guestGender = "UNKNOWN";
+				break;
+			}
+
+			//Prepare guestDetail to add to guestVector	
+			guestDetail = new Vector<String>();
+			guestDetail.add(currGuest.getName());
+			guestDetail.add(currGuest.getEmailAddress());
+			guestDetail.add(currGuest.getDescription());
+			guestDetail.add(currGuest.getGroup());
+			guestDetail.add(currGuest.getContactNumber());
+			guestDetail.add(guestGender);
+
+			//Add guestDetail:vector to guestVector:vector of vector
+			guestVector.add(guestDetail);
+		}
+
+		return guestVector;
+	}
+
+	////STEP 3: PROGRAMME TAB\\\\
+	Vector<Vector<String>> getProgrammeList(){
+		Vector<Programme> programmeList = event.getProgrammeSchedule();
+		Vector<Vector<String>> programmeVector = new Vector<Vector<String>>();
+		Vector<String> programmeDetail;
+		Programme currProgramme;
+		Integer hourInt, minInt;
+		String timeStr;
+		
+		for (int i=0; i<programmeList.size(); ++i){
+			programmeDetail = new Vector<String>();
+			
+			//Get programme from event programme list
+			currProgramme = programmeList.get(i);
+			
+			//Parse startTime to String
+			hourInt = currProgramme.getStartTime().get(Calendar.HOUR_OF_DAY);
+			minInt = currProgramme.getStartTime().get(Calendar.MINUTE);			
+			timeStr = hourInt.toString() + ":" + minInt.toString();
+			
+			//Add start time to programme detail
+			programmeDetail = new Vector<String>();
+			programmeDetail.add(timeStr);
+			
+			//Parse endTime to String
+			hourInt = currProgramme.getEndTime().get(Calendar.HOUR_OF_DAY);
+			minInt = currProgramme.getEndTime().get(Calendar.MINUTE);			
+			timeStr = hourInt.toString() + ":" + minInt.toString();
+			
+			//Add end time to programme detail
+			programmeDetail.add(timeStr);
+			
+			//Add title and inCharge to programme detail
+			programmeDetail.add(currProgramme.getTitle());
+			programmeDetail.add(currProgramme.getInCharge());
+			
+			//Add programme detail to programme vector
+			programmeVector.add(programmeDetail);
+		}
+		
+		return programmeVector;
+	}
+	
+	////STEP 4: HOTEL SUGGESTIONS TAB\\\\
 	void hotelSuggest(int stars, int ratio){
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
@@ -295,45 +380,5 @@ public class Logic {
 		return hotelDetails;
 	}
 	
-	Vector<Vector<String>> getGuestList(){
-		Vector<Guest> guestList = event.getGuestList();
-		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
-		Vector<String> guestDetail;
-		Guest currGuest;
-		String guestGender = null;
-		
-		for (int i=0; i<guestList.size(); ++i){
-			//Get guest from event guest list
-			currGuest = guestList.get(i);
-			
-			//Parse gender to String
-			switch (currGuest.getGender().ordinal()){
-			case 0:
-				guestGender = "MALE";
-				break;
-			case 1:
-				guestGender = "FEMALE";
-				break;
-			case 2:
-				guestGender = "UNKNOWN";
-				break;
-			}
-
-			//Prepare guestDetail to add to guestVector
-			guestDetail = new Vector<String>();
-			guestDetail.add(currGuest.getName());
-			guestDetail.add(currGuest.getEmailAddress());
-			guestDetail.add(currGuest.getDescription());
-			guestDetail.add(currGuest.getGroup());
-			guestDetail.add(currGuest.getContactNumber());
-			guestDetail.add(guestGender);
-			
-			//Add guestDetail:vector to guestVector:vector of vector
-			guestVector.add(guestDetail);
-		}
-		
-		return guestVector;
-	}
 }	
-
 
