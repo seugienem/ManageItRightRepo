@@ -158,7 +158,11 @@ public class Logic {
 		if(event.getEventType() == null)
 			return 0;
 		else
+		{
+			System.out.println("Ordinal: " + event.getEventType().ordinal());
 			return event.getEventType().ordinal();
+		}
+			
 	}
 	
 	void setEventName(String name){
