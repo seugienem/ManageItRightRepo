@@ -311,7 +311,7 @@ public class Logic {
 	}
 
 	////STEP 3: PROGRAMME TAB\\\\
-	Vector<Vector<String>> getProgrammeList(){
+	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
 		Vector<Vector<String>> programmeVector = new Vector<Vector<String>>();
 		Vector<String> programmeDetail;
