@@ -60,6 +60,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.JTextArea;
 
 import java.awt.event.FocusEvent;
@@ -91,6 +92,7 @@ import java.beans.EventHandler;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import javax.swing.ButtonGroup;
 
 
 public class GUI extends JFrame implements FocusListener, MouseListener {
@@ -109,6 +111,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JMenuItem mntmCreateNewEvent;
 	private JMenuItem mntmLoadEvent;
 	private JMenuItem mntmSaveEvent;
+	
+	private Vector<String> guestCols;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -151,6 +155,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_3Star;
 	private JCheckBox chckbx4_4Star;
 	private JCheckBox chckbx4_5Star;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JRadioButton rdbtn1_Lunch;
+	private JRadioButton rdbtn1_Dinner;
 	
 	public GUI(Logic lg) {
 		this.lg = lg;
@@ -455,11 +462,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         JLabel lbl1_EventDescription = new JLabel("Event Description:");
         lbl1_EventDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        lbl1_EventDescription.setBounds(10, 224, 100, 14);
+        lbl1_EventDescription.setBounds(10, 264, 100, 14);
         panel1.add(lbl1_EventDescription);
         
         JScrollPane scrollPane1 = new JScrollPane();
-        scrollPane1.setBounds(120, 220, 435, 171);
+        scrollPane1.setBounds(120, 260, 435, 171);
         panel1.add(scrollPane1);
         
         textArea1_EventDescription = new JTextArea();
@@ -471,13 +478,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         JLabel lbl1_Budget = new JLabel("Budget:          $");
         lbl1_Budget.setFont(new Font("Tahoma", Font.BOLD, 12));
-        lbl1_Budget.setBounds(10, 411, 100, 14);
+        lbl1_Budget.setBounds(10, 451, 100, 14);
         panel1.add(lbl1_Budget);
         
         textField1_budget = new JTextField();
         textField1_budget.setToolTipText("");
         textField1_budget.setColumns(10);
-        textField1_budget.setBounds(120, 409, 117, 20);
+        textField1_budget.setBounds(120, 449, 117, 20);
         panel1.add(textField1_budget);
         textField1_budget.addFocusListener(this);
         
@@ -486,6 +493,31 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
+        
+        JLabel lblMeal = new JLabel("Meal:");
+        lblMeal.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lblMeal.setBounds(10, 224, 46, 14);
+        panel1.add(lblMeal);
+        
+        rdbtn1_Lunch = new JRadioButton("Lunch");
+        rdbtn1_Lunch.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		lg.setMealType(0);
+        	}
+        });
+        buttonGroup.add(rdbtn1_Lunch);
+        rdbtn1_Lunch.setBounds(120, 221, 109, 23);
+        panel1.add(rdbtn1_Lunch);
+        
+        rdbtn1_Dinner = new JRadioButton("Dinner");
+        rdbtn1_Dinner.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		lg.setMealType(1);
+        	}
+        });
+        buttonGroup.add(rdbtn1_Dinner);
+        rdbtn1_Dinner.setBounds(264, 221, 109, 23);
+        panel1.add(rdbtn1_Dinner);
 	}
 	
 	
@@ -520,6 +552,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        btn2_Search.setBounds(536, 58, 77, 23);
 	        panel2.add(btn2_Search);
 	        
+
 	        final DefaultTableModel modelGuest = new DefaultTableModel(); 
 	        table2 =new JTable(modelGuest); 
 	        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -548,8 +581,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        modelGuest.addColumn("Group");
 	        modelGuest.addColumn("Email");
 	        modelGuest.addColumn("Contact Number");
-	    
 	        
+	        guestCols = new Vector<String>();
+	        guestCols.add("Name");
+	        guestCols.add("Gender");
+	        guestCols.add("Age");
+	        guestCols.add("Description");
+	        guestCols.add("Group");
+	        guestCols.add("Email");
+	        guestCols.add("Contact Number");
+	    
+
 	        modelGuest.addRow(new Vector<Object>(7));
 	        table2.getColumnModel().getColumn(0).setPreferredWidth(200);
 	        table2.getColumnModel().getColumn(2).setPreferredWidth(30);
@@ -587,7 +629,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        	public void keyTyped(KeyEvent e) {
 	        	}
 	        });
-	      
+	        
 	        JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
 	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
 	        panel2.add(chckbx2_GuestListFinalised);
@@ -836,7 +878,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep1(){
 		//step 1
-		comboBox1.setSelectedIndex(lg.getEventType());
+		comboBox1.setSelectedIndex(lg.getEventType() + 1);
 		textField1_EventName.setText(lg.getEventName());
 		spinner1_StartTimeH.setValue(lg.getStartTimeH());
 		spinner1_StartTimeM.setValue(lg.getStartTimeM());
@@ -845,6 +887,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		textArea1_EventDescription.setText(lg.getEventDes());
 		textField1_budget.setText(String.valueOf(lg.getBudget()));
 		dateChooser1_StartDate.setDate(lg.getEventStartDate());
+		if(lg.getMealType()==0) {
+			rdbtn1_Lunch.setSelected(true);
+			rdbtn1_Dinner.setSelected(false);
+		}
+		else if(lg.getMealType()==1) {
+			rdbtn1_Lunch.setSelected(false);
+			rdbtn1_Dinner.setSelected(true);
+		}
+		
+	}
+	
+	void updateStep2(){	//should not any how call this, otherwise it's inefficient
+		//get vector vector, refresh
+		table2 = new JTable(lg.getProgrammeSchedule(), guestCols);
 	}
 	
 	void updateStep4(){
@@ -904,7 +960,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			else if(obj == btn2_Load){
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
+				if(file == null)
+					return;
+				lg.importFile(file, "Guest");
+				
+				updateStep2();
 			}
 			else if(obj == btn2_Export){
 				fileChooser.showSaveDialog(frame);
@@ -1053,5 +1113,4 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
     	}
 	
     }
-
 }
