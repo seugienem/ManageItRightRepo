@@ -94,8 +94,6 @@ public class Logic {
 		}
 
 		return 2; //if programme schedule is finalised
-
-
 	}
 
 	//Get Step 4 status
