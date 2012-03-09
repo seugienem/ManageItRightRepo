@@ -246,6 +246,16 @@ public class Logic {
 	int getEndTimeM(){
 		return event.getEndDateAndTime().get(Calendar.MINUTE);
 	}
+	
+	public void setMealType(int i) {
+		if (i == 0) event.setMealType(MealType.LUNCH);
+		else if (i == 1) event.setMealType(MealType.DINNER);
+		
+	}
+	
+	public int getMealType() {
+		return event.getMealType().ordinal();
+	}
 
 	void setEventDes(String des){
 		saved = false;
