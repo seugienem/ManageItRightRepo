@@ -878,7 +878,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep1(){
 		//step 1
-		comboBox1.setSelectedIndex(lg.getEventType());
+		comboBox1.setSelectedIndex(lg.getEventType() + 1);
 		textField1_EventName.setText(lg.getEventName());
 		spinner1_StartTimeH.setValue(lg.getStartTimeH());
 		spinner1_StartTimeM.setValue(lg.getStartTimeM());
