@@ -105,6 +105,7 @@ public class Event implements Serializable{
 	public void mergeWithExistingHotels(Vector<Hotel> newList){
 		suggestedHotels.addAll(newList);
 	}
+	
 	public Vector<Hotel> getSuggestedHotels() {
 		return suggestedHotels;
 	}
