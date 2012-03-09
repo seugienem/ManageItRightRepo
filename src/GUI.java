@@ -100,12 +100,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	private JFileChooser fileChooser = new JFileChooser();
 	private JTabbedPane jtp;
-	private JLabel lbl0_Step1;
-	private JLabel lbl0_Step2;
-	private JLabel lbl0_Step3;
-	private JLabel lbl0_Step4;
-	private JTextPane textPane0_EventName;
-	private JButton btn0_Load;
+	
 	private JMenu mnFile;
 	private JMenuBar menuBar;
 	private JMenuItem mntmCreateNewEvent;
@@ -113,6 +108,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JMenuItem mntmSaveEvent;
 	
 	private Vector<String> guestCols;
+	
+	//GUI0 objects
+	private JLabel lbl0_Step1;
+	private JLabel lbl0_Step2;
+	private JLabel lbl0_Step3;
+	private JLabel lbl0_Step4;
+	private JTextPane textPane0_EventName;
+	private JButton btn0_Load;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -129,6 +132,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JSpinner spinner1_EndTimeM;
 	//private JFormattedTextField spinner1_EndTimeM_TextField;
 	private JTextArea textArea1_EventDescription;
+	private JRadioButton rdbtn1_Lunch;
+	private JRadioButton rdbtn1_Dinner;
 	
 	//GUI2 objects
 	private JButton btn2_Export;
@@ -156,8 +161,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_4Star;
 	private JCheckBox chckbx4_5Star;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JRadioButton rdbtn1_Lunch;
-	private JRadioButton rdbtn1_Dinner;
 	
 	public GUI(Logic lg) {
 		this.lg = lg;
@@ -167,30 +170,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
         getContentPane().add(jtp, BorderLayout.CENTER);
-        jtp.addChangeListener(new ChangeListener(){
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				Object obj = e.getSource();
-				JTabbedPane pane = (JTabbedPane)obj;
-				switch(pane.getSelectedIndex()){
-				case 0:
-					break;
-				case 1:
-					updateStep1();
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				case 4:
-					updateStep4();
-					break;
-				}
-				
-			}
-        	
-        });
         
         /*
          * Drawing of individual tabs
@@ -242,6 +221,32 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         });
         mnFile.add(mntmExit);
         */
+        
+        jtp.addChangeListener(new ChangeListener(){
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Object obj = e.getSource();
+				JTabbedPane pane = (JTabbedPane)obj;
+				switch(pane.getSelectedIndex()){
+				case 0:
+					updateStep0();
+					break;
+				case 1:
+					updateStep1();
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					updateStep4();
+					break;
+				}
+				
+			}
+        	
+        });
     }
 	
 	
@@ -279,13 +284,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         textPane0_EventName = new JTextPane();
         textPane0_EventName.setEditable(false);
-        textPane0_EventName.setText("Event Name");
         textPane0_EventName.setFont(new Font("Tahoma", Font.PLAIN, 16));
         textPane0_EventName.setBounds(136, 11, 504, 30);
         panel0.add(textPane0_EventName);
         
-        lbl0_Step1 = new JLabel("Event details are not completed.");
-        lbl0_Step1.setForeground(Color.RED);
+        lbl0_Step1 = new JLabel();
+        lbl0_Step1.setText("Event Details are empty.");
+		lbl0_Step1.setForeground(Color.RED);
         lbl0_Step1.setBounds(10, 52, 630, 30);
         panel0.add(lbl0_Step1);
         
@@ -874,6 +879,25 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	//refresh all fields
 	void updateAll(){
 		updateStep1();
+	}
+	
+	void updateStep0() {
+		
+		switch(lg.step1Status()) {
+			case 0:
+				textPane0_EventName.setText(lg.getEventName());
+				lbl0_Step1.setText("Event Details are empty.");
+				lbl0_Step1.setForeground(Color.RED);
+				break;
+			case 1:
+				lbl0_Step1.setText("Event Details are incompleted.");
+				lbl0_Step1.setForeground(Color.RED);
+				break;
+			case 2:
+				lbl0_Step1.setText("Event Details are completed.");
+				lbl0_Step1.setForeground(Color.GREEN);
+				break;
+		}
 	}
 	
 	void updateStep1(){
