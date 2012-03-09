@@ -30,6 +30,12 @@ public class Logic {
 		event = dm.load(in);
 	}
 	
+	void importFile(File in, String type){
+		if(type.equals("Guest")){
+			dm.importGuest(in);
+		}
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
@@ -113,33 +119,36 @@ public class Logic {
 		
 		switch(eventType){
 		case 0:
-			eType = EventType.ANNIVERSARY;
+			eType = null;
 			break;
 		case 1:
-			eType = EventType.AWARD_CEREMONY;
+			eType = EventType.ANNIVERSARY;
 			break;
 		case 2:
-			eType = EventType.BIRTHDAY_PARTY;
+			eType = EventType.AWARD_CEREMONY;
 			break;
 		case 3:
-			eType = EventType.DINNER_DANCE;
+			eType = EventType.BIRTHDAY_PARTY;
 			break;
 		case 4:
-			eType = EventType.FESTIVE_PARTY;
+			eType = EventType.DINNER_DANCE;
 			break;
 		case 5:
-			eType = EventType.SEMINAR;
+			eType = EventType.FESTIVE_PARTY;
 			break;
 		case 6:
-			eType = EventType.SOCIAL_EVENT;
+			eType = EventType.SEMINAR;
 			break;
 		case 7:
-			eType = EventType.TALK_SPEECH;
+			eType = EventType.SOCIAL_EVENT;
 			break;
 		case 8:
-			eType = EventType.WEDDING;
+			eType = EventType.TALK_SPEECH;
 			break;
 		case 9:
+			eType = EventType.WEDDING;
+			break;
+		case 10:
 			eType = EventType.WORKSHOP;
 			break;
 		}
@@ -149,9 +158,13 @@ public class Logic {
 
 	int getEventType(){
 		if(event.getEventType() == null)
-			return 0;
+			return -1;
 		else
+		{
+			System.out.println("Ordinal: " + event.getEventType().ordinal());
 			return event.getEventType().ordinal();
+		}
+			
 	}
 	
 	void setEventName(String name){

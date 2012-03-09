@@ -60,6 +60,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.JTextArea;
 
 import java.awt.event.FocusEvent;
@@ -110,6 +111,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JMenuItem mntmCreateNewEvent;
 	private JMenuItem mntmLoadEvent;
 	private JMenuItem mntmSaveEvent;
+	
+	private Vector<String> guestCols;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -549,6 +552,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        btn2_Search.setBounds(536, 58, 77, 23);
 	        panel2.add(btn2_Search);
 	        
+
 	        final DefaultTableModel modelGuest = new DefaultTableModel(); 
 	        table2 =new JTable(modelGuest); 
 	        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -577,8 +581,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        modelGuest.addColumn("Group");
 	        modelGuest.addColumn("Email");
 	        modelGuest.addColumn("Contact Number");
-	    
 	        
+	        guestCols = new Vector<String>();
+	        guestCols.add("Name");
+	        guestCols.add("Gender");
+	        guestCols.add("Age");
+	        guestCols.add("Description");
+	        guestCols.add("Group");
+	        guestCols.add("Email");
+	        guestCols.add("Contact Number");
+	    
+
 	        modelGuest.addRow(new Vector<Object>(7));
 	        table2.getColumnModel().getColumn(0).setPreferredWidth(200);
 	        table2.getColumnModel().getColumn(2).setPreferredWidth(30);
@@ -616,7 +629,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        	public void keyTyped(KeyEvent e) {
 	        	}
 	        });
-	      
+	        
 	        JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
 	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
 	        panel2.add(chckbx2_GuestListFinalised);
@@ -865,7 +878,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep1(){
 		//step 1
-		comboBox1.setSelectedIndex(lg.getEventType());
+		comboBox1.setSelectedIndex(lg.getEventType() + 1);
 		textField1_EventName.setText(lg.getEventName());
 		spinner1_StartTimeH.setValue(lg.getStartTimeH());
 		spinner1_StartTimeM.setValue(lg.getStartTimeM());
@@ -883,6 +896,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			rdbtn1_Dinner.setSelected(true);
 		}
 		
+	}
+	
+	void updateStep2(){	//should not any how call this, otherwise it's inefficient
+		//get vector vector, refresh
+		table2 = new JTable(lg.getProgrammeSchedule(), guestCols);
 	}
 	
 	void updateStep4(){
@@ -942,7 +960,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			else if(obj == btn2_Load){
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
+				if(file == null)
+					return;
+				lg.importFile(file, "Guest");
+				
+				updateStep2();
 			}
 			else if(obj == btn2_Export){
 				fileChooser.showSaveDialog(frame);
