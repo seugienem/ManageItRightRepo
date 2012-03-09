@@ -847,6 +847,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		dateChooser1_StartDate.setDate(lg.getEventStartDate());
 	}
 	
+	void updateStep2(){
+	}
+	
 	void updateStep4(){
 		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
 		textPane4_Budget.setText(Double.toString(lg.getBudget()));
@@ -904,7 +907,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			else if(obj == btn2_Load){
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
+				if(file == null)
+					return;
+				lg.importFile(file, "Guest");
+				
+				updateStep2();
 			}
 			else if(obj == btn2_Export){
 				fileChooser.showSaveDialog(frame);

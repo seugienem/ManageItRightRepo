@@ -30,6 +30,12 @@ public class Logic {
 		event = dm.load(in);
 	}
 	
+	void importFile(File in, String type){
+		if(type.equals("Guest")){
+			dm.importGuest(in);
+		}
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
