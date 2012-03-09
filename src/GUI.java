@@ -500,7 +500,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         rdbtn1_Lunch.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		lg.setMealType(0);
-        		System.out.println("Lunch");
         	}
         });
         buttonGroup.add(rdbtn1_Lunch);
@@ -511,7 +510,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         rdbtn1_Dinner.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		lg.setMealType(1);
-        		System.out.println("Dinner");
         	}
         });
         buttonGroup.add(rdbtn1_Dinner);
