@@ -317,7 +317,7 @@ public class Logic {
 	}
 
 	////STEP 3: PROGRAMME TAB\\\\
-	Vector<Vector<String>> getProgrammeList(){
+	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
 		Vector<Vector<String>> programmeVector = new Vector<Vector<String>>();
 		Vector<String> programmeDetail;
@@ -334,7 +334,7 @@ public class Logic {
 			//Parse startTime to String
 			hourInt = currProgramme.getStartTime().get(Calendar.HOUR_OF_DAY);
 			minInt = currProgramme.getStartTime().get(Calendar.MINUTE);			
-			timeStr = hourInt.toString() + ":" + minInt.toString();
+			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
 			
 			//Add start time to programme detail
 			programmeDetail = new Vector<String>();
@@ -343,7 +343,7 @@ public class Logic {
 			//Parse endTime to String
 			hourInt = currProgramme.getEndTime().get(Calendar.HOUR_OF_DAY);
 			minInt = currProgramme.getEndTime().get(Calendar.MINUTE);			
-			timeStr = hourInt.toString() + ":" + minInt.toString();
+			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
 			
 			//Add end time to programme detail
 			programmeDetail.add(timeStr);
