@@ -13,6 +13,7 @@ public class Event implements Serializable{
 	private Vector<Hotel> suggestedHotels;
 	private Vector<Programme> programmeSchedule;
 	private EventType eventType;
+	private MealType mealType;
 	private double eventBudget;
 	private String eventDescription;
 	
@@ -22,6 +23,7 @@ public class Event implements Serializable{
 		startDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
 		endDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
 		eventType = null;
+		mealType = null;
 		eventBudget = 0.0;
 		eventDescription = "";
 		suggestedHotels = new Vector<Hotel>();
@@ -83,6 +85,14 @@ public class Event implements Serializable{
 	public void setEndDateAndTime(String endDateAndTime){
 		this.endDateAndTime = Parser.parseStringToCalendar(endDateAndTime);
 	}
+	
+	public void setMealType(MealType mealType) {
+		this.mealType = mealType;
+	}
+	
+	public MealType getMealType() {
+		return mealType;
+	}
 
 	public Vector<Guest> getGuestList() {
 		return guestList;
@@ -95,6 +105,7 @@ public class Event implements Serializable{
 	public void mergeWithExistingHotels(Vector<Hotel> newList){
 		suggestedHotels.addAll(newList);
 	}
+	
 	public Vector<Hotel> getSuggestedHotels() {
 		return suggestedHotels;
 	}

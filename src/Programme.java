@@ -9,7 +9,6 @@ public class Programme implements Serializable{
 	private String inCharge;
 	
 	public Programme(){
-		
 	}
 	
 	public Programme(Calendar startTime, Calendar endTime, String title, String inCharge) {

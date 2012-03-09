@@ -92,6 +92,7 @@ import java.beans.EventHandler;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import javax.swing.ButtonGroup;
 
 
 public class GUI extends JFrame implements FocusListener, MouseListener {
@@ -154,6 +155,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_3Star;
 	private JCheckBox chckbx4_4Star;
 	private JCheckBox chckbx4_5Star;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JRadioButton rdbtn1_Lunch;
+	private JRadioButton rdbtn1_Dinner;
 	
 	public GUI(Logic lg) {
 		this.lg = lg;
@@ -458,11 +462,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         JLabel lbl1_EventDescription = new JLabel("Event Description:");
         lbl1_EventDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        lbl1_EventDescription.setBounds(10, 224, 100, 14);
+        lbl1_EventDescription.setBounds(10, 264, 100, 14);
         panel1.add(lbl1_EventDescription);
         
         JScrollPane scrollPane1 = new JScrollPane();
-        scrollPane1.setBounds(120, 220, 435, 171);
+        scrollPane1.setBounds(120, 260, 435, 171);
         panel1.add(scrollPane1);
         
         textArea1_EventDescription = new JTextArea();
@@ -474,13 +478,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         JLabel lbl1_Budget = new JLabel("Budget:          $");
         lbl1_Budget.setFont(new Font("Tahoma", Font.BOLD, 12));
-        lbl1_Budget.setBounds(10, 411, 100, 14);
+        lbl1_Budget.setBounds(10, 451, 100, 14);
         panel1.add(lbl1_Budget);
         
         textField1_budget = new JTextField();
         textField1_budget.setToolTipText("");
         textField1_budget.setColumns(10);
-        textField1_budget.setBounds(120, 409, 117, 20);
+        textField1_budget.setBounds(120, 449, 117, 20);
         panel1.add(textField1_budget);
         textField1_budget.addFocusListener(this);
         
@@ -489,6 +493,31 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn1_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
+        
+        JLabel lblMeal = new JLabel("Meal:");
+        lblMeal.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lblMeal.setBounds(10, 224, 46, 14);
+        panel1.add(lblMeal);
+        
+        rdbtn1_Lunch = new JRadioButton("Lunch");
+        rdbtn1_Lunch.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		lg.setMealType(0);
+        	}
+        });
+        buttonGroup.add(rdbtn1_Lunch);
+        rdbtn1_Lunch.setBounds(120, 221, 109, 23);
+        panel1.add(rdbtn1_Lunch);
+        
+        rdbtn1_Dinner = new JRadioButton("Dinner");
+        rdbtn1_Dinner.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		lg.setMealType(1);
+        	}
+        });
+        buttonGroup.add(rdbtn1_Dinner);
+        rdbtn1_Dinner.setBounds(264, 221, 109, 23);
+        panel1.add(rdbtn1_Dinner);
 	}
 	
 	
@@ -858,6 +887,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		textArea1_EventDescription.setText(lg.getEventDes());
 		textField1_budget.setText(String.valueOf(lg.getBudget()));
 		dateChooser1_StartDate.setDate(lg.getEventStartDate());
+		if(lg.getMealType()==0) {
+			rdbtn1_Lunch.setSelected(true);
+			rdbtn1_Dinner.setSelected(false);
+		}
+		else if(lg.getMealType()==1) {
+			rdbtn1_Lunch.setSelected(false);
+			rdbtn1_Dinner.setSelected(true);
+		}
+		
 	}
 	
 	void updateStep2(){	//should not any how call this, otherwise it's inefficient
@@ -1075,5 +1113,4 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
     	}
 	
     }
-
 }
