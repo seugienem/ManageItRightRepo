@@ -40,19 +40,19 @@ public class Logic {
 	//Get Step 1 status
 	int step1Status(){
 		if (event.getEventType() != null &&
-				event.getEventName() != null &&
-				event.getStartDateAndTime() != null &&
-				event.getEndDateAndTime() != null &&
-				event.getEventDescription() != null &&
+				!event.getEventName().isEmpty() &&
+				!(event.getStartDateAndTime().get(Calendar.YEAR) == 0) && !(event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!(event.getEndDateAndTime().get(Calendar.YEAR) == 0) && !(event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!event.getEventDescription().isEmpty() &&
 				event.getEventBudget() != 0.0)
 			return 2;	//if Step 1 fields are completed
 
 		else if (event.getEventType() == null &&
-				event.getEventName() == null &&
-				event.getStartDateAndTime() == null &&
-				event.getEndDateAndTime() == null &&
-				event.getEventDescription() == null &&
-				event.getEventBudget() == 0)
+				event.getEventName().isEmpty() &&
+				event.getStartDateAndTime().get(Calendar.YEAR) == 0 && event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getEndDateAndTime().get(Calendar.YEAR) == 0 && event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getEventDescription().isEmpty() &&
+				event.getEventBudget() == 0.0)
 			return 0;	//if Step 1 fields are blank
 
 		else return 1;	//if Step 1 fields are partially filled		
@@ -60,7 +60,7 @@ public class Logic {
 
 	//Get Step 2 status
 	int step2Status(){
-		if (event.getGuestList() == null)
+		if (event.getGuestList().isEmpty())
 			return 0;	//if no guest list is found
 
 		Guest g;
@@ -80,7 +80,7 @@ public class Logic {
 
 	//Get Step 3 status
 	int step3Status(){
-		if (event.getProgrammeSchedule() == null)
+		if (event.getProgrammeSchedule().isEmpty())
 			return 0; //if no programme schedule is found
 
 		Programme p;
@@ -107,7 +107,6 @@ public class Logic {
 	}
 	
 	////STEP 1: EVENT DETAILS TAB\\\\
-	
 	void setEventType(int eventType){
 		saved = false;
 		EventType eType = null;
