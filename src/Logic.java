@@ -30,10 +30,8 @@ public class Logic {
 		event = dm.load(in);
 	}
 	
-	void importFile(File in, String type){
-		if(type.equals("Guest")){
-			dm.importGuest(in);
-		}
+	void importGuest(File in){
+		event.setGuestList(dm.importGuest(in));
 	}
 	
 	////OVERVIEW TAB\\\\
@@ -294,6 +292,7 @@ public class Logic {
 	///STEP 2: GUEST LIST\\\\
 	Vector<Vector<String>> getGuestList(){
 		Vector<Guest> guestList = event.getGuestList();
+		System.out.println("Logic.getGuestList guestList size = " + guestList.size());
 		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
 		Vector<String> guestDetail;
 		Guest currGuest;
