@@ -30,10 +30,12 @@ public class Logic {
 		event = dm.load(in);
 	}
 	
-	void importFile(File in, String type){
-		if(type.equals("Guest")){
-			dm.importGuest(in);
-		}
+	void importGuest(File in){
+		event.setGuestList(dm.importGuest(in));
+	}
+	
+	void exportGuest(File out){
+		dm.exportGuest(out, event.getGuestList());
 	}
 	
 	////OVERVIEW TAB\\\\
@@ -47,16 +49,18 @@ public class Logic {
 	int step1Status(){
 		if (event.getEventType() != null &&
 				!event.getEventName().isEmpty() &&
-				!(event.getStartDateAndTime().get(Calendar.YEAR) == 0) && !(event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
-				!(event.getEndDateAndTime().get(Calendar.YEAR) == 0) && !(event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!(event.getStartDateAndTime().getYear() == 0) && //!(event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!(event.getEndDateAndTime().getYear() == 0) && //!(event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				event.getMealType() != null &&
 				!event.getEventDescription().isEmpty() &&
 				event.getEventBudget() != 0.0)
 			return 2;	//if Step 1 fields are completed
 
 		else if (event.getEventType() == null &&
 				event.getEventName().isEmpty() &&
-				event.getStartDateAndTime().get(Calendar.YEAR) == 0 && event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
-				event.getEndDateAndTime().get(Calendar.YEAR) == 0 && event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getStartDateAndTime().getYear() == 0 && //event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getEndDateAndTime().getYear() == 0 && //event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getMealType() == null &&
 				event.getEventDescription().isEmpty() &&
 				event.getEventBudget() == 0.0)
 			return 0;	//if Step 1 fields are blank
@@ -81,7 +85,11 @@ public class Logic {
 				return 1;	//if there is missing guest detail(s)
 		}
 
-		return 2;	//if guest list is finalised
+		
+		if(event.getGuestListFinalised())
+			return 3;
+		else
+			return 2;	//not finalised, but details are in
 	}
 
 	//Get Step 3 status
@@ -92,8 +100,8 @@ public class Logic {
 		Programme p;
 		for (int i=0; i<event.getProgrammeSchedule().size(); ++i){
 			p = event.getProgrammeSchedule().get(i);
-			if (p.getStartTime() == null ||
-					p.getEndTime() == null ||
+			if (p.getStartTime() == 0 ||
+					p.getEndTime() == 0 ||
 					p.getTitle() == null ||
 					p.getInCharge() == null)
 				return 1; //if there is missing programme detail(s)
@@ -104,10 +112,15 @@ public class Logic {
 
 	//Get Step 4 status
 	int step4Status(){
+		/* OLD CODE
 		if (event.getSuggestedHotels().size() == 0) //if no suitable hotel(s) exist for the user criteria
 			return 0;
 		else 
 			return 1; //assume that user has selected a suggested hotel
+		*/
+		
+		if(event.getSelectedHotelIdx() > -1) return 1;
+		else return 0;
 	}
 	
 	////STEP 1: EVENT DETAILS TAB\\\\
@@ -170,91 +183,101 @@ public class Logic {
 		event.setEventName(name);
 	}
 	
+	@SuppressWarnings("deprecation")
 	void setEventStartDate(Date date){
 		saved = false;
-		Calendar startCal = event.getStartDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 		
-		startCal.set(date.getYear(), date.getMonth(), date.getDate());
+		startCal.setDayOfTheWeek(date.getDay());
+		startCal.setDate(date.getDate());
+		startCal.setMonth(date.getMonth());
+		startCal.setYear(date.getYear());
 		event.setStartDateAndTime(startCal);
 	}
 	
+	@SuppressWarnings("deprecation")
 	Date getEventStartDate(){
 		saved = false;
-		Calendar startCal = event.getEndDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 		Date startDate = new Date();
 		
-		startDate.setYear(startCal.get(Calendar.YEAR));
-		startDate.setMonth(startCal.get(Calendar.MONTH));
-		startDate.setDate(startCal.get(Calendar.DATE));
+		startDate.setYear(startCal.getYear());
+		startDate.setMonth(startCal.getMonth());
+		startDate.setDate(startCal.getDate());
 		
 		return startDate;
 	}
 	
+	@SuppressWarnings("deprecation")
 	void setEventEndDate(Date date){
 		saved = false;
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 		
-		endCal.set(date.getYear(), date.getMonth(), date.getDate());
+		endCal.setDayOfTheWeek(date.getDay());
+		endCal.setDate(date.getDate());
+		endCal.setMonth(date.getMonth());
+		endCal.setYear(date.getYear());
 		event.setEndDateAndTime(endCal);
 	}
 	
+	@SuppressWarnings("deprecation")
 	Date getEventEndDate(){
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 		Date endDate = new Date();
 		
-		endDate.setYear(endCal.get(Calendar.YEAR));
-		endDate.setMonth(endCal.get(Calendar.MONTH));
-		endDate.setDate(endCal.get(Calendar.DATE));
+		endDate.setYear(endCal.getYear());
+		endDate.setMonth(endCal.getMonth());
+		endDate.setDate(endCal.getDate());
 		
 		return endDate;
 	}
 	
 	void setStartTimeH(int startH){
 		saved = false;
-		Calendar startCal = event.getStartDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 		
-		startCal.set(Calendar.HOUR_OF_DAY, startH);
+		startCal.setHour(startH);
 		event.setStartDateAndTime(startCal);
 	}
 	
 	int getStartTimeH(){
-		return event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY);
+		return event.getStartDateAndTime().getHour();
 	}
 
 	void setStartTimeM(int startM){
 		saved = false;
-		Calendar startCal = event.getStartDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 
-		startCal.set(Calendar.MINUTE, startM);
+		startCal.setMin(startM);		
 		event.setStartDateAndTime(startCal);
 	}
 	
 	int getStartTimeM(){
-		return event.getStartDateAndTime().get(Calendar.MINUTE);// return: event start time - minutes
+		return event.getStartDateAndTime().getMin();// return: event start time - minutes
 	}
 
 	void setEndTimeH(int endH){
 		saved = false;
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 
-		endCal.set(Calendar.HOUR_OF_DAY, endH);
+		endCal.setHour(endH);
 		event.setEndDateAndTime(endCal);
 	}
 	
 	int getEndTimeH() {
-		return event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY);// return: event start time - minutes
+		return event.getEndDateAndTime().getHour();// return: event start time - minutes
 	}
 	
 	void setEndTimeM(int endM){
 		saved = false;
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 
-		endCal.set(Calendar.MINUTE, endM);
+		endCal.setMin(endM);
 		event.setEndDateAndTime(endCal);
 	}
 	
 	int getEndTimeM(){
-		return event.getEndDateAndTime().get(Calendar.MINUTE);
+		return event.getEndDateAndTime().getMin();
 	}
 	
 	public void setMealType(int i) {
@@ -264,6 +287,8 @@ public class Logic {
 	}
 	
 	public int getMealType() {
+		if(event.getMealType() == null)
+			return -1;
 		return event.getMealType().ordinal();
 	}
 
@@ -317,11 +342,12 @@ public class Logic {
 			//Prepare guestDetail to add to guestVector	
 			guestDetail = new Vector<String>();
 			guestDetail.add(currGuest.getName());
-			guestDetail.add(currGuest.getEmailAddress());
-			guestDetail.add(currGuest.getDescription());
-			guestDetail.add(currGuest.getGroup());
-			guestDetail.add(currGuest.getContactNumber());
 			guestDetail.add(guestGender);
+			guestDetail.add(currGuest.getGroup());
+			guestDetail.add(currGuest.getEmailAddress());
+			guestDetail.add(currGuest.getContactNumber());
+			guestDetail.add(currGuest.getDescription());
+			
 
 			//Add guestDetail:vector to guestVector:vector of vector
 			guestVector.add(guestDetail);
@@ -329,7 +355,57 @@ public class Logic {
 
 		return guestVector;
 	}
-
+	
+	void addGuest(){
+		event.getGuestList().add(new Guest());
+	}
+	
+	void removeGuest(int index){
+		event.getGuestList().remove(index);
+	}
+	
+	void setGuestInfo(int index, String field, String data){
+		switch(field){
+		case "Name":
+			event.getGuestList().get(index).setName(data);
+			break;
+		case "Gender":
+			event.getGuestList().get(index).setGender(Enum.valueOf(Gender.class, data));
+			break;
+		case "Group":
+			event.getGuestList().get(index).setGroup(data);
+			break;
+		case "Email":
+			event.getGuestList().get(index).setEmailAddress(data);
+			break;
+		case "Contact Number":
+			event.getGuestList().get(index).setContactNumber(data);
+			break;
+		case "Description":
+			event.getGuestList().get(index).setDescription(data);
+			break;
+		}
+	}
+	
+	boolean completedGuestFields(int index){
+		Guest guestCheck = event.getGuestList().get(index);
+		
+		if(guestCheck.getName().equals("") || guestCheck.getGroup().equals("")
+				|| guestCheck.getEmailAddress().equals("") || guestCheck.getDescription().equals("")
+				|| guestCheck.getContactNumber().equals("") || guestCheck.getGender().ordinal() == 3){
+			return false;
+		}
+		else
+			return true;
+	}
+	
+	void setGuestListFinalised(boolean value){
+		event.setGuestListFinalised(value);
+	}
+	
+	boolean getGuestListFinalised(){
+		return event.getGuestListFinalised();
+	}
 	////STEP 3: PROGRAMME TAB\\\\
 	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
@@ -346,8 +422,8 @@ public class Logic {
 			currProgramme = programmeList.get(i);
 			
 			//Parse startTime to String
-			hourInt = currProgramme.getStartTime().get(Calendar.HOUR_OF_DAY);
-			minInt = currProgramme.getStartTime().get(Calendar.MINUTE);			
+			hourInt = currProgramme.getStartTime();
+			minInt = currProgramme.getStartTime();			
 			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
 			
 			//Add start time to programme detail
@@ -355,8 +431,8 @@ public class Logic {
 			programmeDetail.add(timeStr);
 			
 			//Parse endTime to String
-			hourInt = currProgramme.getEndTime().get(Calendar.HOUR_OF_DAY);
-			minInt = currProgramme.getEndTime().get(Calendar.MINUTE);			
+			hourInt = currProgramme.getEndTime();
+			minInt = currProgramme.getEndTime();			
 			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
 			
 			//Add end time to programme detail
@@ -424,6 +500,15 @@ public class Logic {
 			}
 		}
 		return hotelDetails;
+	}
+	
+	int getSelectedHotelIdx() {
+		return event.getSelectedHotelIdx();
+	}
+	
+	void setSelectedHotelIdx(int idx) {
+		System.out.println("Set index: " + idx);
+		event.setSelectedHotelIdx(idx);
 	}
 	
 }	

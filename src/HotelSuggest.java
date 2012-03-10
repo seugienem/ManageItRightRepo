@@ -7,12 +7,12 @@ public class HotelSuggest {
 	private int stars;
 	private double eventBudget;
 	private int budgetRatio;
-	private Calendar startDate;
+	private MyCalendar startDate;
 	private MealType eventMealType;
 	private int numberOfGuests; //assume tables of 10pax each
 	
 	//HotelSuggest constructor
-	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, Calendar startDate, MealType eventMealType, int numberOfGuests){
+	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, MyCalendar startDate, MealType eventMealType, int numberOfGuests){
 		this.hotelList = hotelList;
 		this.stars = stars;
 		this.eventBudget = eventBudget;
@@ -26,7 +26,7 @@ public class HotelSuggest {
 		stars = 0;
 		eventBudget = 0;
 		budgetRatio = 0;
-		startDate = Calendar.getInstance();
+		startDate = new MyCalendar();
 		eventMealType = MealType.DINNER;	
 		numberOfGuests = 0;
 	}
@@ -64,12 +64,12 @@ public class HotelSuggest {
 		this.budgetRatio = budgetRatio;
 	}
 
-	public Calendar getStartDate() {
+	public MyCalendar getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Calendar startDate) {
-		this.startDate = startDate;
+	public void setStartDate(MyCalendar myCalendar) {
+		this.startDate = myCalendar;
 	}
 
 	public MealType getEventMealType() {
@@ -89,27 +89,27 @@ public class HotelSuggest {
 	}
 	
 	private MealType getMealType(){
-		if(startDate.get(Calendar.HOUR) > 15){
+		if(startDate.getHour() > 15){
 			return MealType.LUNCH;
 		}
 		else
 			return MealType.DINNER;
 	}
 	
-	private DayType getDayType(Calendar startDate){
-		int day = startDate.get(Calendar.DAY_OF_WEEK); 
+	private DayType getDayType(MyCalendar startDate2){
+		int day = startDate2.getDayOfTheWeek(); 
 		DayType daytype = null;
 		
 		switch(day){
-		case 1:
+		case 0:
+		case 5:
 		case 6:
-		case 7:
 			daytype =  DayType.FRI_SUN; //FRI THRU TO SUNDAY
 			break;
-		case 2:							//MONDAY 
-		case 3:							//THRU 
-		case 4:							//TO
-		case 5: 						//THURSDAY
+		case 1:							//MONDAY 
+		case 2:							//THRU 
+		case 3:							//TO
+		case 4: 						//THURSDAY
 			daytype = DayType.NORMAL;
 			break;
 		}

@@ -5,33 +5,38 @@ import java.io.*;
 // new test
 
 public class Event implements Serializable{
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1;
 	private String eventName;
-	private Calendar startDateAndTime;
-	private Calendar endDateAndTime;
+	private MyCalendar startDateAndTime;
+	private MyCalendar endDateAndTime;
 	private Vector<Guest> guestList;
 	private Vector<Hotel> suggestedHotels;
+	private int selectedHotelIdx;
 	private Vector<Programme> programmeSchedule;
 	private EventType eventType;
 	private MealType mealType;
 	private double eventBudget;
 	private String eventDescription;
 	
+	private boolean guestListFinalised;
+	
 	public Event(){
 		//init all variables here
 		eventName = "";
-		startDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
-		endDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
+		startDateAndTime = new MyCalendar();
+		endDateAndTime = new MyCalendar();
 		eventType = null;
 		mealType = null;
 		eventBudget = 0.0;
 		eventDescription = "";
 		suggestedHotels = new Vector<Hotel>();
+		selectedHotelIdx = -1;
 		guestList = new Vector<Guest>();
 		programmeSchedule = new Vector<Programme>();
+		guestListFinalised = false;
 	}
 	
-	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
+/*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
 			Vector<Programme> programmeSchedule, EventType eventType, String eventDescription){
 		this.eventName = eventName; this.startDateAndTime = start; this.endDateAndTime = end; this.eventBudget = budget;
 		this.guestList = guestList; this.suggestedHotels = suggestedHotels; this.programmeSchedule = programmeSchedule;
@@ -46,7 +51,7 @@ public class Event implements Serializable{
 		this.eventType = eventType;
 		this.eventDescription = eventDescription;
 	}
-
+*/
 	public EventType getEventType(){
 		return eventType;
 	}
@@ -62,30 +67,30 @@ public class Event implements Serializable{
 		this.eventName = eventName;
 	}
 
-	public Calendar getStartDateAndTime() {
+	public MyCalendar getStartDateAndTime() {
 		return startDateAndTime;
 	}
 
-	public void setStartDateAndTime(Calendar startDateAndTime) {
+	public void setStartDateAndTime(MyCalendar startDateAndTime) {
 		this.startDateAndTime = startDateAndTime;
 	}
 	
-	public void setStartDateAndTime(String startDateAndTime){
+/*	public void setStartDateAndTime(String startDateAndTime){
 		this.startDateAndTime = Parser.parseStringToCalendar(startDateAndTime);
 	}
-
-	public Calendar getEndDateAndTime() {
+*/
+	public MyCalendar getEndDateAndTime() {
 		return endDateAndTime;
 	}
 
-	public void setEndDateAndTime(Calendar endDateAndTime) {
+	public void setEndDateAndTime(MyCalendar endDateAndTime) {
 		this.endDateAndTime = endDateAndTime;
 	}
 	
-	public void setEndDateAndTime(String endDateAndTime){
+/*	public void setEndDateAndTime(String endDateAndTime){
 		this.endDateAndTime = Parser.parseStringToCalendar(endDateAndTime);
 	}
-	
+*/	
 	public void setMealType(MealType mealType) {
 		this.mealType = mealType;
 	}
@@ -114,6 +119,14 @@ public class Event implements Serializable{
 		this.suggestedHotels = suggestedHotels;
 	}
 	
+	public int getSelectedHotelIdx() {
+		return selectedHotelIdx;
+	}
+	
+	public void setSelectedHotelIdx(int idx) {
+		this.selectedHotelIdx = idx;
+	}
+	
 	public Vector<Programme> getProgrammeSchedule(){
 		return programmeSchedule;
 	}
@@ -136,5 +149,13 @@ public class Event implements Serializable{
 
 	public void setEventDescription(String eventDescription) {
 		this.eventDescription = eventDescription;
+	}
+	
+	public void setGuestListFinalised(boolean value){
+		this.guestListFinalised = value;
+	}
+	
+	public boolean getGuestListFinalised(){
+		return guestListFinalised;
 	}
 }

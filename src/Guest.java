@@ -13,6 +13,12 @@ public class Guest implements Serializable{
 	private Gender gender;
 	
 	public Guest(){
+		this.name = "";
+		this.emailAddress = "";
+		this.description = "";
+		this.group = "";
+		this.contactNumber = "";
+		this.gender = Gender.UNKNOWN;
 	}
 	
 	public Guest(String name, Gender gender, String emailAddress, String group, String contactNumber){
