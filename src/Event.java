@@ -7,8 +7,8 @@ import java.io.*;
 public class Event implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String eventName;
-	private Calendar startDateAndTime;
-	private Calendar endDateAndTime;
+	private MyCalendar startDateAndTime;
+	private MyCalendar endDateAndTime;
 	private Vector<Guest> guestList;
 	private Vector<Hotel> suggestedHotels;
 	private Vector<Programme> programmeSchedule;
@@ -20,8 +20,8 @@ public class Event implements Serializable{
 	public Event(){
 		//init all variables here
 		eventName = "";
-		startDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
-		endDateAndTime = Parser.parseStringToCalendar("0/0/0 0:0");
+		startDateAndTime = new MyCalendar();
+		endDateAndTime = new MyCalendar();
 		eventType = null;
 		mealType = null;
 		eventBudget = 0.0;
@@ -31,7 +31,7 @@ public class Event implements Serializable{
 		programmeSchedule = new Vector<Programme>();
 	}
 	
-	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
+/*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
 			Vector<Programme> programmeSchedule, EventType eventType, String eventDescription){
 		this.eventName = eventName; this.startDateAndTime = start; this.endDateAndTime = end; this.eventBudget = budget;
 		this.guestList = guestList; this.suggestedHotels = suggestedHotels; this.programmeSchedule = programmeSchedule;
@@ -46,7 +46,7 @@ public class Event implements Serializable{
 		this.eventType = eventType;
 		this.eventDescription = eventDescription;
 	}
-
+*/
 	public EventType getEventType(){
 		return eventType;
 	}
@@ -62,30 +62,30 @@ public class Event implements Serializable{
 		this.eventName = eventName;
 	}
 
-	public Calendar getStartDateAndTime() {
+	public MyCalendar getStartDateAndTime() {
 		return startDateAndTime;
 	}
 
-	public void setStartDateAndTime(Calendar startDateAndTime) {
+	public void setStartDateAndTime(MyCalendar startDateAndTime) {
 		this.startDateAndTime = startDateAndTime;
 	}
 	
-	public void setStartDateAndTime(String startDateAndTime){
+/*	public void setStartDateAndTime(String startDateAndTime){
 		this.startDateAndTime = Parser.parseStringToCalendar(startDateAndTime);
 	}
-
-	public Calendar getEndDateAndTime() {
+*/
+	public MyCalendar getEndDateAndTime() {
 		return endDateAndTime;
 	}
 
-	public void setEndDateAndTime(Calendar endDateAndTime) {
+	public void setEndDateAndTime(MyCalendar endDateAndTime) {
 		this.endDateAndTime = endDateAndTime;
 	}
 	
-	public void setEndDateAndTime(String endDateAndTime){
+/*	public void setEndDateAndTime(String endDateAndTime){
 		this.endDateAndTime = Parser.parseStringToCalendar(endDateAndTime);
 	}
-	
+*/	
 	public void setMealType(MealType mealType) {
 		this.mealType = mealType;
 	}

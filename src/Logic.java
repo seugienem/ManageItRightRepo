@@ -47,8 +47,8 @@ public class Logic {
 	int step1Status(){
 		if (event.getEventType() != null &&
 				!event.getEventName().isEmpty() &&
-				!(event.getStartDateAndTime().get(Calendar.YEAR) == 0) && //!(event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
-				!(event.getEndDateAndTime().get(Calendar.YEAR) == 0) && //!(event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!(event.getStartDateAndTime().getYear() == 0) && //!(event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!(event.getEndDateAndTime().getYear() == 0) && //!(event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
 				event.getMealType() != null &&
 				!event.getEventDescription().isEmpty() &&
 				event.getEventBudget() != 0.0)
@@ -56,8 +56,8 @@ public class Logic {
 
 		else if (event.getEventType() == null &&
 				event.getEventName().isEmpty() &&
-				event.getStartDateAndTime().get(Calendar.YEAR) == 0 && //event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
-				event.getEndDateAndTime().get(Calendar.YEAR) == 0 && //event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getStartDateAndTime().getYear() == 0 && //event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getEndDateAndTime().getYear() == 0 && //event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
 				event.getMealType() == null &&
 				event.getEventDescription().isEmpty() &&
 				event.getEventBudget() == 0.0)
@@ -94,8 +94,8 @@ public class Logic {
 		Programme p;
 		for (int i=0; i<event.getProgrammeSchedule().size(); ++i){
 			p = event.getProgrammeSchedule().get(i);
-			if (p.getStartTime() == null ||
-					p.getEndTime() == null ||
+			if (p.getStartTime() == 0 ||
+					p.getEndTime() == 0 ||
 					p.getTitle() == null ||
 					p.getInCharge() == null)
 				return 1; //if there is missing programme detail(s)
@@ -174,91 +174,101 @@ public class Logic {
 		event.setEventName(name);
 	}
 	
+	@SuppressWarnings("deprecation")
 	void setEventStartDate(Date date){
 		saved = false;
-		Calendar startCal = event.getStartDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 		
-		startCal.set(date.getYear(), date.getMonth(), date.getDate());
+		startCal.setDayOfTheWeek(date.getDay());
+		startCal.setDate(date.getDate());
+		startCal.setMonth(date.getMonth());
+		startCal.setYear(date.getYear());
 		event.setStartDateAndTime(startCal);
 	}
 	
+	@SuppressWarnings("deprecation")
 	Date getEventStartDate(){
 		saved = false;
-		Calendar startCal = event.getEndDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 		Date startDate = new Date();
 		
-		startDate.setYear(startCal.get(Calendar.YEAR));
-		startDate.setMonth(startCal.get(Calendar.MONTH));
-		startDate.setDate(startCal.get(Calendar.DATE));
+		startDate.setYear(startCal.getYear());
+		startDate.setMonth(startCal.getMonth());
+		startDate.setDate(startCal.getDate());
 		
 		return startDate;
 	}
 	
+	@SuppressWarnings("deprecation")
 	void setEventEndDate(Date date){
 		saved = false;
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 		
-		endCal.set(date.getYear(), date.getMonth(), date.getDate());
+		endCal.setDayOfTheWeek(date.getDay());
+		endCal.setDate(date.getDate());
+		endCal.setMonth(date.getMonth());
+		endCal.setYear(date.getYear());
 		event.setEndDateAndTime(endCal);
 	}
 	
+	@SuppressWarnings("deprecation")
 	Date getEventEndDate(){
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 		Date endDate = new Date();
 		
-		endDate.setYear(endCal.get(Calendar.YEAR));
-		endDate.setMonth(endCal.get(Calendar.MONTH));
-		endDate.setDate(endCal.get(Calendar.DATE));
+		endDate.setYear(endCal.getYear());
+		endDate.setMonth(endCal.getMonth());
+		endDate.setDate(endCal.getDate());
 		
 		return endDate;
 	}
 	
 	void setStartTimeH(int startH){
 		saved = false;
-		Calendar startCal = event.getStartDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 		
-		startCal.set(Calendar.HOUR_OF_DAY, startH);
+		startCal.setHour(startH);
 		event.setStartDateAndTime(startCal);
 	}
 	
 	int getStartTimeH(){
-		return event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY);
+		return event.getStartDateAndTime().getHour();
 	}
 
 	void setStartTimeM(int startM){
 		saved = false;
-		Calendar startCal = event.getStartDateAndTime();
+		MyCalendar startCal = event.getStartDateAndTime();
 
-		startCal.set(Calendar.MINUTE, startM);
+		startCal.setMin(startM);		
 		event.setStartDateAndTime(startCal);
 	}
 	
 	int getStartTimeM(){
-		return event.getStartDateAndTime().get(Calendar.MINUTE);// return: event start time - minutes
+		return event.getStartDateAndTime().getMin();// return: event start time - minutes
 	}
 
 	void setEndTimeH(int endH){
 		saved = false;
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 
-		endCal.set(Calendar.HOUR_OF_DAY, endH);
+		endCal.setHour(endH);
 		event.setEndDateAndTime(endCal);
 	}
 	
 	int getEndTimeH() {
-		return event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY);// return: event start time - minutes
+		return event.getEndDateAndTime().getHour();// return: event start time - minutes
 	}
 	
 	void setEndTimeM(int endM){
 		saved = false;
-		Calendar endCal = event.getEndDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
 
-		endCal.set(Calendar.MINUTE, endM);
+		endCal.setMin(endM);
 		event.setEndDateAndTime(endCal);
 	}
 	
 	int getEndTimeM(){
-		return event.getEndDateAndTime().get(Calendar.MINUTE);
+		return event.getEndDateAndTime().getMin();
 	}
 	
 	public void setMealType(int i) {
@@ -350,8 +360,8 @@ public class Logic {
 			currProgramme = programmeList.get(i);
 			
 			//Parse startTime to String
-			hourInt = currProgramme.getStartTime().get(Calendar.HOUR_OF_DAY);
-			minInt = currProgramme.getStartTime().get(Calendar.MINUTE);			
+			hourInt = currProgramme.getStartTime();
+			minInt = currProgramme.getStartTime();			
 			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
 			
 			//Add start time to programme detail
@@ -359,8 +369,8 @@ public class Logic {
 			programmeDetail.add(timeStr);
 			
 			//Parse endTime to String
-			hourInt = currProgramme.getEndTime().get(Calendar.HOUR_OF_DAY);
-			minInt = currProgramme.getEndTime().get(Calendar.MINUTE);			
+			hourInt = currProgramme.getEndTime();
+			minInt = currProgramme.getEndTime();			
 			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
 			
 			//Add end time to programme detail

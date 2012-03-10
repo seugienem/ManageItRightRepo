@@ -19,8 +19,8 @@ public class ProgrammeDataManager {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(out));
 			
 			for(Programme item:programme){
-				writer.write(item.getStartTime().get(Calendar.HOUR_OF_DAY) + ":" + item.getStartTime().get(Calendar.MINUTE) + ",");
-				writer.write(item.getEndTime().get(Calendar.HOUR_OF_DAY) + ":" + item.getEndTime().get(Calendar.MINUTE) + ",");
+				writer.write(item.getStartTime() + ":" + item.getStartTime() + ",");
+				writer.write(item.getEndTime() + ":" + item.getEndTime() + ",");
 				writer.write(item.getTitle() + ",");
 				writer.write(item.getInCharge() + "\n");
 			}
@@ -44,8 +44,8 @@ public class ProgrammeDataManager {
 					throw new DataFormatException();
 				}
 				programme.add(new Programme());
-				programme.lastElement().setStartTime(st.nextToken());
-				programme.lastElement().setEndTime(st.nextToken());
+				programme.lastElement().setStartTime(Integer.parseInt(st.nextToken()));
+				programme.lastElement().setEndTime(Integer.parseInt(st.nextToken()));
 				programme.lastElement().setTitle(st.nextToken());
 				programme.lastElement().setInCharge(st.nextToken());
 			}

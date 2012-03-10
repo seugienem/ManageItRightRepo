@@ -93,6 +93,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import javax.swing.ButtonGroup;
+import java.util.Locale;
 
 
 public class GUI extends JFrame implements FocusListener, MouseListener {
@@ -371,15 +372,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel1.add(lbl1_EventDate);
         
         dateChooser1_StartDate = new JDateChooser();
+    
+              
         dateChooser1_StartDate.addPropertyChangeListener(new PropertyChangeListener() {
-        	public void propertyChange(PropertyChangeEvent evt) {
+			public void propertyChange(PropertyChangeEvent evt) {
         		if (dateChooser1_StartDate.getDate()!= null) {
-        			lg.setEventStartDate((Date)evt.getNewValue());
-					System.out.println( (Date)evt.getNewValue());
-				}
+        			Date StartDate = dateChooser1_StartDate.getDate();
+//        	        String dateString = String.format("%1$td/%1$tm/%1$tY", StartDate); 
+        			lg.setEventStartDate(StartDate);        		 	
+//					System.out.println(StartDate);      	        
+        		}	
         	}
         });
-        dateChooser1_StartDate.setDateFormatString("dd/MM/YYYY");
+ 
+        
         dateChooser1_StartDate.setBounds(120, 142, 117, 20);
         panel1.add(dateChooser1_StartDate);
      

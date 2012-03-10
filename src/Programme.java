@@ -1,17 +1,16 @@
-import java.util.*;
 import java.io.*;
 
 public class Programme implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private Calendar startTime;
-	private Calendar endTime;
+	private int startTime;
+	private int endTime;
 	private String title;
 	private String inCharge;
 	
 	public Programme(){
 	}
 	
-	public Programme(Calendar startTime, Calendar endTime, String title, String inCharge) {
+/*	public Programme(Calendar startTime, Calendar endTime, String title, String inCharge) {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.title = title;
@@ -24,31 +23,31 @@ public class Programme implements Serializable{
 		this.title = title;
 		this.inCharge = inCharge;
 	}
-
-	public Calendar getStartTime() {
+*/
+	public int getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Calendar startTime) {
+	public void setStartTime(int startTime) {
 		this.startTime = startTime;
 	}
 	
-	public void setStartTime(String startTime){
+/*	public void setStartTime(String startTime){
 		this.startTime = Parser.parseStringToCalendarTime(startTime);
 	}
-
-	public Calendar getEndTime() {
+*/
+	public int getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Calendar endTime) {
+	public void setEndTime(int endTime) {
 		this.endTime = endTime;
 	}
 	
-	public void setEndTime(String endTime){
+/*	public void setEndTime(String endTime){
 		this.endTime = Parser.parseStringToCalendarTime(endTime);
 	}
-
+*/
 	public String getTitle() {
 		return title;
 	}
