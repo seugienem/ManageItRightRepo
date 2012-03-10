@@ -34,6 +34,10 @@ public class Logic {
 		event.setGuestList(dm.importGuest(in));
 	}
 	
+	void exportGuest(File out){
+		dm.exportGuest(out, event.getGuestList());
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
@@ -266,6 +270,8 @@ public class Logic {
 	}
 	
 	public int getMealType() {
+		if(event.getMealType() == null)
+			return -1;
 		return event.getMealType().ordinal();
 	}
 
@@ -294,7 +300,6 @@ public class Logic {
 	///STEP 2: GUEST LIST\\\\
 	Vector<Vector<String>> getGuestList(){
 		Vector<Guest> guestList = event.getGuestList();
-		System.out.println("Logic.getGuestList guestList size = " + guestList.size());
 		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
 		Vector<String> guestDetail;
 		Guest currGuest;
@@ -320,17 +325,49 @@ public class Logic {
 			//Prepare guestDetail to add to guestVector	
 			guestDetail = new Vector<String>();
 			guestDetail.add(currGuest.getName());
-			guestDetail.add(currGuest.getEmailAddress());
-			guestDetail.add(currGuest.getDescription());
-			guestDetail.add(currGuest.getGroup());
-			guestDetail.add(currGuest.getContactNumber());
 			guestDetail.add(guestGender);
+			guestDetail.add(currGuest.getGroup());
+			guestDetail.add(currGuest.getEmailAddress());
+			guestDetail.add(currGuest.getContactNumber());
+			guestDetail.add(currGuest.getDescription());
+			
 
 			//Add guestDetail:vector to guestVector:vector of vector
 			guestVector.add(guestDetail);
 		}
 
 		return guestVector;
+	}
+	
+	void addGuest(){
+		event.getGuestList().add(new Guest());
+	}
+	
+	void removeGuest(int index){
+		event.getGuestList().remove(index);
+	}
+	
+	void setGuestInfo(int index, String field, String data){
+		switch(field){
+		case "Name":
+			event.getGuestList().get(index).setName(data);
+			break;
+		case "Gender":
+			event.getGuestList().get(index).setGender(Enum.valueOf(Gender.class, data));
+			break;
+		case "Group":
+			event.getGuestList().get(index).setGroup(data);
+			break;
+		case "Email":
+			event.getGuestList().get(index).setEmailAddress(data);
+			break;
+		case "Contact Number":
+			event.getGuestList().get(index).setContactNumber(data);
+			break;
+		case "Description":
+			event.getGuestList().get(index).setDescription(data);
+			break;
+		}
 	}
 
 	////STEP 3: PROGRAMME TAB\\\\

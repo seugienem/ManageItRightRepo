@@ -563,11 +563,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        guestCols = new Vector<String>();
 	        guestCols.add("Name");
 	        guestCols.add("Gender");
-	        guestCols.add("Age");
-	        guestCols.add("Description");
+	        //guestCols.add("Age");
 	        guestCols.add("Group");
 	        guestCols.add("Email");
 	        guestCols.add("Contact Number");
+	        guestCols.add("Description");
 	        
 	        createTable2(new Vector<Vector<String>>(), guestCols);
 	        
@@ -831,18 +831,26 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table2.setAutoCreateRowSorter(true);
         
         table2.getColumnModel().getColumn(0).setPreferredWidth(200);
-        table2.getColumnModel().getColumn(2).setPreferredWidth(30);
+        //table2.getColumnModel().getColumn(2).setPreferredWidth(30);
+        table2.getColumnModel().getColumn(2).setPreferredWidth(110);
         table2.getColumnModel().getColumn(3).setPreferredWidth(200);
-        table2.getColumnModel().getColumn(4).setPreferredWidth(120);
-        table2.getColumnModel().getColumn(5).setPreferredWidth(200);
-        table2.getColumnModel().getColumn(6).setPreferredWidth(110);
+        table2.getColumnModel().getColumn(4).setPreferredWidth(110);
+        table2.getColumnModel().getColumn(5).setPreferredWidth(250);
         
         final DefaultTableModel modelGuest = (DefaultTableModel)table2.getModel();
+        
+        MouseListener [] listeners = btn2_AddContact.getMouseListeners();
+        if(listeners.length != 0){
+        	for(int i = 0; i < listeners.length; i++){
+        		btn2_AddContact.removeMouseListener(listeners[i]);
+        	}
+        }
         
         btn2_AddContact.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		modelGuest.addRow(new Vector<Object>(7)); 	    	
+        		modelGuest.addRow(new Vector<Object>(6));
+        		lg.addGuest();
         	}
         });
         
@@ -853,11 +861,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelGuest.addRow(new Vector<Object>(7));  
+        			modelGuest.addRow(new Vector<Object>(6));
+        			lg.addGuest();
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table2.getSelectedRow();
+        			if(rowNumber == -1)
+        				return;
         			modelGuest.removeRow(rowNumber);
+        			lg.removeGuest(rowNumber);
         		}
         	}
         	@Override
@@ -867,11 +879,30 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	public void keyTyped(KeyEvent e) {
         	}
         });
+        
+        table2.getModel().addTableModelListener(new TableModelListener(){
+        	@Override
+        	public void tableChanged(TableModelEvent e){
+        		//get information about change
+        		int row = e.getFirstRow();
+        		int column = e.getColumn();
+        		TableModel model = (TableModel)e.getSource();
+        		String columnName = model.getColumnName(column);
+        		if(row == -1 || column == -1)
+        			return;
+        		String data = (String)model.getValueAt(row, column);
+        		
+        		//pass to logic to save
+        		lg.setGuestInfo(row, columnName, data);
+        	}
+        });
 	}
 	
 	//refresh all fields
 	void updateAll(){
 		updateStep1();
+		updateStep2();
+		updateStep4();
 	}
 	
 	void updateStep0() {
@@ -917,7 +948,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep2(){	
 		panel2.remove(scrollPane2);
-		panel2.setOpaque(true);
 		createTable2(lg.getGuestList(), guestCols);		
 	}
 	
@@ -987,6 +1017,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			else if(obj == btn2_Export){
 				fileChooser.showSaveDialog(frame);
 				File file = fileChooser.getSelectedFile();
+				if(file == null)
+					return;
+				lg.exportGuest(file);
 			}
 			else if(obj == btn3_Export){
 				fileChooser.showSaveDialog(frame);
@@ -1064,24 +1097,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			lg.setEventDes(textArea1_EventDescription.getText());
 			System.out.println(lg.getEventDes());
 		}
-		/*
-		else if(obj == spinner1_StartTimeH_TextField){
-			lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
-			System.out.println(lg.getStartTimeH());
-		}
-		else if(obj == spinner1_StartTimeM_TextField){
-			lg.setStartTimeM((int)spinner1_StartTimeM.getValue());
-			System.out.println(lg.getStartTimeM());
-		}
-		else if(obj == spinner1_EndTimeH_TextField){
-			lg.setEndTimeH((int)spinner1_EndTimeH.getValue());
-			System.out.println(lg.getEndTimeH());
-		}
-		else if(obj == spinner1_EndTimeM_TextField){
-			lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
-			System.out.println(lg.getEndTimeM());
-		}
-		*/
 		else if(obj == textField1_budget){
 			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
 			System.out.println(lg.getBudget());
