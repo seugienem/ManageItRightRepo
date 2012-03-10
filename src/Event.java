@@ -18,6 +18,8 @@ public class Event implements Serializable{
 	private double eventBudget;
 	private String eventDescription;
 	
+	private boolean guestListFinalised;
+	
 	public Event(){
 		//init all variables here
 		eventName = "";
@@ -31,6 +33,7 @@ public class Event implements Serializable{
 		selectedHotelIdx = -1;
 		guestList = new Vector<Guest>();
 		programmeSchedule = new Vector<Programme>();
+		guestListFinalised = false;
 	}
 	
 /*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
@@ -146,5 +149,13 @@ public class Event implements Serializable{
 
 	public void setEventDescription(String eventDescription) {
 		this.eventDescription = eventDescription;
+	}
+	
+	public void setGuestListFinalised(boolean value){
+		this.guestListFinalised = value;
+	}
+	
+	public boolean getGuestListFinalised(){
+		return guestListFinalised;
 	}
 }

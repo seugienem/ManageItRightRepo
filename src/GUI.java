@@ -146,6 +146,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JButton btn2_AddContact;
 	private JTable table2;
 	private JTextField textField2_Search;
+	private JCheckBox chckbx2_GuestListFinalised;
 	
 	//GUI3 objects
 	private JButton btn3_Export;
@@ -577,11 +578,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        guestCols.add("Contact Number");
 	        guestCols.add("Description");
 	        
-	        createTable2(new Vector<Vector<String>>(), guestCols);
+	        createTable2(new Vector<Vector<String>>(), guestCols);	        
 	        
-	        JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
+	        chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
 	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
 	        panel2.add(chckbx2_GuestListFinalised);
+	        chckbx2_GuestListFinalised.setEnabled(false);
+	        chckbx2_GuestListFinalised.addChangeListener(new ChangeListener(){
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					lg.setGuestListFinalised(chckbx2_GuestListFinalised.isSelected());
+				}
+	        });
 	        
 	        btn2_Export = new JButton("Export");
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -880,6 +888,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			modelGuest.removeRow(rowNumber);
         			lg.removeGuest(rowNumber);
+        			if(lg.getGuestList().size() == 0)
+        				chckbx2_GuestListFinalised.setEnabled(false);
         		}
         	}
         	@Override
@@ -904,6 +914,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		
         		//pass to logic to save
         		lg.setGuestInfo(row, columnName, data);
+        		
+        		//if there exist 1 guest, and all fields are updated, chckbx2_GuestListFinalised should be enabled.
+        		if(lg.completedGuestFields(row)){
+        			if(chckbx2_GuestListFinalised == null)
+        				return;
+        			chckbx2_GuestListFinalised.setEnabled(true);
+        		}
+    			
+        		//if chckBx is checked, it shld be unchecked
+        		if(chckbx2_GuestListFinalised.isSelected()){
+        			chckbx2_GuestListFinalised.setSelected(false);
+        			lg.setGuestListFinalised(false);
+        		}
+        			
+        		
         	}
         });
 	}
@@ -970,7 +995,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep2(){	
 		panel2.remove(scrollPane2);
-		createTable2(lg.getGuestList(), guestCols);		
+		createTable2(lg.getGuestList(), guestCols);
+		if(lg.getGuestList().size() >= 1)
+			chckbx2_GuestListFinalised.setEnabled(true);
+		if(lg.getGuestListFinalised() == true)
+			chckbx2_GuestListFinalised.setSelected(true);
 	}
 	
 	void updateStep4(){
@@ -989,7 +1018,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		public void actionPerformed(ActionEvent e){
 			int selectedEventType = ((JComboBox)e.getSource()).getSelectedIndex();
 			lg.setEventType(selectedEventType);
-			System.out.println(comboBox1.getItemAt(lg.getEventType()));
+			//System.out.println(comboBox1.getItemAt(lg.getEventType()));
 		}
 	}
 	
