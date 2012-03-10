@@ -955,6 +955,25 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step1.setForeground(Color.GREEN);
 				break;
 		}
+		
+		switch(lg.step2Status()){
+			case 0:
+				lbl0_Step2.setText("Guest list is empty.");
+				lbl0_Step2.setForeground(Color.RED);
+				break;
+			case 1:
+				lbl0_Step2.setText("Guest list contains missing details.");
+				lbl0_Step2.setForeground(Color.RED);
+				break;
+			case 2:
+				lbl0_Step2.setText("Guest list is not finalised.");
+				lbl0_Step2.setForeground(Color.RED);
+				break;
+			case 3:
+				lbl0_Step2.setText("Guest list is finalised.");
+				lbl0_Step2.setForeground(Color.GREEN);
+				break;
+		}
 	}
 	
 	void updateStep1(){

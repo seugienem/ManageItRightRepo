@@ -85,7 +85,11 @@ public class Logic {
 				return 1;	//if there is missing guest detail(s)
 		}
 
-		return 2;	//if guest list is finalised
+		
+		if(event.getGuestListFinalised())
+			return 3;
+		else
+			return 2;	//not finalised, but details are in
 	}
 
 	//Get Step 3 status
