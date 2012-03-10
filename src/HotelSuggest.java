@@ -56,7 +56,7 @@ public class HotelSuggest {
 		this.eventBudget = eventBudget;
 	}
 
-	public double getBudgetRatio() {
+	public int getBudgetRatio() {
 		return budgetRatio;
 	}
 
