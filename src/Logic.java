@@ -38,6 +38,10 @@ public class Logic {
 		dm.exportGuest(out, event.getGuestList());
 	}
 	
+	void exportProgramme(File out){
+		dm.exportProgramme(out, event.getProgrammeSchedule());
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
@@ -447,6 +451,31 @@ public class Logic {
 		}
 		
 		return programmeVector;
+	}
+	
+	void addProgramme(){
+		event.getProgrammeSchedule().add(new Programme());
+	}
+	
+	void removeProgramme(int index){
+		event.getProgrammeSchedule().remove(index);
+	}
+	
+	void setProgrammeInfo(int index, String field, String data){
+		switch(field){
+		case "Start Time":
+			event.getProgrammeSchedule().get(index).setStartTime(Integer.parseInt(data));
+			break;
+		case "End Time":
+			event.getProgrammeSchedule().get(index).setEndTime(Integer.parseInt(data));
+			break;
+		case "Programme":
+			event.getProgrammeSchedule().get(index).setTitle(data);
+			break;
+		case "In-Charge":
+			event.getProgrammeSchedule().get(index).setInCharge(data);
+			break;
+		}
 	}
 	
 	////STEP 4: HOTEL SUGGESTIONS TAB\\\\

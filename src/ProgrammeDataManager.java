@@ -19,8 +19,8 @@ public class ProgrammeDataManager {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(out));
 			
 			for(Programme item:programme){
-				writer.write(item.getStartTime() + ":" + item.getStartTime() + ",");
-				writer.write(item.getEndTime() + ":" + item.getEndTime() + ",");
+				writer.write(item.getStartTime() + ",");
+				writer.write(item.getEndTime() + ",");
 				writer.write(item.getTitle() + ",");
 				writer.write(item.getInCharge() + "\n");
 			}
