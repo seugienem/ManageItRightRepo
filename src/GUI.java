@@ -137,10 +137,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JRadioButton rdbtn1_Dinner;
 	
 	//GUI2 objects
+	private JPanel panel2;
+	private JScrollPane scrollPane2;
 	private JButton btn2_Export;
 	private JButton btn2_Load;
 	private JButton btn2_Next;
 	private JButton btn2_Search;
+	private JButton btn2_AddContact;
 	private JTable table2;
 	private JTextField textField2_Search;
 	
@@ -533,7 +536,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	
 	private void GUI2(){
-		 JPanel panel2 = new JPanel();
+			panel2 = new JPanel();
 	        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 2:<br>Guest List</body></html>", null, panel2, "Manage the list of guests attending the event.");
 	        panel2.setLayout(null);
 	        
@@ -542,7 +545,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        lbl2_GuestList.setBounds(10, 10, 81, 30);
 	        panel2.add(lbl2_GuestList);
 	        
-	        JButton btn2_AddContact = new JButton("Add Contact");
+	        btn2_AddContact = new JButton("Add Contact");
 	        btn2_AddContact.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent arg0) {
 	        	}
@@ -563,83 +566,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        btn2_Search.setBounds(536, 58, 77, 23);
 	        panel2.add(btn2_Search);
 	        
-
-	        final DefaultTableModel modelGuest = new DefaultTableModel(); 
-	        table2 =new JTable(modelGuest); 
-	        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-	        table2.getTableHeader().setReorderingAllowed(false);
-	        JScrollPane scrollPane2 = new JScrollPane(table2);
-	        scrollPane2.setBounds(10, 92, 600, 370);
-	        panel2.add(scrollPane2);
-	        
-	      //This portion is to initialize the Jtable                                     
-	        scrollPane2.setViewportView(table2);
-	        table2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        table2.setPreferredScrollableViewportSize(new Dimension(600,370));
-	        table2.setFillsViewportHeight(true);
-	        table2.setColumnSelectionAllowed(true);
-	        table2.setCellSelectionEnabled(true);
-	        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	        table2.setAutoCreateRowSorter(true);
-	        
-	                
-	        //Adding column names
-	        TableColumn columnGuest = null;
-	        modelGuest.addColumn("Name");
-	        modelGuest.addColumn("Gender");
-	        modelGuest.addColumn("Age");
-	        modelGuest.addColumn("Description");
-	        modelGuest.addColumn("Group");
-	        modelGuest.addColumn("Email");
-	        modelGuest.addColumn("Contact Number");
-	        
 	        guestCols = new Vector<String>();
 	        guestCols.add("Name");
 	        guestCols.add("Gender");
-	        guestCols.add("Age");
-	        guestCols.add("Description");
+	        //guestCols.add("Age");
 	        guestCols.add("Group");
 	        guestCols.add("Email");
 	        guestCols.add("Contact Number");
-	    
-
-	        modelGuest.addRow(new Vector<Object>(7));
-	        table2.getColumnModel().getColumn(0).setPreferredWidth(200);
-	        table2.getColumnModel().getColumn(2).setPreferredWidth(30);
-	        table2.getColumnModel().getColumn(3).setPreferredWidth(200);
-	        table2.getColumnModel().getColumn(4).setPreferredWidth(120);
-	        table2.getColumnModel().getColumn(5).setPreferredWidth(200);
-	        table2.getColumnModel().getColumn(6).setPreferredWidth(110);
+	        guestCols.add("Description");
 	        
-	        btn2_AddContact.addMouseListener(new MouseAdapter() {
-	        	@Override
-	        	public void mouseClicked(MouseEvent e) {
-	        		modelGuest.addRow(new Vector<Object>(7)); 	    	
-	        	}
-	        });
-    
-	        //Set the key listener for new row(by pressing 'enter' or 'insert') and next cell(by pressing 'tab')
-	        table2.addKeyListener(new KeyAdapter() {
-	        	@Override
-	        	public void keyPressed(KeyEvent e) {
-	        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
-	        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
-	        		} 
-	        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-	        			modelGuest.addRow(new Vector<Object>(7));  
-	        		}
-	        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-	        			int rowNumber = table2.getSelectedRow();
-	        			modelGuest.removeRow(rowNumber);
-	        		}
-	        	}
-	        	@Override
-	        	public void keyReleased(KeyEvent e) {
-	        	}
-	        	@Override
-	        	public void keyTyped(KeyEvent e) {
-	        	}
-	        });
+	        createTable2(new Vector<Vector<String>>(), guestCols);
 	        
 	        JCheckBox chckbx2_GuestListFinalised = new JCheckBox("Guest List Finalised");
 	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
@@ -882,9 +818,97 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel4.add(btn4_Next);
 	}
 	
+	//code to create, init table
+	void createTable2(Vector<Vector<String>> data, Vector<String> cols){
+		table2 = new JTable(data, cols);
+		table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table2.getTableHeader().setReorderingAllowed(false);
+        scrollPane2 = new JScrollPane(table2);
+        scrollPane2.setBounds(10, 92, 600, 370);
+        panel2.add(scrollPane2);
+        
+        scrollPane2.setViewportView(table2);
+        table2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        table2.setPreferredScrollableViewportSize(new Dimension(600,370));
+        table2.setFillsViewportHeight(true);
+        table2.setColumnSelectionAllowed(true);
+        table2.setCellSelectionEnabled(true);
+        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table2.setAutoCreateRowSorter(true);
+        
+        table2.getColumnModel().getColumn(0).setPreferredWidth(200);
+        //table2.getColumnModel().getColumn(2).setPreferredWidth(30);
+        table2.getColumnModel().getColumn(2).setPreferredWidth(110);
+        table2.getColumnModel().getColumn(3).setPreferredWidth(200);
+        table2.getColumnModel().getColumn(4).setPreferredWidth(110);
+        table2.getColumnModel().getColumn(5).setPreferredWidth(250);
+        
+        final DefaultTableModel modelGuest = (DefaultTableModel)table2.getModel();
+        
+        MouseListener [] listeners = btn2_AddContact.getMouseListeners();
+        if(listeners.length != 0){
+        	for(int i = 0; i < listeners.length; i++){
+        		btn2_AddContact.removeMouseListener(listeners[i]);
+        	}
+        }
+        
+        btn2_AddContact.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		modelGuest.addRow(new Vector<Object>(6));
+        		lg.addGuest();
+        	}
+        });
+        
+        table2.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
+        		} 
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        			modelGuest.addRow(new Vector<Object>(6));
+        			lg.addGuest();
+        		}
+        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+        			int rowNumber = table2.getSelectedRow();
+        			if(rowNumber == -1)
+        				return;
+        			modelGuest.removeRow(rowNumber);
+        			lg.removeGuest(rowNumber);
+        		}
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        	}
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        	}
+        });
+        
+        table2.getModel().addTableModelListener(new TableModelListener(){
+        	@Override
+        	public void tableChanged(TableModelEvent e){
+        		//get information about change
+        		int row = e.getFirstRow();
+        		int column = e.getColumn();
+        		TableModel model = (TableModel)e.getSource();
+        		String columnName = model.getColumnName(column);
+        		if(row == -1 || column == -1)
+        			return;
+        		String data = (String)model.getValueAt(row, column);
+        		
+        		//pass to logic to save
+        		lg.setGuestInfo(row, columnName, data);
+        	}
+        });
+	}
+	
 	//refresh all fields
 	void updateAll(){
 		updateStep1();
+		updateStep2();
+		updateStep4();
 	}
 	
 	void updateStep0() {
@@ -928,9 +952,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		
 	}
 	
-	void updateStep2(){	//should not any how call this, otherwise it's inefficient
-		//get vector vector, refresh
-		table2 = new JTable(lg.getProgrammeSchedule(), guestCols);
+	void updateStep2(){	
+		panel2.remove(scrollPane2);
+		createTable2(lg.getGuestList(), guestCols);		
 	}
 	
 	void updateStep4(){
@@ -992,13 +1016,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				File file = fileChooser.getSelectedFile();
 				if(file == null)
 					return;
-				lg.importFile(file, "Guest");
+				lg.importGuest(file);
 				
 				updateStep2();
 			}
 			else if(obj == btn2_Export){
 				fileChooser.showSaveDialog(frame);
 				File file = fileChooser.getSelectedFile();
+				if(file == null)
+					return;
+				lg.exportGuest(file);
 			}
 			else if(obj == btn3_Export){
 				fileChooser.showSaveDialog(frame);
@@ -1076,24 +1103,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			lg.setEventDes(textArea1_EventDescription.getText());
 			System.out.println(lg.getEventDes());
 		}
-		/*
-		else if(obj == spinner1_StartTimeH_TextField){
-			lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
-			System.out.println(lg.getStartTimeH());
-		}
-		else if(obj == spinner1_StartTimeM_TextField){
-			lg.setStartTimeM((int)spinner1_StartTimeM.getValue());
-			System.out.println(lg.getStartTimeM());
-		}
-		else if(obj == spinner1_EndTimeH_TextField){
-			lg.setEndTimeH((int)spinner1_EndTimeH.getValue());
-			System.out.println(lg.getEndTimeH());
-		}
-		else if(obj == spinner1_EndTimeM_TextField){
-			lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
-			System.out.println(lg.getEndTimeM());
-		}
-		*/
 		else if(obj == textField1_budget){
 			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
 			System.out.println(lg.getBudget());
