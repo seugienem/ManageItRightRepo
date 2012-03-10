@@ -509,6 +509,7 @@ public class Logic {
 	}
 	
 	void setSelectedHotelIdx(int idx) {
+		System.out.println("Set index: " + idx);
 		event.setSelectedHotelIdx(idx);
 	}
 	
