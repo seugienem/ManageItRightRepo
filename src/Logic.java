@@ -379,7 +379,26 @@ public class Logic {
 			break;
 		}
 	}
-
+	
+	boolean completedGuestFields(int index){
+		Guest guestCheck = event.getGuestList().get(index);
+		
+		if(guestCheck.getName().equals("") || guestCheck.getGroup().equals("")
+				|| guestCheck.getEmailAddress().equals("") || guestCheck.getDescription().equals("")
+				|| guestCheck.getContactNumber().equals("") || guestCheck.getGender().ordinal() == 3){
+			return false;
+		}
+		else
+			return true;
+	}
+	
+	void setGuestListFinalised(boolean value){
+		event.setGuestListFinalised(value);
+	}
+	
+	boolean getGuestListFinalised(){
+		return event.getGuestListFinalised();
+	}
 	////STEP 3: PROGRAMME TAB\\\\
 	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
