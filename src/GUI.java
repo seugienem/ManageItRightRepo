@@ -805,6 +805,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				Object obj = e.getSource();
 				JList list = (JList)obj;
 				textPane4_HotelDetails.setText(lg.getHotelInformation((String)list.getSelectedValue()));
+				
+				lg.setSelectedHotelIdx(list4.getSelectedIndex());
 			}
         });
         
@@ -930,6 +932,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step1.setForeground(Color.GREEN);
 				break;
 		}
+		
+		switch(lg.step4Status()) {
+			case 0:
+				lbl0_Step4.setText("Location not selected");
+				lbl0_Step4.setForeground(Color.RED);
+				break;
+			case 1:
+				lbl0_Step4.setText("Location has been selected.");
+				lbl0_Step4.setForeground(Color.GREEN);
+				break;	
+		}
 	}
 	
 	void updateStep1(){
@@ -964,6 +977,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
 		textPane4_Budget.setText(Double.toString(lg.getBudget()));
 		list4.setListData(lg.getSuggestedHotelsNames());
+		
+		list4.setSelectedIndex(lg.getSelectedHotelIdx());
 	}
 	
 	/*

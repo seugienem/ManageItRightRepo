@@ -11,6 +11,7 @@ public class Event implements Serializable{
 	private MyCalendar endDateAndTime;
 	private Vector<Guest> guestList;
 	private Vector<Hotel> suggestedHotels;
+	private int selectedHotelIdx;
 	private Vector<Programme> programmeSchedule;
 	private EventType eventType;
 	private MealType mealType;
@@ -27,6 +28,7 @@ public class Event implements Serializable{
 		eventBudget = 0.0;
 		eventDescription = "";
 		suggestedHotels = new Vector<Hotel>();
+		selectedHotelIdx = -1;
 		guestList = new Vector<Guest>();
 		programmeSchedule = new Vector<Programme>();
 	}
@@ -112,6 +114,14 @@ public class Event implements Serializable{
 
 	public void setSuggestedHotels(Vector<Hotel> suggestedHotels) {
 		this.suggestedHotels = suggestedHotels;
+	}
+	
+	public int getSelectedHotelIdx() {
+		return selectedHotelIdx;
+	}
+	
+	public void setSelectedHotelIdx(int idx) {
+		this.selectedHotelIdx = idx;
 	}
 	
 	public Vector<Programme> getProgrammeSchedule(){
