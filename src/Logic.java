@@ -114,10 +114,15 @@ public class Logic {
 
 	//Get Step 4 status
 	int step4Status(){
+		/* OLD CODE
 		if (event.getSuggestedHotels().size() == 0) //if no suitable hotel(s) exist for the user criteria
 			return 0;
 		else 
 			return 1; //assume that user has selected a suggested hotel
+		*/
+		
+		if(event.getSelectedHotelIdx() > -1) return 1;
+		else return 0;
 	}
 	
 	////STEP 1: EVENT DETAILS TAB\\\\
@@ -497,6 +502,14 @@ public class Logic {
 			}
 		}
 		return hotelDetails;
+	}
+	
+	int getSelectedHotelIdx() {
+		return event.getSelectedHotelIdx();
+	}
+	
+	void setSelectedHotelIdx(int idx) {
+		event.setSelectedHotelIdx(idx);
 	}
 	
 }	

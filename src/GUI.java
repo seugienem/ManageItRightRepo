@@ -813,6 +813,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				Object obj = e.getSource();
 				JList list = (JList)obj;
 				textPane4_HotelDetails.setText(lg.getHotelInformation((String)list.getSelectedValue()));
+				
+				lg.setSelectedHotelIdx(list4.getSelectedIndex());
 			}
         });
         
@@ -1012,6 +1014,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
 		textPane4_Budget.setText(Double.toString(lg.getBudget()));
 		list4.setListData(lg.getSuggestedHotelsNames());
+		
+		list4.setSelectedIndex(lg.getSelectedHotelIdx());
 	}
 	
 	/*
