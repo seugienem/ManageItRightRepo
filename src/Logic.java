@@ -450,6 +450,10 @@ public class Logic {
 	}
 	
 	////STEP 4: HOTEL SUGGESTIONS TAB\\\\
+	double calculateHotelBudget(int ratio){
+		return (event.getEventBudget() * ratio/100.0);
+	}
+	
 	void hotelSuggest(int stars, int ratio){
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
