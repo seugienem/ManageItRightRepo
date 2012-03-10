@@ -248,7 +248,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				case 3:
 					break;
 				case 4:
-					updateStep4();
+					//updateStep4();
 					break;
 				}
 				
@@ -704,11 +704,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         slider4.setBounds(102, 101, 421, 45);
         panel4.add(slider4);
         
+        
         textPane4_Budget = new JTextPane();
         textPane4_Budget.setEditable(false);
         textPane4_Budget.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
         textPane4_Budget.setBounds(533, 109, 107, 20);
         panel4.add(textPane4_Budget);
+        
+        
+        slider4.addChangeListener(new ChangeListener() {
+        	public void stateChanged(ChangeEvent e) {        		
+        		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget(slider4.getValue())));
+        		lg.setBudgetRatio(slider4.getValue());
+        	}
+        });
+        
         
         btn4_Suggest = new JButton("Suggest");
         btn4_Suggest.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -1065,10 +1075,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep4(){
 		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
-		textPane4_Budget.setText(Double.toString(lg.getBudget()));
+		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget(slider4.getValue())));	
 		list4.setListData(lg.getSuggestedHotelsNames());
-		
 		list4.setSelectedIndex(lg.getSelectedHotelIdx());
+		slider4.setValue(lg.getBudgetRatio());
 	}
 	
 	/*

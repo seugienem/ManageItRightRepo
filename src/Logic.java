@@ -314,6 +314,8 @@ public class Logic {
 		return event.getEventBudget();
 	}
 	
+	
+	
 	void clearHotelSuggestions(){
 		event.setSuggestedHotels(new Vector<Hotel>());
 	}
@@ -481,6 +483,14 @@ public class Logic {
 	////STEP 4: HOTEL SUGGESTIONS TAB\\\\
 	double calculateHotelBudget(int ratio){
 		return (event.getEventBudget() * ratio/100.0);
+	}
+	
+	void setBudgetRatio(int budgetRatio) {
+		event.setBudgetRatio(budgetRatio);
+	}
+	
+	int getBudgetRatio() {
+		return event.getBudgetRatio();
 	}
 	
 	void hotelSuggest(int stars, int ratio){

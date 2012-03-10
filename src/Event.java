@@ -16,8 +16,8 @@ public class Event implements Serializable{
 	private EventType eventType;
 	private MealType mealType;
 	private double eventBudget;
-	private String eventDescription;
-	
+	private int budgetRatio;
+	private String eventDescription;	
 	private boolean guestListFinalised;
 	
 	public Event(){
@@ -142,7 +142,15 @@ public class Event implements Serializable{
 	public void setEventBudget(double eventBudget) {
 		this.eventBudget = eventBudget;
 	}
-
+	
+	public int getBudgetRatio() {
+		return budgetRatio;
+	}
+	
+	public void setBudgetRatio(int budgetRatio) {
+		this.budgetRatio = budgetRatio;
+	}
+	
 	public String getEventDescription() {
 		return eventDescription;
 	}
