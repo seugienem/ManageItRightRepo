@@ -8,8 +8,8 @@ public class Programme implements Serializable{
 	private String inCharge;
 	
 	public Programme(){
-		startTime = 0;
-		endTime = 0;
+		startTime = -1;
+		endTime = -1;
 		title = "";
 		inCharge = "";
 	}

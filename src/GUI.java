@@ -587,9 +587,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        chckbx2_GuestListFinalised.setBounds(10, 463, 140, 23);
 	        panel2.add(chckbx2_GuestListFinalised);
 	        chckbx2_GuestListFinalised.setEnabled(false);
-	        chckbx2_GuestListFinalised.addChangeListener(new ChangeListener(){
+	        chckbx2_GuestListFinalised.addActionListener(new ActionListener(){
 				@Override
-				public void stateChanged(ChangeEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					lg.setGuestListFinalised(chckbx2_GuestListFinalised.isSelected());
 				}
 	        });
@@ -635,12 +635,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         chckbx3_ProgrammeScheduleFinalised = new JCheckBox("Programme Schedule Finalised");
         chckbx3_ProgrammeScheduleFinalised.setBounds(10, 447, 217, 23);
         panel3.add(chckbx3_ProgrammeScheduleFinalised);
+        chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
+        chckbx3_ProgrammeScheduleFinalised.addActionListener(new ActionListener(){
+			@Override	//change here
+			public void actionPerformed(ActionEvent e) {
+				lg.setProgrammeScheduleFinalised(chckbx3_ProgrammeScheduleFinalised.isSelected());
+			}
+        });
       
         btn3_Export = new JButton("Export");
         btn3_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Export.setBounds(460, 490, 80, 30);
         panel3.add(btn3_Export);
         btn3_Export.addActionListener(new ExportImportButtonsListener());
+        
         
         btn3_Next = new JButton("Next");
         btn3_Next.addMouseListener(this);
@@ -714,7 +722,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         slider4.addChangeListener(new ChangeListener() {
         	public void stateChanged(ChangeEvent e) {        		
-        		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget(slider4.getValue())));
+        		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget()));
         		lg.setBudgetRatio(slider4.getValue());
         	}
         });
@@ -812,9 +820,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
         
-        modelProgramme.addRow(new Vector<Object>(4));
-        lg.addProgramme();
-        
         table3.addKeyListener(new KeyAdapter() {
         	@Override
         	public void keyPressed(KeyEvent e) {
@@ -829,6 +834,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			int rowNumber = table3.getSelectedRow();
         			modelProgramme.removeRow(rowNumber);
         			lg.removeProgramme(rowNumber);
+        			if(lg.getProgrammeSchedule().size() == 0)
+        				chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         		}
         	}
         	@Override
@@ -854,20 +861,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		//pass to logic to save
         		lg.setProgrammeInfo(row, columnName, data);
         		
-        		/*
         		//if there exist 1 guest, and all fields are updated, chckbx2_GuestListFinalised should be enabled.
-        		if(lg.completedGuestFields(row)){
-        			if(chckbx2_GuestListFinalised == null)
+        		if(lg.completedProgrammeFields(row)){
+        			if(chckbx3_ProgrammeScheduleFinalised == null)
         				return;
-        			chckbx2_GuestListFinalised.setEnabled(true);
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(true);
         		}
 
         		//if chckBx is checked, it shld be unchecked
-        		if(chckbx2_GuestListFinalised.isSelected()){
-        			chckbx2_GuestListFinalised.setSelected(false);
-        			lg.setGuestListFinalised(false);
+        		if(chckbx3_ProgrammeScheduleFinalised.isSelected()){
+        			chckbx3_ProgrammeScheduleFinalised.setSelected(false);
+        			lg.setProgrammeScheduleFinalised(false);
         		}
-        			*/
         		
         	}
         });
@@ -899,9 +904,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         final DefaultTableModel modelGuest = (DefaultTableModel)table2.getModel();
         
-        modelGuest.addRow(new Vector<Object>(6));
-        lg.addGuest();
-        
         MouseListener [] listeners = btn2_AddContact.getMouseListeners();
         if(listeners.length != 0){
         	for(int i = 0; i < listeners.length; i++){
@@ -914,6 +916,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	public void mouseClicked(MouseEvent e) {
         		modelGuest.addRow(new Vector<Object>(6));
         		lg.addGuest();
+        		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
         	}
         });
         
@@ -982,6 +985,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void updateAll(){
 		updateStep1();
 		updateStep2();
+		updateStep3();
 		updateStep4();
 		updateStep0();
 	}
@@ -1023,6 +1027,24 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				break;
 		}
 		
+		switch(lg.step3Status()){
+			case 0:
+				lbl0_Step3.setText("Programme Schedule is empty.");
+				lbl0_Step3.setForeground(Color.RED);
+				break;
+			case 1:
+				lbl0_Step3.setText("Programme Schedule contains missing details.");
+				lbl0_Step3.setForeground(Color.RED);
+				break;
+			case 2:
+				lbl0_Step3.setText("Programme Schedule is not finalised.");
+				lbl0_Step3.setForeground(Color.RED);
+				break;
+			case 3:
+				lbl0_Step3.setText("Programme Schedule is finalised");
+				lbl0_Step3.setForeground(Color.GREEN);
+				break;
+		}
 		switch(lg.step4Status()){
 			case 0:
 				lbl0_Step4.setText("Location not selected");
@@ -1070,12 +1092,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void updateStep3(){
 		panel3.remove(scrollPane3);
 		createTable3(lg.getProgrammeSchedule(), programmeCols);
-		//add chckbox code here
+		if(lg.getProgrammeSchedule().size() >= 1)
+			chckbx3_ProgrammeScheduleFinalised.setEnabled(true);
+		if(lg.getProgrammeScheduleFinalised() == true)
+			chckbx3_ProgrammeScheduleFinalised.setSelected(true);
 	}
 	
 	void updateStep4(){
 		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
-		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget(slider4.getValue())));	
+		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget()));	
 		list4.setListData(lg.getSuggestedHotelsNames());
 		list4.setSelectedIndex(lg.getSelectedHotelIdx());
 		slider4.setValue(lg.getBudgetRatio());
@@ -1124,12 +1149,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		public void actionPerformed(ActionEvent e) {
 			Object obj = e.getSource();
 			JFrame frame = new JFrame();
+			/*
 			if(obj == btn0_Load){
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
 				//send file directory to logic
 			}
-			else if(obj == btn2_Load){
+			*/
+			if(obj == btn2_Load){
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
 				if(file == null)
@@ -1152,7 +1179,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					return;
 				lg.exportProgramme(file);
 			}
-			else if(obj == mntmLoadEvent){
+			else if(obj == mntmLoadEvent || obj == btn0_Load){
 				if(!lg.getSavedStatus()){
 					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
 					if(ans == 0){
@@ -1226,6 +1253,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		}
 		else if(obj == textField1_budget){
 			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
+			textPane4_Budget.setText(String.valueOf(lg.calculateHotelBudget()));
 			System.out.println(lg.getBudget());
 		}
 	}

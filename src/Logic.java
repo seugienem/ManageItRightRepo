@@ -111,7 +111,10 @@ public class Logic {
 				return 1; //if there is missing programme detail(s)
 		}
 
-		return 2; //if programme schedule is finalised
+		if(event.getProgrammeScheduleFinalised())
+			return 3;
+		else
+			return 2;
 	}
 
 	//Get Step 4 status
@@ -428,18 +431,24 @@ public class Logic {
 			currProgramme = programmeList.get(i);
 			
 			//Parse startTime to String
+			/*
 			hourInt = currProgramme.getStartTime();
 			minInt = currProgramme.getStartTime();			
 			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
+			*/
+			timeStr = String.valueOf(currProgramme.getStartTime());
 			
 			//Add start time to programme detail
 			programmeDetail = new Vector<String>();
 			programmeDetail.add(timeStr);
 			
 			//Parse endTime to String
+			/*
 			hourInt = currProgramme.getEndTime();
 			minInt = currProgramme.getEndTime();			
 			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
+			*/
+			timeStr = String.valueOf(currProgramme.getStartTime());
 			
 			//Add end time to programme detail
 			programmeDetail.add(timeStr);
@@ -480,9 +489,27 @@ public class Logic {
 		}
 	}
 	
+	boolean completedProgrammeFields(int index){
+		Programme programmeCheck = event.getProgrammeSchedule().get(index);
+		
+		if(programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
+				|| programmeCheck.getTitle().equals("") || programmeCheck.getInCharge().equals(""))
+			return false;
+		else
+			return true;
+	}
+	
+	boolean getProgrammeScheduleFinalised(){
+		return event.getProgrammeScheduleFinalised();
+	}
+	
+	void setProgrammeScheduleFinalised(boolean value){
+		event.setProgrammeScheduleFinalised(value);
+	}
+	
 	////STEP 4: HOTEL SUGGESTIONS TAB\\\\
-	double calculateHotelBudget(int ratio){
-		return (event.getEventBudget() * ratio/100.0);
+	double calculateHotelBudget(){
+		return (event.getEventBudget() * event.getBudgetRatio()/100.0);
 	}
 	
 	void setBudgetRatio(int budgetRatio) {
