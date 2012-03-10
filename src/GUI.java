@@ -237,7 +237,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					updateStep0();
 					break;
 				case 1:
-					updateStep1();
+					//updateStep1();
 					break;
 				case 2:
 					break;
@@ -433,11 +433,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         dateChooser1_EndDate.addPropertyChangeListener(new PropertyChangeListener() {
         	public void propertyChange(PropertyChangeEvent evt) {
         		if (dateChooser1_EndDate.getDate()!= null) {
-					System.out.println( (Date)evt.getNewValue());
+        			Date EndDate = dateChooser1_EndDate.getDate();
+//        	        String dateString = String.format("%1$td/%1$tm/%1$tY", StartDate); 
+        			lg.setEventEndDate(EndDate);        		 	
+//					System.out.println(StartDate);    
 				}
         	}
         });
-        dateChooser1_EndDate.setDateFormatString("dd/MM/YYYY");
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
         panel1.add(dateChooser1_EndDate);
 
@@ -941,6 +943,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		textArea1_EventDescription.setText(lg.getEventDes());
 		textField1_budget.setText(String.valueOf(lg.getBudget()));
 		dateChooser1_StartDate.setDate(lg.getEventStartDate());
+		dateChooser1_EndDate.setDate(lg.getEventEndDate());
 		if(lg.getMealType()==0) {
 			rdbtn1_Lunch.setSelected(true);
 			rdbtn1_Dinner.setSelected(false);

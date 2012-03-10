@@ -1,4 +1,6 @@
-public class MyCalendar {
+import java.io.*;
+
+public class MyCalendar implements Serializable{
 	private int dayOfTheWeek;
 	private int date;
 	private int month;

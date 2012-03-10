@@ -5,7 +5,7 @@ import java.io.*;
 // new test
 
 public class Event implements Serializable{
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1;
 	private String eventName;
 	private MyCalendar startDateAndTime;
 	private MyCalendar endDateAndTime;
