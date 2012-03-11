@@ -1,7 +1,6 @@
 import java.io.*;
+import java.util.*;
 import java.util.zip.DataFormatException;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /*
  * Notes about ProgrammeDataManager
