@@ -132,6 +132,18 @@ public class HotelSuggest {
 			this.setHotelList(dataM.importHotels(hotelFile));
 		}
 		
+		//print out all hotels
+		/*
+		for(Hotel item : hotelList){
+			System.out.print(item.getName() + " " + item.getStars() + " ");
+			for(Menu menuItem : item.getMenuList()){
+				System.out.print(menuItem.getDayType() + " " + menuItem.getMealType() + " " + menuItem.getMenuType() + " " + menuItem.getPricePerTable() +" ");
+			}
+			
+			System.out.println();
+		}
+		*/
+		
 		//Calculate hotel budget
 		double hotelBudget = (eventBudget * budgetRatio/100.0);
 		if(hotelBudget == 0){
@@ -146,7 +158,7 @@ public class HotelSuggest {
 			numberOfTables = numberOfGuests/10;
 		
 		if(numberOfTables == 0){
-			//return new Vector<Hotel>();
+			return new Vector<Hotel>();
 		}
 		
 		//Generate suggested hotels

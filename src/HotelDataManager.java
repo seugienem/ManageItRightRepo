@@ -46,6 +46,10 @@ public class HotelDataManager {
 				
 				hotel.add(new Hotel());
 				hotel.lastElement().setName(st.nextToken());
+				hotel.lastElement().setAddress(st.nextToken());
+				hotel.lastElement().setContact(st.nextToken());
+				hotel.lastElement().setEmail(st.nextToken());
+				hotel.lastElement().setWebsite(st.nextToken());
 				hotel.lastElement().setStars(Integer.parseInt(st.nextToken()));
 				
 				Vector<Menu> menu = new Vector<Menu>();

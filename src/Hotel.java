@@ -5,7 +5,7 @@ public class Hotel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String address;	//NEW
-	private int contact;	//NEW
+	private String contact;	//NEW
 	private String email;	//NEW
 	private String website;	//NEW
 	private Vector<Menu> menuList;
@@ -14,15 +14,8 @@ public class Hotel implements Serializable{
 	public Hotel(){
 		
 	}
-	
-	//this constructor needs to be gotten rid of
-	public Hotel(String name, int stars, Vector<Menu> menuList){
-		this.name = name;
-		this.stars = stars;
-		this.menuList = menuList;
-	}
 	//Hotel constructor
-	public Hotel(String name, String address, int contact, String email, String website, Vector<Menu> menuList, int stars) {
+	public Hotel(String name, String address, String contact, String email, String website, Vector<Menu> menuList, int stars) {
 		this.name = name;
 		this.address = address;
 		this.contact = contact;
@@ -49,11 +42,11 @@ public class Hotel implements Serializable{
 		this.address = address;
 	}
 
-	public int getContact() {
+	public String getContact() {
 		return contact;
 	}
 
-	public void setContact(int contact) {
+	public void setContact(String contact) {
 		this.contact = contact;
 	}
 
