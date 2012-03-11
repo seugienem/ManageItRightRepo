@@ -23,7 +23,7 @@ public class EventDataManager {
 		} 
 	}
 	
-	public Event deserializeEvent(File in){
+	public Event deserializeEvent(File in) throws Exception{
 		Event eventIn = new Event();
 		try{
 			FileInputStream fs = new FileInputStream(in);
@@ -33,12 +33,12 @@ public class EventDataManager {
 			
 			is.close();
 		} catch(FileNotFoundException fileEx){
-			fileEx.printStackTrace();
+			throw fileEx;
 		} catch (IOException IOEx){
-			IOEx.printStackTrace();
+			throw IOEx;
 		} catch(ClassNotFoundException classEx){	//Class of a serialized object cannot be found.
-			classEx.printStackTrace();
-		}
+			throw classEx;
+		} 
 		
 		return eventIn;
 	}

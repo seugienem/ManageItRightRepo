@@ -1,6 +1,10 @@
 import java.io.*;
 
 public class MyCalendar implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int dayOfTheWeek;
 	private int date;
 	private int month;

@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.*;
+import java.util.zip.DataFormatException;
 
 public class Logic {
 
@@ -20,18 +21,32 @@ public class Logic {
 		return saved;
 	}
 	
+	void setSavedStatus(boolean value){
+		saved = value;
+	}
+	
 	void saveEvent(File out){
 		saved = true;
 		dm.save(out, event);
 	}
 	
-	void loadEvent(File in){
+	void loadEvent(File in) throws Exception{
 		saved = true;
-		event = dm.load(in);
+		try{
+			event = dm.load(in);
+		} catch(Exception ex){
+			throw ex;
+		}
 	}
 	
-	void importGuest(File in){
-		event.setGuestList(dm.importGuest(in));
+	void importGuest(File in) throws DataFormatException{
+		try{
+			saved = false;
+			Vector<Guest> guestIn = dm.importGuest(in);
+			event.setGuestList(guestIn);
+		} catch(DataFormatException ex){
+			throw new DataFormatException();
+		}
 	}
 	
 	void exportGuest(File out){
@@ -179,7 +194,7 @@ public class Logic {
 			return -1;
 		else
 		{
-			System.out.println("Ordinal: " + event.getEventType().ordinal());
+			//System.out.println("Ordinal: " + event.getEventType().ordinal());
 			return event.getEventType().ordinal();
 		}
 			
@@ -374,6 +389,7 @@ public class Logic {
 	}
 	
 	void setGuestInfo(int index, String field, String data){
+		saved = false;
 		switch(field){
 			case "Name":
 				event.getGuestList().get(index).setName(data);
@@ -415,6 +431,7 @@ public class Logic {
 	}
 	
 	void setGuestListFinalised(boolean value){
+		saved = false;
 		event.setGuestListFinalised(value);
 	}
 	
@@ -427,7 +444,7 @@ public class Logic {
 		Vector<Vector<String>> programmeVector = new Vector<Vector<String>>();
 		Vector<String> programmeDetail;
 		Programme currProgramme;
-		Integer hourInt, minInt;
+		//Integer hourInt, minInt;
 		String timeStr;
 		
 		for (int i=0; i<programmeList.size(); ++i){
@@ -471,6 +488,7 @@ public class Logic {
 	}
 	
 	void addProgramme(){
+		saved = false;
 		event.getProgrammeSchedule().add(new Programme());
 	}
 	
@@ -479,6 +497,7 @@ public class Logic {
 	}
 	
 	void setProgrammeInfo(int index, String field, String data){
+		saved = false;
 		switch(field){
 		case "Start Time":
 			event.getProgrammeSchedule().get(index).setStartTime(Integer.parseInt(data));
@@ -510,6 +529,7 @@ public class Logic {
 	}
 	
 	void setProgrammeScheduleFinalised(boolean value){
+		saved = false;
 		event.setProgrammeScheduleFinalised(value);
 	}
 	
@@ -583,7 +603,8 @@ public class Logic {
 	}
 	
 	void setSelectedHotelIdx(int idx) {
-		System.out.println("Set index: " + idx);
+		saved = false;
+		//System.out.println("Set index: " + idx);
 		event.setSelectedHotelIdx(idx);
 	}
 	

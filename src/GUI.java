@@ -3,38 +3,22 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FlowLayout;
-import java.awt.FontMetrics;
-import java.awt.Insets;
-
 import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.SwingConstants;
 import javax.swing.JMenu;
-import javax.swing.JSeparator;
-
 import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JTextField;
-import java.awt.Choice;
-
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.JList;
@@ -42,63 +26,41 @@ import javax.swing.JRadioButton;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
 import javax.swing.ListSelectionModel;
-import javax.swing.AbstractListModel;
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
-import javax.swing.border.LineBorder;
 import java.awt.Cursor;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.JTextArea;
-
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SpinnerDateModel;
 import java.util.Date;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
-import javax.swing.ScrollPaneConstants;
-
-import java.beans.EventHandler;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import javax.swing.ButtonGroup;
-import java.util.Locale;
-
+import java.util.zip.DataFormatException;
 
 public class GUI extends JFrame implements FocusListener, MouseListener {
+	private static final long serialVersionUID = 1L;
 	private Logic lg;
 	
 	private JFileChooser fileChooser = new JFileChooser();
@@ -127,14 +89,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JComboBox<String> comboBox1;
 	private JDateChooser dateChooser1_StartDate;
 	private JSpinner spinner1_StartTimeH;
-	//private JFormattedTextField spinner1_StartTimeH_TextField;
 	private JSpinner spinner1_StartTimeM;
-	//private JFormattedTextField spinner1_StartTimeM_TextField;
 	private JDateChooser dateChooser1_EndDate;
 	private JSpinner spinner1_EndTimeH;
-	//private JFormattedTextField spinner1_EndTimeH_TextField;
 	private JSpinner spinner1_EndTimeM;
-	//private JFormattedTextField spinner1_EndTimeM_TextField;
 	private JTextArea textArea1_EventDescription;
 	private JRadioButton rdbtn1_Lunch;
 	private JRadioButton rdbtn1_Dinner;
@@ -172,6 +130,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_5Star;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	
+	/*
+	 * Constructor
+	 */
 	public GUI(Logic lg) {
 		this.lg = lg;
     	
@@ -201,7 +162,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         menuBar.add(mnFile);
         mnFile.setMnemonic(KeyEvent.VK_F);
         
-        JMenuItem mntmCreateNewEvent = new JMenuItem("Create New Event");
+        mntmCreateNewEvent = new JMenuItem("Create New Event");
         mnFile.add(mntmCreateNewEvent);
         mntmCreateNewEvent.addActionListener(new ActionListener(){
         	@Override
@@ -259,7 +220,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         });
     }
 	
-	
+	/*
+	 * Draw everything in Overview tab
+	 */
 	private void GUI0(){
 		JPanel panel0 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Overview</body></html>", null, panel0, null);
@@ -272,7 +235,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn0_New.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent arg0) {
-        		// TODO: create new event
         		// then the next tab is selected.
         		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
         	}
@@ -323,7 +285,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel0.add(btn0_Continue);
 	}
 	
-	
+	/*
+	 * Draws everything in Step 1
+	 */
 	private void GUI1(){
 		JPanel panel1 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 1:<br>Event Details</body></html>", null, panel1, "Manage the event details.");
@@ -412,8 +376,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_StartTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_StartTimeH.setBounds(357, 140, 40, 20);
         panel1.add(spinner1_StartTimeH);
-        //spinner1_StartTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeH.getEditor()).getTextField();
-        //spinner1_StartTimeH_TextField.addFocusListener(this);
         spinner1_StartTimeH.addChangeListener(new SpinnerListeners());
         
         
@@ -426,8 +388,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_StartTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_StartTimeM.setBounds(417, 140, 40, 20);
         panel1.add(spinner1_StartTimeM);
-        //spinner1_StartTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_StartTimeM.getEditor()).getTextField();
-        //spinner1_StartTimeM_TextField.addFocusListener(this);
         spinner1_StartTimeM.addChangeListener(new SpinnerListeners());
         
         JLabel lbl1_EndDate = new JLabel("End Date:");
@@ -465,8 +425,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_EndTimeH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
         spinner1_EndTimeH.setBounds(357, 182, 40, 20);
         panel1.add(spinner1_EndTimeH);
-        //spinner1_EndTimeH_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeH.getEditor()).getTextField();
-        //spinner1_EndTimeH_TextField.addFocusListener(this);
         spinner1_EndTimeH.addChangeListener(new SpinnerListeners());
         
         JLabel label1_EndTimeM = new JLabel("M");
@@ -478,8 +436,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         spinner1_EndTimeM.setModel(new SpinnerNumberModel(0, 0, 59, 1));
         spinner1_EndTimeM.setBounds(417, 182, 40, 20);
         panel1.add(spinner1_EndTimeM);
-        //spinner1_EndTimeM_TextField = ((JSpinner.DefaultEditor)spinner1_EndTimeM.getEditor()).getTextField();
-        //spinner1_EndTimeM_TextField.addFocusListener(this);
         spinner1_EndTimeM.addChangeListener(new SpinnerListeners());
         
         JLabel lbl1_EventDescription = new JLabel("Event Description:");
@@ -542,7 +498,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel1.add(rdbtn1_Dinner);
 	}
 	
-	
+	/*
+	 * Drawing of everything in Step 2
+	 */
 	private void GUI2(){
 			panel2 = new JPanel();
 	        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 2:<br>Guest List</body></html>", null, panel2, "Manage the list of guests attending the event.");
@@ -616,6 +574,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	
+	/*
+	 * Drawing of everything in Step 3
+	 */
 	private void GUI3(){
 		panel3 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 3:<br>Programme</body></html>", null, panel3, "Manage the flow of events.");
@@ -659,7 +620,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel3.add(btn3_Next);
 	}
 	
-	
+	/*
+	 * Drawing of everything in Step 4
+	 */
 	private void GUI4(){
 		JPanel panel4 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=8>Step 4:<br>Hotel<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
@@ -772,7 +735,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				Object obj = e.getSource();
-				JList list = (JList)obj;
+				@SuppressWarnings("unchecked")
+				JList<String> list = (JList<String>)obj;
 				Object selectedObj = list.getSelectedValue();
 				if(selectedObj == null)
 					return;
@@ -797,6 +761,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel4.add(btn4_Next);
 	}
 	
+	/*
+	 * Method for creation and initlialisation of table3, found in 
+	 */
 	void createTable3(Vector<Vector<String>> data, Vector<String> cols){
 		table3 = new JTable(data, cols);
 		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -863,7 +830,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		//pass to logic to save
         		lg.setProgrammeInfo(row, columnName, data);
         		
-        		//if there exist 1 guest, and all fields are updated, chckbx2_GuestListFinalised should be enabled.
+        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
         		if(lg.completedProgrammeFields(row)){
         			if(chckbx3_ProgrammeScheduleFinalised == null)
         				return;
@@ -879,7 +846,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	}
         });
 	}
-	//code to create, init table
+	
+	/*
+	 * Method for creation and initilisation of table2 used in Step 2
+	 */
 	void createTable2(Vector<Vector<String>> data, Vector<String> cols){
 		table2 = new JTable(data, cols);
 		table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -906,7 +876,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         TableColumn genderCol = table2.getColumnModel().getColumn(1);
         
-        JComboBox<String> comboBox_Gender = new JComboBox();
+        JComboBox<String> comboBox_Gender = new JComboBox<String>();
         comboBox_Gender.addItem("Select");
         comboBox_Gender.addItem("Male");
         comboBox_Gender.addItem("Female");
@@ -1124,6 +1094,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	class ComboBox1Listener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
+			@SuppressWarnings("rawtypes")
 			int selectedEventType = ((JComboBox)e.getSource()).getSelectedIndex();
 			lg.setEventType(selectedEventType);
 			//System.out.println(comboBox1.getItemAt(lg.getEventType()));
@@ -1136,19 +1107,19 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			Object obj = e.getSource();
 			if(obj == spinner1_StartTimeH){
 				lg.setStartTimeH((int)spinner1_StartTimeH.getValue());
-				System.out.println(lg.getStartTimeH());
+				//System.out.println(lg.getStartTimeH());
 			}
 			else if(obj == spinner1_StartTimeM){
 				lg.setStartTimeM((int)spinner1_StartTimeM.getValue());
-				System.out.println(lg.getStartTimeM());
+				//System.out.println(lg.getStartTimeM());
 			}
 			else if(obj == spinner1_EndTimeH){
 				lg.setEndTimeH((int)spinner1_EndTimeH.getValue());
-				System.out.println(lg.getEndTimeH());
+				//System.out.println(lg.getEndTimeH());
 			}
 			else if(obj == spinner1_EndTimeM){
 				lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
-				System.out.println(lg.getEndTimeM());
+				//System.out.println(lg.getEndTimeM());
 			}
 		}
 	}
@@ -1166,7 +1137,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				File file = fileChooser.getSelectedFile();
 				if(file == null)
 					return;
-				lg.importGuest(file);
+				try{
+					lg.importGuest(file);
+				} catch(DataFormatException ex){
+					JOptionPane.showMessageDialog(new JFrame(), "Error importing CSV file. Make sure file is properly formatted");
+				}
 				
 				updateStep2();
 			}
@@ -1201,8 +1176,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				File file = fileChooser.getSelectedFile();
 				if(file == null)
 					return;
-				lg.loadEvent(file);
+				try{
+					lg.loadEvent(file);
+				} catch (Exception ex){
+					JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
+				}
 				updateAll();
+				lg.setSavedStatus(true);
 			}
 			else if (obj == mntmSaveEvent){
 				fileChooser.showSaveDialog(frame);
@@ -1250,11 +1230,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		Object obj = e.getSource();
 		if(obj == textField1_EventName){
 			lg.setEventName(textField1_EventName.getText());
-			System.out.println(lg.getEventName());
+			//System.out.println(lg.getEventName());
 		}
 		else if(obj == textArea1_EventDescription){
 			lg.setEventDes(textArea1_EventDescription.getText());
-			System.out.println(lg.getEventDes());
+			//System.out.println(lg.getEventDes());
 		}
 		else if(obj == textField1_budget){
 			try{
@@ -1264,20 +1244,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				textField1_budget.setText("0");
 				textPane4_Budget.setText("0");
 			}
-			System.out.println(lg.getBudget());
+			//System.out.println(lg.getBudget());
 		}
 	}
 	
 	
-	
+	/*
     private int getPreferredRowHeight(JTable table, int r, int margin) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
     
     /*
      *Custom renderer for wrapping text in cell
      */
+    /*
     class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
     	int rowHeight = 0;  // current max row height for this scan           	
     	
@@ -1311,4 +1291,5 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
     	}
 	
     }
+    */
 }

@@ -28,22 +28,25 @@ public class DataManager{
 		eventDataManager.serializeEvent(out, eventOut);
 	}
 	
-	public Event load(File in){
-		Event eventIn = eventDataManager.deserializeEvent(in);
-		return eventIn;
+	public Event load(File in) throws Exception{
+		try{
+			Event eventIn = eventDataManager.deserializeEvent(in);
+			return eventIn;
+		} catch(Exception ex){
+			throw ex;
+		}
 	}
 	
 	public void exportGuest(File out, Vector<Guest> guestOut){
 		guestDataManager.saveGuestList(out, guestOut);
 	}
 	
-	public Vector<Guest> importGuest(File in){
+	public Vector<Guest> importGuest(File in) throws DataFormatException{
 		try{
 			Vector<Guest> guestIn = guestDataManager.loadGuestList(in);
 			return guestIn;
 		} catch(DataFormatException dataEx){
-			dataEx.printStackTrace();
-			return new Vector<Guest>();
+			throw new DataFormatException();
 		}
 	}
 	
