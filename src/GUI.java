@@ -33,6 +33,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JLabel lbl0_Step4;
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
+	private JButton btn0_New;
 	
 	//GUI1 objects
 	private JTextField textField1_EventName;
@@ -118,7 +119,23 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         mntmCreateNewEvent.addActionListener(new ActionListener(){
         	@Override
         	public void actionPerformed(ActionEvent e){
-        		jtp.setSelectedIndex(1);
+        		if(!lg.getSavedStatus()){
+        			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
+        			switch(choice){
+        			case 0:
+        				fileChooser.showSaveDialog(new JFrame());
+        				File file = fileChooser.getSelectedFile();
+        				if(file == null)
+        					return;
+        				lg.saveEvent(file);
+        				break;
+        			case 1:
+        				jtp.setSelectedIndex(1);
+        				break;
+        			case 2:
+        				break;
+        			}
+        		}
         	}
         });
         
@@ -183,12 +200,27 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl0_Overview.setBounds(10, 11, 76, 30);
         lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
         
-        JButton btn0_New = new JButton("New");
+        btn0_New = new JButton("New");
         btn0_New.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent arg0) {
-        		// then the next tab is selected.
-        		jtp.setSelectedIndex(jtp.getSelectedIndex()+1);
+        		if(!lg.getSavedStatus()){
+        			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
+        			switch(choice){
+        			case 0:
+        				fileChooser.showSaveDialog(new JFrame());
+        				File file = fileChooser.getSelectedFile();
+        				if(file == null)
+        					return;
+        				lg.saveEvent(file);
+        				break;
+        			case 1:
+        				jtp.setSelectedIndex(1);
+        				break;
+        			case 2:
+        				break;
+        			}
+        		}
         	}
         });
         btn0_New.setBounds(350, 490, 80, 30);
