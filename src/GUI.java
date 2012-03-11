@@ -26,6 +26,8 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Choice;
+
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -902,6 +904,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table2.getColumnModel().getColumn(4).setPreferredWidth(110);
         table2.getColumnModel().getColumn(5).setPreferredWidth(250);
         
+        TableColumn genderCol = table2.getColumnModel().getColumn(1);
+        
+        JComboBox<String> comboBox_Gender = new JComboBox();
+        comboBox_Gender.addItem("Select");
+        comboBox_Gender.addItem("Male");
+        comboBox_Gender.addItem("Female");
+        genderCol.setCellEditor(new DefaultCellEditor(comboBox_Gender));
+        
         final DefaultTableModel modelGuest = (DefaultTableModel)table2.getModel();
         
         MouseListener [] listeners = btn2_AddContact.getMouseListeners();
@@ -914,8 +924,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn2_AddContact.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		modelGuest.addRow(new Vector<Object>(6));
         		lg.addGuest();
+        		modelGuest.addRow(new Vector<String>(6));
+        		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
         		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
         	}
         });
@@ -927,8 +938,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelGuest.addRow(new Vector<Object>(6));
         			lg.addGuest();
+            		modelGuest.addRow(new Vector<String>(6));
+            		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table2.getSelectedRow();
@@ -1149,13 +1161,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		public void actionPerformed(ActionEvent e) {
 			Object obj = e.getSource();
 			JFrame frame = new JFrame();
-			/*
-			if(obj == btn0_Load){
-				fileChooser.showOpenDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				//send file directory to logic
-			}
-			*/
 			if(obj == btn2_Load){
 				fileChooser.showOpenDialog(frame);
 				File file = fileChooser.getSelectedFile();
@@ -1252,8 +1257,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			System.out.println(lg.getEventDes());
 		}
 		else if(obj == textField1_budget){
-			lg.setBudget(Double.parseDouble(textField1_budget.getText()));
-			textPane4_Budget.setText(String.valueOf(lg.calculateHotelBudget()));
+			try{
+				lg.setBudget(Double.parseDouble(textField1_budget.getText()));
+				textPane4_Budget.setText(String.valueOf(lg.calculateHotelBudget()));
+			} catch(NumberFormatException ex){
+				textField1_budget.setText("0");
+				textPane4_Budget.setText("0");
+			}
 			System.out.println(lg.getBudget());
 		}
 	}

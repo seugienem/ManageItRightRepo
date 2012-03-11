@@ -46,6 +46,7 @@ public class GuestDataManager {
 				StringTokenizer st = new StringTokenizer(line, ",");
 				
 				if(st.countTokens() != numberOfTokens){
+					System.out.println(st.countTokens());
 					throw new DataFormatException();
 				}
 				guestList.add(new Guest());

@@ -338,13 +338,13 @@ public class Logic {
 			//Parse gender to String
 			switch (currGuest.getGender().ordinal()){
 			case 0:
-				guestGender = "MALE";
+				guestGender = "Male";
 				break;
 			case 1:
-				guestGender = "FEMALE";
+				guestGender = "Female";
 				break;
 			case 2:
-				guestGender = "UNKNOWN";
+				guestGender = "Select";
 				break;
 			}
 
@@ -375,24 +375,30 @@ public class Logic {
 	
 	void setGuestInfo(int index, String field, String data){
 		switch(field){
-		case "Name":
-			event.getGuestList().get(index).setName(data);
-			break;
-		case "Gender":
-			event.getGuestList().get(index).setGender(Enum.valueOf(Gender.class, data));
-			break;
-		case "Group":
-			event.getGuestList().get(index).setGroup(data);
-			break;
-		case "Email":
-			event.getGuestList().get(index).setEmailAddress(data);
-			break;
-		case "Contact Number":
-			event.getGuestList().get(index).setContactNumber(data);
-			break;
-		case "Description":
-			event.getGuestList().get(index).setDescription(data);
-			break;
+			case "Name":
+				event.getGuestList().get(index).setName(data);
+				break;
+			case "Gender":
+				//convert to upper case
+				data = data.toUpperCase();
+				try{
+					event.getGuestList().get(index).setGender(Enum.valueOf(Gender.class, data));
+				} catch(Exception ex){
+					event.getGuestList().get(index).setGender(Gender.UNKNOWN);
+				}
+				break;
+			case "Group":
+				event.getGuestList().get(index).setGroup(data);
+				break;
+			case "Email":
+				event.getGuestList().get(index).setEmailAddress(data);
+				break;
+			case "Contact Number":
+				event.getGuestList().get(index).setContactNumber(data);
+				break;
+			case "Description":
+				event.getGuestList().get(index).setDescription(data);
+				break;
 		}
 	}
 	
