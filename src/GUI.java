@@ -1,63 +1,14 @@
-import javax.swing.JFrame;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import java.awt.event.KeyEvent;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.JCheckBox;
-import javax.swing.JSlider;
-import javax.swing.JList;
-import javax.swing.JRadioButton;
-import java.awt.Color;
-import javax.swing.border.TitledBorder;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.JTextPane;
-import java.awt.Cursor;
-import javax.swing.JScrollPane;
-import javax.swing.border.MatteBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-import javax.swing.JTextArea;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import java.util.Date;
-import java.util.Vector;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.io.File;
-import javax.swing.ButtonGroup;
-import java.util.zip.DataFormatException;
+import java.util.*;
+import java.util.zip.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import java.io.*;
+import java.beans.*;
+import com.toedter.calendar.*;
 
 public class GUI extends JFrame implements FocusListener, MouseListener {
 	private static final long serialVersionUID = 1L;
@@ -983,7 +934,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step1.setForeground(Color.RED);
 				break;
 			case 1:
-				lbl0_Step1.setText("Event Details are incompleted.");
+				lbl0_Step1.setText("Event Details are incomplete.");
 				lbl0_Step1.setForeground(Color.RED);
 				break;
 			case 2:
@@ -1025,17 +976,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step3.setForeground(Color.RED);
 				break;
 			case 3:
-				lbl0_Step3.setText("Programme Schedule is finalised");
+				lbl0_Step3.setText("Programme Schedule is finalised.");
 				lbl0_Step3.setForeground(Color.GREEN);
 				break;
 		}
 		switch(lg.step4Status()){
 			case 0:
-				lbl0_Step4.setText("Location not selected");
+				lbl0_Step4.setText("Location not selected.");
 				lbl0_Step4.setForeground(Color.RED);
 				break;
 			case 1:
-				lbl0_Step4.setText("Location has been selected");
+				lbl0_Step4.setText("Location has been selected.");
 				lbl0_Step4.setForeground(Color.GREEN);
 				break;
 		}
