@@ -820,6 +820,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		String data = (String)model.getValueAt(row, column);
         		
         		//pass to logic to save
+        		if(column == 0 || column == 1){
+        			try{
+        				Integer.parseInt(data);
+        			} catch(NumberFormatException ex){
+        				data = "0";
+        				model.setValueAt("0", row, column);
+        				return;
+        			}
+        		}
         		lg.setProgrammeInfo(row, columnName, data);
         		
         		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
