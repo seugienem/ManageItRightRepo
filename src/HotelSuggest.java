@@ -110,10 +110,9 @@ public class HotelSuggest {
 		return daytype;
 	}
 
-	public Vector<Hotel> suggest(DataManager dataM){
+	public Vector<Hotel> suggest(DataManager dataM){		
 		//Get day of week from start date of event
 		DayType eventDayType = getDayType(startDate);
-		
 		
 		//Read hotelList from DataManager for the first time only
 		if(hotelList == null){
@@ -143,8 +142,6 @@ public class HotelSuggest {
 		Vector<Hotel> suggestedHotels = new Vector<Hotel>();
 		Hotel tryHotel;
 		Vector<Menu> tryMenu;
-		
-		
 		Menu currentMenu;
 	
 		for (int i=0; i<hotelList.size(); ++i){ //scan through hotel list
@@ -153,21 +150,20 @@ public class HotelSuggest {
 			if (hotelList.get(i).getStars() == stars){ //if hotel matches preferred star rating
 				tryHotel = hotelList.get(i);
 				tryMenu = tryHotel.getMenuList();
-
+				
 				for (int j=0; j<tryMenu.size(); ++j){ //scan through menu list of current hotel
 					currentMenu = tryMenu.get(j);
 					if (currentMenu.getDayType() == eventDayType && currentMenu.getMealType() == eventMealType){ //if required day and required meal types match offerings
-						
 						if (currentMenu.getPricePerTable()*numberOfTables <= hotelBudget){	//if menu falls within hotel budget
 							selectedMenu.add(currentMenu); 								 	//add to selected menu list
 						}
 					}
 				}
-			
-				tryHotel.setMenuList(selectedMenu);
 				
-				if (!tryHotel.getMenuList().isEmpty()){	//if hotel possesses at least one affordable menu item
-					suggestedHotels.add(tryHotel);		//add hotel to suggested list
+				Hotel toBeAdded = new Hotel(tryHotel.getName(), tryHotel.getAddress(), tryHotel.getContact(), tryHotel.getEmail(), tryHotel.getWebsite(), selectedMenu, tryHotel.getStars());
+				
+				if (!toBeAdded.getMenuList().isEmpty()){	//if hotel possesses at least one affordable menu item
+					suggestedHotels.add(toBeAdded);		//add hotel to suggested list
 				}
 			}
 		}
