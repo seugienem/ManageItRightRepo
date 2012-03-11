@@ -850,7 +850,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	public void mouseClicked(MouseEvent e) {
         		lg.addGuest();
         		modelGuest.addRow(new Vector<String>(6));
-        		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
+        		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);       		
         		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
         	}
         });
@@ -865,6 +865,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			lg.addGuest();
             		modelGuest.addRow(new Vector<String>(6));
             		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
+            		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table2.getSelectedRow();
