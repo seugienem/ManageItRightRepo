@@ -551,6 +551,7 @@ public class Logic {
 		hotelSuggester.setEventBudget(event.getEventBudget());
 		hotelSuggester.setBudgetRatio(ratio);
 		hotelSuggester.setStartDate(event.getStartDateAndTime());
+		hotelSuggester.setEventMealType(event.getMealType());
 		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
 		Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
 		event.mergeWithExistingHotels(hotelList);

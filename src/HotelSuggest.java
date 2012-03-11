@@ -88,13 +88,6 @@ public class HotelSuggest {
 		this.numberOfGuests = numberOfGuests;
 	}
 	
-	private MealType getMealType(){
-		if(startDate.getHour() > 15){
-			return MealType.LUNCH;
-		}
-		else
-			return MealType.DINNER;
-	}
 	
 	private DayType getDayType(MyCalendar startDate2){
 		int day = startDate2.getDayOfTheWeek(); 
@@ -121,9 +114,6 @@ public class HotelSuggest {
 		//Get day of week from start date of event
 		DayType eventDayType = getDayType(startDate);
 		
-		//Get expected meal type based on start time of event
-		this.eventMealType = getMealType();
-		
 		
 		//Read hotelList from DataManager for the first time only
 		if(hotelList == null){
@@ -131,18 +121,6 @@ public class HotelSuggest {
 			File hotelFile = new File(path + File.separator + "Data" + File.separator + "hotelData");
 			this.setHotelList(dataM.importHotels(hotelFile));
 		}
-		
-		//print out all hotels
-		/*
-		for(Hotel item : hotelList){
-			System.out.print(item.getName() + " " + item.getStars() + " ");
-			for(Menu menuItem : item.getMenuList()){
-				System.out.print(menuItem.getDayType() + " " + menuItem.getMealType() + " " + menuItem.getMenuType() + " " + menuItem.getPricePerTable() +" ");
-			}
-			
-			System.out.println();
-		}
-		*/
 		
 		//Calculate hotel budget
 		double hotelBudget = (eventBudget * budgetRatio/100.0);
@@ -165,11 +143,12 @@ public class HotelSuggest {
 		Vector<Hotel> suggestedHotels = new Vector<Hotel>();
 		Hotel tryHotel;
 		Vector<Menu> tryMenu;
-		Vector<Menu> selectedMenu = new Vector<Menu>();
+		
 		
 		Menu currentMenu;
 	
 		for (int i=0; i<hotelList.size(); ++i){ //scan through hotel list
+			Vector<Menu> selectedMenu = new Vector<Menu>();
 			
 			if (hotelList.get(i).getStars() == stars){ //if hotel matches preferred star rating
 				tryHotel = hotelList.get(i);
@@ -185,10 +164,11 @@ public class HotelSuggest {
 					}
 				}
 			
-				tryHotel.setMenuList(selectedMenu); 
+				tryHotel.setMenuList(selectedMenu);
 				
-				if (!tryHotel.getMenuList().isEmpty())	//if hotel possesses at least one affordable menu item
+				if (!tryHotel.getMenuList().isEmpty()){	//if hotel possesses at least one affordable menu item
 					suggestedHotels.add(tryHotel);		//add hotel to suggested list
+				}
 			}
 		}
 		
