@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.zip.DataFormatException;
 
@@ -546,15 +547,19 @@ public class Logic {
 		return event.getBudgetRatio();
 	}
 	
-	void hotelSuggest(int stars, int ratio){
+	void hotelSuggest(int stars, int ratio) throws IOException{
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
 		hotelSuggester.setBudgetRatio(ratio);
 		hotelSuggester.setStartDate(event.getStartDateAndTime());
 		hotelSuggester.setEventMealType(event.getMealType());
 		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
-		Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
-		event.mergeWithExistingHotels(hotelList);
+		try{
+			Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
+			event.mergeWithExistingHotels(hotelList);
+		} catch(IOException ioEx){
+			throw ioEx;
+		}
 	}
 	
 	Vector<String> getSuggestedHotelsNames(){

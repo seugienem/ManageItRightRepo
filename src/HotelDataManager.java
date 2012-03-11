@@ -35,7 +35,7 @@ public class HotelDataManager {
 		}
 	}
 	
-	public Vector<Hotel> loadHotels(File in) throws DataFormatException{
+	public Vector<Hotel> loadHotels(File in) throws DataFormatException, IOException{
 		Vector<Hotel> hotel = new Vector<Hotel>();
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(in));
@@ -71,7 +71,7 @@ public class HotelDataManager {
 			
 			reader.close();
 		} catch(IOException ex){
-			ex.printStackTrace();
+			throw ex;
 		}
 		return hotel;
 	}

@@ -54,13 +54,15 @@ public class DataManager{
 		hotelDataManager.saveHotels(out, hotelOut);
 	}
 	
-	public Vector<Hotel> importHotels(File in){
+	public Vector<Hotel> importHotels(File in) throws IOException{
 		try{
 			Vector<Hotel> hotelIn = hotelDataManager.loadHotels(in);
 			return hotelIn;
 		} catch(DataFormatException dataEx){
 			dataEx.printStackTrace();
 			return new Vector<Hotel>();
+		} catch(IOException ioEx){
+			throw ioEx;
 		}
 	}
 	

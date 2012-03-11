@@ -110,7 +110,7 @@ public class HotelSuggest {
 		return daytype;
 	}
 
-	public Vector<Hotel> suggest(DataManager dataM){		
+	public Vector<Hotel> suggest(DataManager dataM) throws IOException{		
 		//Get day of week from start date of event
 		DayType eventDayType = getDayType(startDate);
 		
@@ -118,7 +118,11 @@ public class HotelSuggest {
 		if(hotelList == null){
 			String path = System.getProperty("user.dir");
 			File hotelFile = new File(path + File.separator + "Data" + File.separator + "hotelData");
-			this.setHotelList(dataM.importHotels(hotelFile));
+			try{
+				this.setHotelList(dataM.importHotels(hotelFile));
+			} catch(IOException ioEx){
+				throw ioEx;
+			}
 		}
 		
 		//Calculate hotel budget

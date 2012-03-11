@@ -687,16 +687,19 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	public void actionPerformed(ActionEvent e){
         		lg.clearHotelSuggestions();
         		int budgetRatio = slider4.getValue();
-        		
-        		if(chckbx4_3Star.isSelected()){
-        			lg.hotelSuggest(3, budgetRatio);
+        		try{
+	        		if(chckbx4_3Star.isSelected()){
+	        			lg.hotelSuggest(3, budgetRatio);
+	        		}
+	        		if(chckbx4_4Star.isSelected()){
+	        			lg.hotelSuggest(4, budgetRatio);
+	        		}
+	        		
+	        		if(chckbx4_5Star.isSelected()){
+	        			lg.hotelSuggest(5, budgetRatio);
         		}
-        		if(chckbx4_4Star.isSelected()){
-        			lg.hotelSuggest(4, budgetRatio);
-        		}
-        		
-        		if(chckbx4_5Star.isSelected()){
-        			lg.hotelSuggest(5, budgetRatio);
+        		} catch(IOException io){
+        			JOptionPane.showMessageDialog(new JFrame(), "Hotel data file could not be found. Please ensure 'hotelData' is found in the Data directory in your program folder.");
         		}
         		//display
         		list4.removeAll();
