@@ -70,7 +70,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI4 objects
 	private JButton btn4_Suggest;
-	private JButton btn4_Next;
+	//private JButton btn4_Next;
 	private JTextPane textPane4_HotelDetails;
 	private JList<String> list4;
 	private JSlider slider4;
@@ -84,7 +84,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	/*
 	 * Constructor
 	 */
-	public GUI(Logic lg) {
+	public GUI(final Logic lg) {
 		this.lg = lg;
     	
         setTitle("Manage It Right! v0.1");
@@ -163,6 +163,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					break;
 				case 4:
 					//updateStep4();
+					textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
 					break;
 				}
 				
@@ -674,12 +675,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         JPanel panel4_SuggestedList = new JPanel();
         panel4_SuggestedList.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Suggested List of Hotels", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        panel4_SuggestedList.setBounds(10, 220, 226, 250);
+        panel4_SuggestedList.setBounds(10, 220, 246, 250);
         panel4.add(panel4_SuggestedList);
         panel4_SuggestedList.setLayout(null);
         
         JScrollPane scrollPane4 = new JScrollPane();
-        scrollPane4.setBounds(6, 16, 216, 226);
+        scrollPane4.setBounds(6, 16, 234, 226);
         panel4_SuggestedList.add(scrollPane4);
         
         list4 = new JList<String>();
@@ -698,7 +699,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					list.clearSelection();
 					return;
 				}
-				textPane4_HotelDetails.setText(lg.getHotelInformation((String)list.getSelectedValue()));
+				textPane4_HotelDetails.setText(lg.getHotelInformation(list.getSelectedIndex()));
 				lg.setSelectedHotelIdx(list4.getSelectedIndex());
 			}
         });
@@ -706,13 +707,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         textPane4_HotelDetails = new JTextPane();
         textPane4_HotelDetails.setEditable(false);
         textPane4_HotelDetails.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-        textPane4_HotelDetails.setBounds(250, 220, 379, 250);
+        textPane4_HotelDetails.setBounds(266, 220, 374, 250);
         panel4.add(textPane4_HotelDetails);
         
+        /* Next button for v0.2
         btn4_Next = new JButton("Next");
         btn4_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Next.setBounds(560, 490, 80, 30);
         panel4.add(btn4_Next);
+        */
 	}
 	
 	/*

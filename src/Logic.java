@@ -560,7 +560,7 @@ public class Logic {
 	Vector<String> getSuggestedHotelsNames(){
 		Vector<String> names = new Vector<String>();
 		for(Hotel item : event.getSuggestedHotels()){
-			names.add(item.getName());
+			names.add("[" + item.getStars() + "] " + item.getName());
 		}
 		if(names.size() == 0)
 			names.add("No hotels match your criteria!");
@@ -568,34 +568,34 @@ public class Logic {
 		return names;
 	}
 	
-	String getHotelInformation(String hotelName){
+	String getHotelInformation(int index){
 		String hotelDetails = "";
-		for(Hotel item : event.getSuggestedHotels()){
-			if(hotelName.equals(item.getName())){
-				Vector<Menu> menu = item.getMenuList();
+		if (index > -1) {
+			Hotel item = event.getSuggestedHotels().get(index);
+			Vector<Menu> menu = item.getMenuList();
 				
-				hotelDetails = hotelDetails + hotelName + '\n';
-				hotelDetails = hotelDetails + "Price(s):" + '\n';
+			hotelDetails = hotelDetails + item.getName() + " (" + item.getStars() + "-star)\n";
+			hotelDetails = hotelDetails + "Address: " + item.getAddress() + "\n";
+			hotelDetails = hotelDetails + "Tel: " + item.getContact() + "\n";
+			hotelDetails = hotelDetails + "Website: " + item.getWebsite() + "\n";
+			hotelDetails = hotelDetails + "Email: " + item.getEmail() + "\n";
 				
-				for(Menu menuItem : menu){
-					if(menuItem.getMealType() == MealType.LUNCH)
-						hotelDetails = hotelDetails + "Lunch ";
-					else
-						hotelDetails = hotelDetails + "Dinner ";
+			hotelDetails = hotelDetails + "\nPrice(s):" + '\n';
+				
+			for(Menu menuItem : menu){
+				if(menuItem.getMealType() == MealType.LUNCH)
+					hotelDetails = hotelDetails + "Lunch ";
+				else
+					hotelDetails = hotelDetails + "Dinner ";
 					
-					if(menuItem.getMenuType() == MenuType.HIGH)
-						hotelDetails = hotelDetails + "High: $" + menuItem.getPricePerTable() + " per table.\n";
-					else
-						hotelDetails = hotelDetails + "Low: $" + menuItem.getPricePerTable() + " per table.\n";
-				}
+				if(menuItem.getMenuType() == MenuType.HIGH)
+					hotelDetails = hotelDetails + "highest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
+				else
+					hotelDetails = hotelDetails + "lowest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
+			}
 				
-				hotelDetails = hotelDetails + "Address: " + item.getAddress() + "\n";
-				hotelDetails = hotelDetails + "Tel: " + item.getContact() + "\n";
-				hotelDetails = hotelDetails + "Website: " + item.getWebsite() + "\n";
-				hotelDetails = hotelDetails + "Email: " + item.getEmail() + "\n";
 				return hotelDetails;
 			}
-		}
 		return hotelDetails;
 	}
 	
