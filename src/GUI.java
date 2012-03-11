@@ -103,10 +103,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JButton btn2_Export;
 	private JButton btn2_Load;
 	private JButton btn2_Next;
-	private JButton btn2_Search;
+	//private JButton btn2_Search;
 	private JButton btn2_AddContact;
 	private JTable table2;
-	private JTextField textField2_Search;
+	//private JTextField textField2_Search;
 	private JCheckBox chckbx2_GuestListFinalised;
 	
 	//GUI3 objects
@@ -521,6 +521,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        btn2_AddContact.setBounds(10, 58, 119, 23);
 	        panel2.add(btn2_AddContact);
 	        
+	        /*
 	        textField2_Search = new JTextField();
 	        textField2_Search.setToolTipText("Search Guest List");
 	        textField2_Search.setBounds(351, 60, 175, 20);
@@ -531,6 +532,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        btn2_Search.setFont(new Font("Tahoma", Font.PLAIN, 12));
 	        btn2_Search.setBounds(536, 58, 77, 23);
 	        panel2.add(btn2_Search);
+	        */
 	        
 	        guestCols = new Vector<String>();
 	        guestCols.add("Name");
