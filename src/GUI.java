@@ -141,6 +141,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
+        		else jtp.setSelectedIndex(1);
         	}
         });
         
