@@ -268,7 +268,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl0_Step2.setBounds(10, 116, 630, 30);
         panel0.add(lbl0_Step2);
         
-        lbl0_Step3 = new JLabel("Programme Schedule is not finalised.");
+        lbl0_Step3 = new JLabel("Programme Schedule is empty.");
         lbl0_Step3.setForeground(Color.RED);
         lbl0_Step3.setBounds(10, 181, 630, 30);
         panel0.add(lbl0_Step3);
