@@ -73,8 +73,8 @@ public class Logic {
 	int step1Status(){
 		if (event.getEventType() != null &&
 				!event.getEventName().isEmpty() &&
-				!(event.getStartDateAndTime().getYear() == 0) && !(event.getStartDateAndTime().getHour() == 0) &&
-				!(event.getEndDateAndTime().getYear() == 0) && !(event.getEndDateAndTime().getHour() == 0) &&
+				!(event.getStartDateAndTime().getYear() == 0) && //!(event.getStartDateAndTime().getHour() == 0) &&
+				!(event.getEndDateAndTime().getYear() == 0) && //!(event.getEndDateAndTime().getHour() == 0) &&
 				event.getMealType() != null &&
 				!event.getEventDescription().isEmpty() &&
 				event.getEventBudget() != 0.0)
@@ -82,8 +82,8 @@ public class Logic {
 
 		else if (event.getEventType() == null &&
 				event.getEventName().isEmpty() &&
-				event.getStartDateAndTime().getYear() == 0 && event.getStartDateAndTime().getHour() == 0 &&
-				event.getEndDateAndTime().getYear() == 0 && event.getEndDateAndTime().getHour() == 0 &&
+				event.getStartDateAndTime().getYear() == 0 && //event.getStartDateAndTime().getHour() == 0 &&
+				event.getEndDateAndTime().getYear() == 0 && //event.getEndDateAndTime().getHour() == 0 &&
 				event.getMealType() == null &&
 				event.getEventDescription().isEmpty() &&
 				event.getEventBudget() == 0.0)
