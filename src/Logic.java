@@ -586,6 +586,8 @@ public class Logic {
 		if(names.size() == 0)
 			names.add("No hotels match your criteria!");
 		
+		event.setSelectedHotelIdx(-1);
+		
 		return names;
 	}
 	
