@@ -14,6 +14,12 @@ public class MyCalendar implements Serializable{
 	
 	
 	public MyCalendar(){
+		this.dayOfTheWeek = 0;
+		this.date = 0;
+		this.month = 0;
+		this.year = 0;
+		this.hour = 0;
+		this.min = 0;
 	}
 	
 	public void setDayOfTheWeek(int day) {

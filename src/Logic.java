@@ -58,6 +58,10 @@ public class Logic {
 		dm.exportProgramme(out, event.getProgrammeSchedule());
 	}
 	
+	void createNewEvent(){
+		this.event = new Event();
+	}
+	
 	////OVERVIEW TAB\\\\
 
 	//Get Event Name
@@ -222,6 +226,9 @@ public class Logic {
 	Date getEventStartDate(){
 		saved = false;
 		MyCalendar startCal = event.getStartDateAndTime();
+		if(startCal.getDate() == 0 && startCal.getMonth() == 0 && startCal.getYear() == 0){
+			return null;
+		}
 		Date startDate = new Date();
 		
 		startDate.setYear(startCal.getYear());
@@ -247,6 +254,9 @@ public class Logic {
 	Date getEventEndDate(){
 		MyCalendar endCal = event.getEndDateAndTime();
 		Date endDate = new Date();
+		if(endCal.getDate() == 0 && endCal.getMonth() == 0 && endCal.getYear() == 0){
+			return null;
+		}
 		
 		endDate.setYear(endCal.getYear());
 		endDate.setMonth(endCal.getMonth());
