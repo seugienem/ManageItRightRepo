@@ -20,6 +20,8 @@ public class Event implements Serializable{
 	private String eventDescription;	
 	private boolean guestListFinalised;
 	private boolean programmeScheduleFinalised;
+	private boolean[] checkBox;
+	
 	
 	public Event(){
 		//init all variables here
@@ -37,6 +39,8 @@ public class Event implements Serializable{
 		budgetRatio = 50;
 		guestListFinalised = false;
 		programmeScheduleFinalised = false;
+		checkBox = new boolean[3];
+		
 	}
 	
 /*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
@@ -177,4 +181,14 @@ public class Event implements Serializable{
 	public boolean getProgrammeScheduleFinalised(){
 		return programmeScheduleFinalised;
 	}
+	
+	public void setcheckBox(boolean[] value) {
+		this.checkBox = value;
+	}
+	
+	public boolean[] getcheckBox() {
+		return checkBox;
+	}
+	
+	
 }

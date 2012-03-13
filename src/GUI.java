@@ -198,67 +198,58 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Draw everything in Overview tab
 	 */
 	private void GUI0(){
+	}
+	
+	/*
+	 * Draws everything in Step 1
+	 */
+	private void GUI1(){
 		JPanel panel0 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=15>Overview</body></html>", null, panel0, null);
-        
-        JLabel lbl0_Overview = new JLabel("Overview");
-        lbl0_Overview.setBounds(10, 11, 76, 30);
-        lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
-       
-        btn0_New = new JButton("New");        
-        btn0_New.setBounds(350, 490, 80, 30);
-        btn0_New.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn0_New.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent arg0) {
-        		if(!lg.getSavedStatus()){
-        			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
-        			switch(choice){
-        			case 0:
-        				fileChooser.showSaveDialog(new JFrame());
-        				File file = fileChooser.getSelectedFile();
-        				if(file == null)
-        					return;
-        				lg.saveEvent(file);
-        				lg.createNewEvent();
-        				updateAll();
-        				break;
-        			case 1:
-        				lg.createNewEvent();
-        				updateAll();
-        				jtp.setSelectedIndex(1);
-        				break;
-        			case 2:
-        				break;
-        			}
-        		}
-        	}
-        });
-        
-        btn0_Load = new JButton("Load");
-        btn0_Load.setBounds(450, 490, 80, 30);
-        btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn0_Load.addActionListener(new ExportImportButtonsListener());
-        
-        JButton btn0_Continue = new JButton("Continue");   
-        btn0_Continue.setBounds(550, 490, 90, 30);
-        btn0_Continue.setFont(new Font("Tahoma", Font.BOLD, 12));
-        panel0.setLayout(null);
-        panel0.add(lbl0_Overview);
-        btn0_Continue.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent arg0) {
-        		if (!lg.getSavedStatus()) {
-        			JOptionPane.showMessageDialog(new JFrame(),"Please create a new event or load in an event to continue","warning",JOptionPane.WARNING_MESSAGE);
-        		}
-        		else {        		
-        			jtp.setSelectedIndex(1);     
-        			
-        		}
-        		
-        	}
-        });
-              
+		jtp.addTab("<html><body marginwidth=15 marginheight=15>Overview</body></html>", null, panel0, null);
+		
+		JLabel lbl0_Overview = new JLabel("Overview");
+		lbl0_Overview.setBounds(10, 11, 76, 30);
+		lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
+		
+		 btn0_New = new JButton("New");        
+		
+		 btn0_New.setBounds(460, 490, 80, 30);
+		 btn0_New.setFont(new Font("Tahoma", Font.BOLD, 12));
+		 btn0_New.addMouseListener(new MouseAdapter() {
+		 	@Override
+		 	public void mouseClicked(MouseEvent arg0) {
+		 		if(!lg.getSavedStatus()){
+		 			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
+		 			switch(choice){
+		 			case 0:
+		 				fileChooser.showSaveDialog(new JFrame());
+		 				File file = fileChooser.getSelectedFile();
+		 				if(file == null)
+		 					return;
+		 				lg.saveEvent(file);
+		 				lg.createNewEvent();
+		 				updateAll();
+		 				break;
+		 			case 1:
+		 				lg.createNewEvent();
+		 				updateAll();
+		 				jtp.setSelectedIndex(1);
+		 				break;
+		 			case 2:
+		 				break;
+		 			}
+		 		}
+		 		else jtp.setSelectedIndex(1);
+		 	}
+		 });
+		 
+		 btn0_Load = new JButton("Load");
+		 btn0_Load.setBounds(560, 490, 80, 30);
+		 btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
+		 btn0_Load.addActionListener(new ExportImportButtonsListener());
+		 panel0.setLayout(null);
+		 panel0.add(lbl0_Overview);
+		 
         
         textPane0_EventName = new JTextPane();
         textPane0_EventName.setEditable(false);
@@ -268,7 +259,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         lbl0_Step1 = new JLabel();
         lbl0_Step1.setText("Event Details are empty.");
-		lbl0_Step1.setForeground(Color.RED);
+        lbl0_Step1.setForeground(Color.RED);
         lbl0_Step1.setBounds(10, 52, 630, 30);
         panel0.add(lbl0_Step1);
         
@@ -288,13 +279,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel0.add(lbl0_Step4);
         panel0.add(btn0_New);
         panel0.add(btn0_Load);
-        panel0.add(btn0_Continue);
-	}
-	
-	/*
-	 * Draws everything in Step 1
-	 */
-	private void GUI1(){
 		panel1 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 1:<br>Event Details</body></html>", null, panel1, "Manage the event details.");
         panel1.setLayout(null);
@@ -683,14 +667,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         slider4.setBounds(102, 101, 421, 45);
         panel4.add(slider4);
         
-        
-        textPane4_Budget = new JTextPane();
-        textPane4_Budget.setEditable(false);
-        textPane4_Budget.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-        textPane4_Budget.setBounds(533, 109, 107, 20);
-        panel4.add(textPane4_Budget);
-        
-        
         slider4.addChangeListener(new ChangeListener() {
         	public void stateChanged(ChangeEvent e) {        		
         		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget()));
@@ -698,7 +674,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	}
         });
         
+        textPane4_Budget = new JTextPane();
+        textPane4_Budget.setEditable(false);
+        textPane4_Budget.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+        textPane4_Budget.setBounds(533, 109, 107, 20);
+        panel4.add(textPane4_Budget);
         
+     
         btn4_Suggest = new JButton("Suggest");
         btn4_Suggest.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Suggest.setBounds(550, 167, 90, 30);
@@ -706,18 +688,37 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn4_Suggest.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e){
         		lg.clearHotelSuggestions();
+        		boolean checkbox3Star = chckbx4_3Star.isSelected();
+        		boolean checkbox4Star = chckbx4_4Star.isSelected();
+        		boolean checkbox5Star = chckbx4_5Star.isSelected();
+        		boolean[] checkbox = new boolean[3];
         		int budgetRatio = slider4.getValue();
         		try{
-	        		if(chckbx4_3Star.isSelected()){
-	        			lg.hotelSuggest(3, budgetRatio);
+	        		if(checkbox3Star == true){
+	        			lg.hotelSuggest(3, budgetRatio);	        				        		
 	        		}
-	        		if(chckbx4_4Star.isSelected()){
+	        		else {
+	        			checkbox3Star = false;
+	        		}
+	        		if(checkbox4Star == true){
 	        			lg.hotelSuggest(4, budgetRatio);
 	        		}
+	        		else {
+	        			checkbox4Star = false;
+	        		}
 	        		
-	        		if(chckbx4_5Star.isSelected()){
+	        		if(checkbox5Star == true){
 	        			lg.hotelSuggest(5, budgetRatio);
-        		}
+	        		}
+	        		else {
+	        			checkbox5Star = false;
+	        		}
+	        			        		
+	        		checkbox[0] = checkbox3Star;
+	        		checkbox[1] = checkbox4Star;
+	        		checkbox[2] = checkbox5Star;
+	        		lg.setcheckBox(checkbox);
+	        		
         		} catch(IOException io){
         			JOptionPane.showMessageDialog(new JFrame(), "Hotel data file could not be found. Please ensure 'hotelData' is found in the Data directory in your program folder.");
         		}
@@ -999,14 +1000,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		updateStep0();
 	}
 	
-	void clearAllFields() {	
-		comboBox1.setSelectedIndex(0);
-		textField1_EventName.setText("");
-		textArea1_EventDescription.setText("");
-		
-	}
-	
-	
 	
 	void updateStep0() {
 		
@@ -1122,6 +1115,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		list4.setListData(lg.getSuggestedHotelsNames());
 		list4.setSelectedIndex(lg.getSelectedHotelIdx());
 		slider4.setValue(lg.getBudgetRatio());
+		boolean[] checkbox = lg.getcheckBox();
+		if (checkbox[0] == true )
+			chckbx4_3Star.setSelected(true);
+		else chckbx4_3Star.setSelected(false);
+		
+		if (checkbox[1] == true )
+			chckbx4_4Star.setSelected(true);
+		else chckbx4_4Star.setSelected(false);
+		
+		if (checkbox[2] == true )
+			chckbx4_5Star.setSelected(true);
+		else chckbx4_5Star.setSelected(false);
 	}
 	
 	/*

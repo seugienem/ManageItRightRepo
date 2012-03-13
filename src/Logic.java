@@ -73,8 +73,8 @@ public class Logic {
 	int step1Status(){
 		if (event.getEventType() != null &&
 				!event.getEventName().isEmpty() &&
-				!(event.getStartDateAndTime().getYear() == 0) && //!(event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
-				!(event.getEndDateAndTime().getYear() == 0) && //!(event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0) &&
+				!(event.getStartDateAndTime().getYear() == 0) && !(event.getStartDateAndTime().getHour() == 0) &&
+				!(event.getEndDateAndTime().getYear() == 0) && !(event.getEndDateAndTime().getHour() == 0) &&
 				event.getMealType() != null &&
 				!event.getEventDescription().isEmpty() &&
 				event.getEventBudget() != 0.0)
@@ -82,8 +82,8 @@ public class Logic {
 
 		else if (event.getEventType() == null &&
 				event.getEventName().isEmpty() &&
-				event.getStartDateAndTime().getYear() == 0 && //event.getStartDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
-				event.getEndDateAndTime().getYear() == 0 && //event.getEndDateAndTime().get(Calendar.HOUR_OF_DAY) == 0 &&
+				event.getStartDateAndTime().getYear() == 0 && event.getStartDateAndTime().getHour() == 0 &&
+				event.getEndDateAndTime().getYear() == 0 && event.getEndDateAndTime().getHour() == 0 &&
 				event.getMealType() == null &&
 				event.getEventDescription().isEmpty() &&
 				event.getEventBudget() == 0.0)
@@ -544,6 +544,15 @@ public class Logic {
 		event.setProgrammeScheduleFinalised(value);
 	}
 	
+	boolean[] getcheckBox() {
+		return event.getcheckBox();
+	}
+	
+	void setcheckBox(boolean[] value) {
+		event.setcheckBox(value);
+	}
+	
+	
 	////STEP 4: HOTEL SUGGESTIONS TAB\\\\
 	double calculateHotelBudget(){
 		return (event.getEventBudget() * event.getBudgetRatio()/100.0);
@@ -560,7 +569,7 @@ public class Logic {
 	void hotelSuggest(int stars, int ratio) throws IOException{
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
-		hotelSuggester.setBudgetRatio(ratio);
+		hotelSuggester.setBudgetRatio(event.getBudgetRatio());
 		hotelSuggester.setStartDate(event.getStartDateAndTime());
 		hotelSuggester.setEventMealType(event.getMealType());
 		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
