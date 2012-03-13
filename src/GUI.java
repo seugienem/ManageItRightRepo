@@ -199,8 +199,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         JLabel lbl0_Overview = new JLabel("Overview");
         lbl0_Overview.setBounds(10, 11, 76, 30);
         lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
-        
-        btn0_New = new JButton("New");
+       
+        btn0_New = new JButton("New");        
+        btn0_New.setBounds(350, 490, 80, 30);
+        btn0_New.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn0_New.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent arg0) {
@@ -215,6 +217,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				lg.saveEvent(file);
         				break;
         			case 1:
+        				clearAllFields();
         				jtp.setSelectedIndex(1);
         				break;
         			case 2:
@@ -223,20 +226,31 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		}
         	}
         });
-        btn0_New.setBounds(350, 490, 80, 30);
-        btn0_New.setFont(new Font("Tahoma", Font.BOLD, 12));
         
         btn0_Load = new JButton("Load");
         btn0_Load.setBounds(450, 490, 80, 30);
         btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn0_Load.addActionListener(new ExportImportButtonsListener());
         
-        JButton btn0_Continue = new JButton("Continue");
-        btn0_Continue.addMouseListener(this);
+        JButton btn0_Continue = new JButton("Continue");   
         btn0_Continue.setBounds(550, 490, 90, 30);
         btn0_Continue.setFont(new Font("Tahoma", Font.BOLD, 12));
         panel0.setLayout(null);
         panel0.add(lbl0_Overview);
+        btn0_Continue.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent arg0) {
+        		if (!lg.getSavedStatus()) {
+        			JOptionPane.showMessageDialog(new JFrame(),"Please create a new event or load in an event to continue","warning",JOptionPane.WARNING_MESSAGE);
+        		}
+        		else {        		
+        			jtp.setSelectedIndex(1);     
+        			
+        		}
+        		
+        	}
+        });
+              
         
         textPane0_EventName = new JTextPane();
         textPane0_EventName.setEditable(false);
@@ -328,9 +342,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl1_EventDate.setBounds(10, 142, 73, 14);
         panel1.add(lbl1_EventDate);
         
-        dateChooser1_StartDate = new JDateChooser();
-    
-              
+        dateChooser1_StartDate = new JDateChooser();    
         dateChooser1_StartDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
         		if (dateChooser1_StartDate.getDate()!= null) {
@@ -495,7 +507,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        lbl2_GuestList.setBounds(10, 10, 81, 30);
 	        panel2.add(lbl2_GuestList);
 	        
-	        btn2_AddContact = new JButton("Add Contact");
+	        btn2_AddContact = new JButton("Add Guest");
 	        btn2_AddContact.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent arg0) {
 	        	}
@@ -745,6 +757,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         textPane4_HotelDetails.setBounds(266, 220, 374, 250);
         panel4.add(textPane4_HotelDetails);
         
+        JLabel lbl4_NoOfGuest = new JLabel("No. of Guest");
+        lbl4_NoOfGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl4_NoOfGuest.setBounds(533, 20, 82, 20);
+        panel4.add(lbl4_NoOfGuest);
+        
         /* Next button for v0.2
         btn4_Next = new JButton("Next");
         btn4_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -973,6 +990,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		updateStep4();
 		updateStep0();
 	}
+	
+	void clearAllFields() {	
+		comboBox1.setSelectedIndex(0);
+		textField1_EventName.setText("");
+		textArea1_EventDescription.setText("");
+		
+	}
+	
+	
 	
 	void updateStep0() {
 		
@@ -1249,49 +1275,4 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			//System.out.println(lg.getBudget());
 		}
 	}
-	
-	
-	/*
-    private int getPreferredRowHeight(JTable table, int r, int margin) {
-		return 0;
-	}
-    
-    /*
-     *Custom renderer for wrapping text in cell
-     */
-    /*
-    class LineWrapCellRenderer extends JTextArea implements TableCellRenderer  {
-    	int rowHeight = 0;  // current max row height for this scan           	
-    	
-		public Component getTableCellRendererComponent(
-    	        JTable table,
-    	        Object value,
-    	        boolean isSelected,
-    	        boolean hasFocus,
-    	        int row,
-    	        int column)
-    	{
-				    
-			setText((String) value);
-    	    setWrapStyleWord(true);
-    	    setLineWrap(true);        	           	         	                  
-            
-    	    int colWidth = table.getColumnModel().getColumn(column).getWidth();
-
-    	    
-    	    setSize(new Dimension(colWidth, 1)); 
-
-    	    // get the text area preferred height and add the row margin
-    	    int height = getPreferredSize().height + table.getRowMargin();
-
-    	    // ensure the row height fits the cell with most lines
-    	    if (column == 0 || height > rowHeight) {
-    	        table.setRowHeight(row, height);
-    	        rowHeight = height;
-    	    }
-    	    return this;
-    	}
-	
-    }
-    */
 }
