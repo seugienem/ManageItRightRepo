@@ -35,17 +35,13 @@ public class ProgrammeDataManager {
 			BufferedReader reader = new BufferedReader(new FileReader(in));
 			String line;
 			while((line = reader.readLine()) != null){
-				StringTokenizer st = new StringTokenizer(line, ",");
+				String [] programmeData = line.split(",", numberOfTokens);
 				
-				//perhaps add in check here, if st does not have enough token, thrown exception
-				if(st.countTokens() != numberOfTokens){
-					throw new DataFormatException();
-				}
 				programme.add(new Programme());
-				programme.lastElement().setStartTime(Integer.parseInt(st.nextToken()));
-				programme.lastElement().setEndTime(Integer.parseInt(st.nextToken()));
-				programme.lastElement().setTitle(st.nextToken());
-				programme.lastElement().setInCharge(st.nextToken());
+				programme.lastElement().setStartTime(Integer.parseInt(programmeData[0]));
+				programme.lastElement().setEndTime(Integer.parseInt(programmeData[1]));
+				programme.lastElement().setTitle(programmeData[2]);
+				programme.lastElement().setInCharge(programmeData[3]);
 			}
 			
 			reader.close();

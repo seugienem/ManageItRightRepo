@@ -37,18 +37,15 @@ public class GuestDataManager {
 			BufferedReader reader = new BufferedReader(new FileReader(in));
 			String line;
 			while((line = reader.readLine()) != null){
-				StringTokenizer st = new StringTokenizer(line, ",");
+				String [] guestData = line.split(",", numberOfTokens);
 				
-				if(st.countTokens() != numberOfTokens){
-					throw new DataFormatException();
-				}
 				guestList.add(new Guest());
-				guestList.lastElement().setName(st.nextToken());
-				guestList.lastElement().setGender(Enum.valueOf(Gender.class, st.nextToken()));
-				guestList.lastElement().setGroup(st.nextToken());
-				guestList.lastElement().setContactNumber(st.nextToken());
-				guestList.lastElement().setEmailAddress(st.nextToken());
-				guestList.lastElement().setDescription(st.nextToken());
+				guestList.lastElement().setName(guestData[0]);
+				guestList.lastElement().setGender(Enum.valueOf(Gender.class, guestData[1]));
+				guestList.lastElement().setGroup(guestData[2]);
+				guestList.lastElement().setContactNumber(guestData[3]);
+				guestList.lastElement().setEmailAddress(guestData[4]);
+				guestList.lastElement().setDescription(guestData[5]);
 			}
 			
 			reader.close();

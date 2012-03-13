@@ -817,7 +817,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
         			modelProgramme.addRow(new Vector<Object>(4));  
         			lg.addProgramme();
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table3.getSelectedRow();
@@ -825,6 +825,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			modelProgramme.removeRow(rowNumber);
         			lg.removeProgramme(rowNumber);
+        			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
+        				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		}
         	}
@@ -928,6 +930,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		modelGuest.addRow(new Vector<String>(6));
         		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);       		
         		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
+        		chckbx2_GuestListFinalised.setEnabled(false);
         	}
         });
         
@@ -943,7 +946,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
             		modelGuest.addRow(new Vector<String>(6));
             		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
             		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
-            		chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
+            		chckbx2_GuestListFinalised.setEnabled(false);
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table2.getSelectedRow();
@@ -951,6 +954,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			modelGuest.removeRow(rowNumber);
         			lg.removeGuest(rowNumber);
+        			if(chckbx2_GuestListFinalised.isSelected())
+        				chckbx2_GuestListFinalised.setSelected(false);
         			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		}
         	}
