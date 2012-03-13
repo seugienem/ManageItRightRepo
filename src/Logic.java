@@ -97,18 +97,8 @@ public class Logic {
 		if (event.getGuestList().isEmpty())
 			return 0;	//if no guest list is found
 
-		Guest g;
-		for (int i=0; i<event.getGuestList().size(); ++i){
-			g = event.getGuestList().get(i);
-			if (g.getName() == null ||
-					g.getEmailAddress() == null ||
-					g.getDescription() == null ||
-					g.getGroup() == null ||
-					g.getContactNumber() == null ||
-					g.getGender() == null)
-				return 1;	//if there is missing guest detail(s)
-		}
-
+		if(!completedGuestFields())
+			return 1;
 		
 		if(event.getGuestListFinalised())
 			return 3;
@@ -121,15 +111,8 @@ public class Logic {
 		if (event.getProgrammeSchedule().isEmpty())
 			return 0; //if no programme schedule is found
 
-		Programme p;
-		for (int i=0; i<event.getProgrammeSchedule().size(); ++i){
-			p = event.getProgrammeSchedule().get(i);
-			if (p.getStartTime() == 0 ||
-					p.getEndTime() == 0 ||
-					p.getTitle() == null ||
-					p.getInCharge() == null)
-				return 1; //if there is missing programme detail(s)
-		}
+		if(!completedProgrammeFields())
+			return 1;
 
 		if(event.getProgrammeScheduleFinalised())
 			return 3;

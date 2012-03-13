@@ -863,11 +863,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setProgrammeInfo(row, columnName, data);
         		
         		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
-        		if(lg.completedProgrammeFields()){
-        			if(chckbx3_ProgrammeScheduleFinalised == null)
-        				return;
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(true);
-        		}
+        		chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
 
         		//if chckBx is checked, it shld be unchecked
         		if(chckbx3_ProgrammeScheduleFinalised.isSelected()){
@@ -983,11 +979,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setGuestInfo(row, columnName, data);
         		
         		//if there exist 1 guest, and all fields are updated, chckbx2_GuestListFinalised should be enabled.
-        		if(lg.completedGuestFields()){
-        			if(chckbx2_GuestListFinalised == null)
-        				return;
-        			chckbx2_GuestListFinalised.setEnabled(true);
-        		}
+        		chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
     			
         		//if chckBx is checked, it shld be unchecked
         		if(chckbx2_GuestListFinalised.isSelected()){
