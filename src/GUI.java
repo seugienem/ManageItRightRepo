@@ -36,6 +36,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JButton btn0_New;
 	
 	//GUI1 objects
+	private JPanel panel1;
 	private JTextField textField1_EventName;
 	private JTextField textField1_budget;
 	private JComboBox<String> comboBox1;
@@ -128,8 +129,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				if(file == null)
         					return;
         				lg.saveEvent(file);
+        				lg.createNewEvent();
+        				updateAll();
         				break;
         			case 1:
+        				lg.createNewEvent();
+        				updateAll();
         				jtp.setSelectedIndex(1);
         				break;
         			case 2:
@@ -215,9 +220,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				if(file == null)
         					return;
         				lg.saveEvent(file);
+        				lg.createNewEvent();
+        				updateAll();
         				break;
         			case 1:
-        				clearAllFields();
+        				lg.createNewEvent();
+        				updateAll();
         				jtp.setSelectedIndex(1);
         				break;
         			case 2:
@@ -287,7 +295,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Draws everything in Step 1
 	 */
 	private void GUI1(){
-		JPanel panel1 = new JPanel();
+		panel1 = new JPanel();
         jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 1:<br>Event Details</body></html>", null, panel1, "Manage the event details.");
         panel1.setLayout(null);
         
