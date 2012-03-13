@@ -556,6 +556,7 @@ public class Logic {
 		try{
 			Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
 			event.mergeWithExistingHotels(hotelList);
+			event.setSelectedHotelIdx(-1);
 		} catch(IOException ioEx){
 			throw ioEx;
 		}
@@ -568,8 +569,6 @@ public class Logic {
 		}
 		if(names.size() == 0)
 			names.add("No hotels match your criteria!");
-		
-		event.setSelectedHotelIdx(-1);
 		
 		return names;
 	}
@@ -606,6 +605,7 @@ public class Logic {
 	}
 	
 	int getSelectedHotelIdx() {
+		System.out.println(event.getSelectedHotelIdx());
 		return event.getSelectedHotelIdx();
 	}
 	
