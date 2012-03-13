@@ -429,16 +429,14 @@ public class Logic {
 		}
 	}
 	
-	boolean completedGuestFields(int index){
-		Guest guestCheck = event.getGuestList().get(index);
-		
-		if(guestCheck.getName().equals("") || guestCheck.getGroup().equals("")
-				|| guestCheck.getEmailAddress().equals("") || guestCheck.getDescription().equals("")
-				|| guestCheck.getContactNumber().equals("") || guestCheck.getGender().ordinal() == 3){
+	boolean completedGuestFields(){
+		for(Guest guestCheck : event.getGuestList()){
+			if(guestCheck.getName().equals(" ") || guestCheck.getGroup().equals(" ")
+					|| guestCheck.getEmailAddress().equals(" ") || guestCheck.getDescription().equals(" ")
+					|| guestCheck.getContactNumber().equals(" ") || guestCheck.getGender().ordinal() == 3)
 			return false;
 		}
-		else
-			return true;
+		return true;
 	}
 	
 	void setGuestListFinalised(boolean value){
@@ -525,14 +523,13 @@ public class Logic {
 		}
 	}
 	
-	boolean completedProgrammeFields(int index){
-		Programme programmeCheck = event.getProgrammeSchedule().get(index);
-		
-		if(programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
-				|| programmeCheck.getTitle().equals("") || programmeCheck.getInCharge().equals(""))
-			return false;
-		else
-			return true;
+	boolean completedProgrammeFields(){
+		for(Programme programmeCheck : event.getProgrammeSchedule()){
+			if(programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
+					|| programmeCheck.getTitle().equals(" ") || programmeCheck.getInCharge().equals(" "))
+				return false;
+		}
+		return true;
 	}
 	
 	boolean getProgrammeScheduleFinalised(){

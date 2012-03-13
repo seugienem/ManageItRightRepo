@@ -766,7 +766,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         textPane4_HotelDetails.setBounds(266, 220, 374, 250);
         panel4.add(textPane4_HotelDetails);
         
-        JLabel lbl4_NoOfGuest = new JLabel("No. of Guest");
+        JLabel lbl4_NoOfGuest = new JLabel("No. of Guests");
         lbl4_NoOfGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
         lbl4_NoOfGuest.setBounds(533, 20, 82, 20);
         panel4.add(lbl4_NoOfGuest);
@@ -811,18 +811,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	@Override
         	public void keyPressed(KeyEvent e) {
         		if (e.getKeyCode()==KeyEvent.VK_TAB) {
-        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
+        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
         			modelProgramme.addRow(new Vector<Object>(4));  
         			lg.addProgramme();
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table3.getSelectedRow();
+        			if(rowNumber == -1)
+        				return;
         			modelProgramme.removeRow(rowNumber);
         			lg.removeProgramme(rowNumber);
-        			if(lg.getProgrammeSchedule().size() == 0)
-        				chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		}
         	}
         	@Override
@@ -858,7 +861,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setProgrammeInfo(row, columnName, data);
         		
         		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
-        		if(lg.completedProgrammeFields(row)){
+        		if(lg.completedProgrammeFields()){
         			if(chckbx3_ProgrammeScheduleFinalised == null)
         				return;
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(true);
@@ -932,13 +935,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	@Override
         	public void keyPressed(KeyEvent e) {
         		if (e.getKeyCode()==KeyEvent.VK_TAB) {
-        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");        		     			
+        			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell"); 
+        			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
         			lg.addGuest();
             		modelGuest.addRow(new Vector<String>(6));
             		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
             		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
+            		chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int rowNumber = table2.getSelectedRow();
@@ -946,8 +951,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			modelGuest.removeRow(rowNumber);
         			lg.removeGuest(rowNumber);
-        			if(lg.getGuestList().size() == 0)
-        				chckbx2_GuestListFinalised.setEnabled(false);
+        			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		}
         	}
         	@Override
@@ -974,7 +978,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setGuestInfo(row, columnName, data);
         		
         		//if there exist 1 guest, and all fields are updated, chckbx2_GuestListFinalised should be enabled.
-        		if(lg.completedGuestFields(row)){
+        		if(lg.completedGuestFields()){
         			if(chckbx2_GuestListFinalised == null)
         				return;
         			chckbx2_GuestListFinalised.setEnabled(true);
