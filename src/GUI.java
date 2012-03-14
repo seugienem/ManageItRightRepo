@@ -341,8 +341,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		if (dateChooser1_StartDate.getDate()!= null) {
         			Date StartDate = dateChooser1_StartDate.getDate();
 //        	        String dateString = String.format("%1$td/%1$tm/%1$tY", StartDate); 
-        			lg.setEventStartDate(StartDate);        		 	
-//					System.out.println(StartDate);      	        
+        			lg.setEventStartDate(StartDate);       
+        			
+        			if (lg.checkDate() == false) {
+        				JOptionPane.showMessageDialog(new JFrame(), "Start Date cannot " +
+        						"be after End Date!", "Start Date Error", JOptionPane.ERROR_MESSAGE );
+        				dateChooser1_StartDate.setDate(dateChooser1_EndDate.getDate());
+        			}
+        			
         		}	
         	}
         });
@@ -391,7 +397,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			Date EndDate = dateChooser1_EndDate.getDate();
 //        	        String dateString = String.format("%1$td/%1$tm/%1$tY", StartDate); 
         			lg.setEventEndDate(EndDate);        		 	
-//					System.out.println(StartDate);    
+					 
+        			if (lg.checkDate() == false) {
+        				JOptionPane.showMessageDialog(new JFrame(), "End Date cannot " +
+        						"be before Start Date!", "End Date Error", JOptionPane.ERROR_MESSAGE );
+        				dateChooser1_EndDate.setDate(dateChooser1_StartDate.getDate());
+        			}
 				}
         	}
         });

@@ -248,6 +248,19 @@ public class Logic {
 		return endDate;
 	}
 	
+	boolean checkDate(){
+		MyCalendar startCal = event.getStartDateAndTime();
+		MyCalendar endCal = event.getEndDateAndTime();
+		
+		if ( endCal.getYear() == 0  || endCal.getMonth() == 0 || endCal.getDate() == 0)
+			return true;
+		
+		if ( endCal.getYear() < startCal.getYear() || endCal.getMonth() < startCal.getMonth() || endCal.getDate() < startCal.getDate() )
+			return false;
+		else
+			return true;
+	}
+	
 	void setStartTimeH(int startH){
 		saved = false;
 		MyCalendar startCal = event.getStartDateAndTime();
