@@ -799,6 +799,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table3.getTableHeader().setReorderingAllowed(false);
         scrollPane3 = new JScrollPane(table3);
+        scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane3.setBounds(10, 70, 600, 370);
         panel3.add(scrollPane3);
         
@@ -808,7 +809,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table3.setFillsViewportHeight(true);
         table3.setColumnSelectionAllowed(true);
         table3.setCellSelectionEnabled(true);
-        table3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table3.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table3.setAutoCreateRowSorter(true);
         
         table3.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -816,8 +817,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table3.getColumnModel().getColumn(2).setPreferredWidth(250);
         table3.getColumnModel().getColumn(3).setPreferredWidth(150);
         
-        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
+ //       table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
         
         table3.addKeyListener(new KeyAdapter() {
         	@Override
@@ -832,11 +834,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-        			int rowNumber = table3.getSelectedRow();
-        			if(rowNumber == -1)
-        				return;
-        			modelProgramme.removeRow(rowNumber);
-        			lg.removeProgramme(rowNumber);
+        			int[] rowIndices = table3.getSelectedRows();
+ //       			if(rowNumber == -1)
+ //       				return;
+        			for (int i=0;i< rowIndices.length;i++) {
+        				modelProgramme.removeRow(rowIndices[i]);
+        				lg.removeProgramme(rowIndices[i]);
+        			}
         			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
         				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
@@ -904,7 +908,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table2.setFillsViewportHeight(true);
         table2.setColumnSelectionAllowed(true);
         table2.setCellSelectionEnabled(true);
-        table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table2.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table2.setAutoCreateRowSorter(true);
         
         table2.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -1301,4 +1305,31 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			//System.out.println(lg.getBudget());
 		}
 	}
+	
+	public class LineWrapCellRenderer  extends JTextArea implements TableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(
+                        JTable table,
+                        Object value,
+                        boolean isSelected,
+                        boolean hasFocus,
+                        int row,
+                        int column) {
+                this.setText((String)value);
+                this.setWrapStyleWord(true);                    
+                this.setLineWrap(true);      
+                
+                this.setBackground(Color.YELLOW);
+                
+                int fontHeight = this.getFontMetrics(this.getFont()).getHeight();
+                int textLength = this.getText().length();
+                int lines = textLength / this.getColumns() +1;//+1, because we need at least 1 row.                       
+                int height = fontHeight * lines;                        
+                table.setRowHeight(row, height);
+                return this;
+        }
+	}
+	
+	
 }
