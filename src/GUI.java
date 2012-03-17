@@ -31,6 +31,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JLabel lbl0_Step2;
 	private JLabel lbl0_Step3;
 	private JLabel lbl0_Step4;
+	private JLabel lbl0_Step5;
+	private JLabel lbl0_Step6;
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
 	private JButton btn0_New;
@@ -72,7 +74,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI4 objects
 	private JButton btn4_Suggest;
-	//private JButton btn4_Next;
+	private JButton btn4_Next;
 	private JTextPane textPane4_HotelDetails;
 	private JList<String> list4;
 	private JSlider slider4;
@@ -82,6 +84,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_4Star;
 	private JCheckBox chckbx4_5Star;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	
+	//GUI5 objects
+	private JButton btn5_Next;
+	
+	//GUI6 objects
+	private JButton btn6_ViewSummary;
+	
+	//GUI7 objects
+
 	
 	/*
 	 * Constructor
@@ -103,6 +114,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
     	GUI2();
     	GUI3();
     	GUI4();
+    	
+    	GUI5();
+    	GUI6();
+    	GUI7();
         
     	/*
     	 * Menu Bar
@@ -199,14 +214,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Draw everything in Overview tab
 	 */
 	private void GUI0(){
-	}
-	
-	/*
-	 * Draws everything in Step 1
-	 */
-	private void GUI1(){
 		JPanel panel0 = new JPanel();
-		jtp.addTab("<html><body marginwidth=15 marginheight=15>Overview</body></html>", null, panel0, null);
+		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Overview</b></body></html>", null, panel0, null);
 		
 		JLabel lbl0_Overview = new JLabel("Overview");
 		lbl0_Overview.setBounds(10, 11, 76, 30);
@@ -278,10 +287,28 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl0_Step4.setForeground(Color.RED);
         lbl0_Step4.setBounds(10, 249, 630, 30);
         panel0.add(lbl0_Step4);
+        
+        lbl0_Step5 = new JLabel("Guests are not assigned to tables.");
+        lbl0_Step5.setForeground(Color.RED);
+        lbl0_Step5.setBounds(10, 317, 630, 30);
+        panel0.add(lbl0_Step5);
+        
+        lbl0_Step6 = new JLabel("Expenses List is empty.");
+        lbl0_Step6.setForeground(Color.RED);
+        lbl0_Step6.setBounds(10, 385, 630, 30);
+        panel0.add(lbl0_Step6);
+        
         panel0.add(btn0_New);
         panel0.add(btn0_Load);
+	}
+	
+	/*
+	 * Draws everything in Step 1
+	 */
+	private void GUI1(){
+		
 		panel1 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 1:<br>Event Details</body></html>", null, panel1, "Manage the event details.");
+        jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 1:</b><br>Event Details</body></html>", null, panel1, "Manage the event details.");
         panel1.setLayout(null);
         
         JLabel lbl1_EventDetails = new JLabel("Event Details");
@@ -503,7 +530,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	private void GUI2(){
 			panel2 = new JPanel();
-	        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 2:<br>Guest List</body></html>", null, panel2, "Manage the list of guests attending the event.");
+	        jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 2:</b><br>Guest List&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</body></html>", null, panel2, "Manage the list of guests attending the event.");
 	        panel2.setLayout(null);
 	        
 	        JLabel lbl2_GuestList = new JLabel("Guest List");
@@ -581,7 +608,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	private void GUI3(){
 		panel3 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=15>Step 3:<br>Programme</body></html>", null, panel3, "Manage the flow of events.");
+        jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 3:</b><br>Programme</body></html>", null, panel3, "Manage the flow of events.");
         panel3.setLayout(null);
         
         JLabel lbl3_ProgrammeSchedule = new JLabel("Programme Schedule");
@@ -627,7 +654,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	private void GUI4(){
 		JPanel panel4 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=8>Step 4:<br>Hotel<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
+        jtp.addTab("<html><body marginwidth=15 marginheight=8><b>Step 4:</b><br>Hotel<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
         panel4.setLayout(null);
         
         JLabel lbl4_LocationSelection = new JLabel("Hotel Selection");
@@ -783,12 +810,65 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl4_NoOfGuest.setBounds(533, 20, 82, 20);
         panel4.add(lbl4_NoOfGuest);
         
-        /* Next button for v0.2
         btn4_Next = new JButton("Next");
         btn4_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn4_Next.setBounds(560, 490, 80, 30);
         panel4.add(btn4_Next);
-        */
+        btn4_Next.addMouseListener(this);
+	}
+	
+	/*
+	 * Drawing of everything in Step 5
+	 */
+	private void GUI5() {
+		JPanel panel5 = new JPanel();
+		jtp.addTab("<html><body marginwidth=15 marginheight=8><b>Step 5:</b><br>Table<br>Assignment</body></html>", null, panel5, "Assign guests to tables of 10.");
+		panel5.setLayout(null);
+        
+		JLabel lbl5_TableAssignment = new JLabel("Table Assignment");
+		lbl5_TableAssignment.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbl5_TableAssignment.setBounds(10, 10, 218, 30);
+		panel5.add(lbl5_TableAssignment);
+		
+		btn5_Next = new JButton("Next");
+        btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn5_Next.setBounds(560, 490, 80, 30);
+        panel5.add(btn5_Next);
+        btn5_Next.addMouseListener(this);
+	}
+	
+	/*
+	 * Drawing of everything in Step 6
+	 */
+	private void GUI6() {
+		JPanel panel6 = new JPanel();
+		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 6:</b><br>Expenses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</body></html>", null, panel6, "Manage the expenses for this event.");
+		panel6.setLayout(null);
+        
+		JLabel lbl6_Expenses = new JLabel("Expenses");
+		lbl6_Expenses.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbl6_Expenses.setBounds(10, 10, 166, 30);
+		panel6.add(lbl6_Expenses);
+		
+		btn6_ViewSummary = new JButton("View Summary");
+		btn6_ViewSummary.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btn6_ViewSummary.setBounds(510, 490, 130, 30);
+        panel6.add(btn6_ViewSummary);
+        btn6_ViewSummary.addMouseListener(this);
+	}
+	
+	/*
+	 * Drawing of everything in Summary
+	 */
+	private void GUI7() {
+		JPanel panel7 = new JPanel();
+		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Summary</b></body></html>", null, panel7, null);
+		panel7.setLayout(null);
+		
+		JLabel lbl7_Summary = new JLabel("Summary");
+		lbl7_Summary.setBounds(10, 11, 76, 30);
+		lbl7_Summary.setFont(new Font("Tahoma", Font.BOLD, 16));
+		panel7.add(lbl7_Summary);
 	}
 	
 	/*
