@@ -13,8 +13,10 @@ import com.toedter.calendar.*;
 public class GUI extends JFrame implements FocusListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	private Logic lg;
+	private JFileChooser fileChooser; 
+	 
 	
-	private JFileChooser fileChooser = new JFileChooser();
+	
 	private JTabbedPane jtp;
 	
 	private JMenu mnFile;
@@ -105,7 +107,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
         getContentPane().add(jtp, BorderLayout.CENTER);
+              
+        try {
+     		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+     	} catch (Exception e) {
+     		System.out.println("Unable to load Windows look and feel");
+     	}
         
+        fileChooser = new JFileChooser(".");
         /*
          * Drawing of individual tabs
          */
