@@ -1,10 +1,5 @@
-import java.io.*;
 
-public class Guest implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Guest implements Comparable<Guest>{
 	private String name;
 	private String emailAddress;
 	private String description;
@@ -13,17 +8,15 @@ public class Guest implements Serializable{
 	private Gender gender;
 	
 	public Guest(){
-		this.name = "";
-		this.emailAddress = "";
-		this.description = "";
-		this.group = "";
-		this.contactNumber = "";
-		this.gender = Gender.UNKNOWN;
 	}
 	
 	public Guest(String name, Gender gender, String emailAddress, String group, String contactNumber){
 		this.name = name; this.gender = gender; this.emailAddress = emailAddress;
 		this.group = group; this.contactNumber = contactNumber;
+	}
+	
+	public int compareTo(Guest o){
+		return this.getGroup().compareTo(o.getGroup());
 	}
 	
 	public void setName(String name){
