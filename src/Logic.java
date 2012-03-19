@@ -426,6 +426,9 @@ public class Logic {
 	}
 	
 	boolean completedGuestFields(){
+		if(event.getGuestList().size() == 0)
+			return false;
+		
 		for(Guest guestCheck : event.getGuestList()){
 			if(guestCheck.getName().equals("") || guestCheck.getGroup().equals("")
 					|| guestCheck.getEmailAddress().equals("") || guestCheck.getDescription().equals("")
@@ -520,6 +523,8 @@ public class Logic {
 	}
 	
 	boolean completedProgrammeFields(){
+		if(event.getProgrammeSchedule().size() == 0)
+			return false;
 		for(Programme programmeCheck : event.getProgrammeSchedule()){
 			if(programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
 					|| programmeCheck.getTitle().equals("") || programmeCheck.getInCharge().equals(""))

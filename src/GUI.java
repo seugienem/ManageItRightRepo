@@ -908,7 +908,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
- //       table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
         
         table3.addKeyListener(new KeyAdapter() {
         	@Override
