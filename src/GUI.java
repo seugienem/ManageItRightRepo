@@ -87,13 +87,22 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI5 objects
 	private JPanel panel5;
+	private JRadioButton rdbtn5_Random;
+	private JRadioButton rdbtn5_ByGroup;
+	private JComboBox<String> comboBox5_arrangerGroupType;
+	private JButton btn5_Generate;
 	private JTable table5;
 	private JScrollPane scrollPane5;
 	private Vector<String> tableCols;
 	private JButton btn5_Next;
 	
 	//GUI6 objects
+	private JPanel panel6;
+	private JTable table6;
+	private JScrollPane scrollPane6;
+	private Vector<String> expensesCols;
 	private JButton btn6_ViewSummary;
+	private final ButtonGroup buttonGroup5 = new ButtonGroup();
 	
 	//GUI7 objects
 
@@ -841,9 +850,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl5_TableAssignment.setBounds(10, 10, 218, 30);
 		panel5.add(lbl5_TableAssignment);
 		
-		JLabel lbl5_ArrangeType = new JLabel("Select Arrangement Type: ");
+		JLabel lbl5_ArrangeType = new JLabel("Select Assignment Type: ");
 		lbl5_ArrangeType.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl5_ArrangeType.setBounds(10, 42, 165, 20);
+		lbl5_ArrangeType.setBounds(10, 42, 154, 20);
         panel5.add(lbl5_ArrangeType);
 		
 		tableCols = new Vector<String>();
@@ -853,28 +862,45 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		// GUI needs to get the list of Guests assigned to the different tables --> 10 rows(guests) per column(table)
 		
 		createTable5 (new Vector<Vector<String>>(), tableCols);
-		
-		btn5_Next = new JButton("Next");
-        btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn5_Next.setBounds(560, 490, 80, 30);
-        panel5.add(btn5_Next);
         
-        JRadioButton rdbtnRandom = new JRadioButton("Random");
-        rdbtnRandom.setBounds(181, 42, 80, 23);
-        panel5.add(rdbtnRandom);
+        rdbtn5_Random = new JRadioButton("Random");
+        buttonGroup5.add(rdbtn5_Random);
+        rdbtn5_Random.setBounds(163, 42, 65, 23);
+        panel5.add(rdbtn5_Random);
+        rdbtn5_Random.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		comboBox5_arrangerGroupType.setEnabled(false);
+        	}
+        });
         
-        JRadioButton rdbtnByGroup = new JRadioButton("By Group");
-        rdbtnByGroup.setBounds(270, 42, 80, 23);
-        panel5.add(rdbtnByGroup);
+        rdbtn5_ByGroup = new JRadioButton("By Group");
+        buttonGroup5.add(rdbtn5_ByGroup);
+        rdbtn5_ByGroup.setBounds(240, 42, 69, 23);
+        panel5.add(rdbtn5_ByGroup);
+        rdbtn5_ByGroup.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		comboBox5_arrangerGroupType.setEnabled(true);
+        	}
+        });
         
-        JComboBox<String> comboBox5_arrangerGroupType = new JComboBox<String>();
-        comboBox5_arrangerGroupType.setBounds(363, 43, 131, 20);
+        comboBox5_arrangerGroupType = new JComboBox<String>();
+        comboBox5_arrangerGroupType.setBounds(330, 43, 137, 20);
+        comboBox5_arrangerGroupType.setEnabled(false);
         comboBox5_arrangerGroupType.addItem("Fast (poorer results)");
         comboBox5_arrangerGroupType.addItem("Normal (default)");
         comboBox5_arrangerGroupType.addItem("Slow (better results)");
         comboBox5_arrangerGroupType.setSelectedIndex(1);
         panel5.add(comboBox5_arrangerGroupType);
         
+        btn5_Generate = new JButton("Generate");
+        btn5_Generate.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn5_Generate.setBounds(510, 42, 100, 30);
+        panel5.add(btn5_Generate);
+        
+        btn5_Next = new JButton("Next");
+        btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn5_Next.setBounds(560, 490, 80, 30);
+        panel5.add(btn5_Next);
         btn5_Next.addMouseListener(this);
 	}
 	
@@ -1150,7 +1176,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         //table5.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table5.setAutoCreateRowSorter(false);
         
-/*       
+/* duplicated code from table 3
+       
         table5.getColumnModel().getColumn(0).setPreferredWidth(100);
         table5.getColumnModel().getColumn(1).setPreferredWidth(100);
         table5.getColumnModel().getColumn(2).setPreferredWidth(250);
