@@ -992,7 +992,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			if(chckbx2_GuestListFinalised.isSelected())
         				chckbx2_GuestListFinalised.setSelected(false);
         			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
-        		}       		
+        		}
+     		
         	}
         	@Override
         	public void keyReleased(KeyEvent e) {
@@ -1073,7 +1074,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			lg.addProgramme();
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         		}
-        		
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int[] rowIndices = table3.getSelectedRows();        			
         		              			
