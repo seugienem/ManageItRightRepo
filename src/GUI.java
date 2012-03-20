@@ -13,20 +13,16 @@ import com.toedter.calendar.*;
 public class GUI extends JFrame implements FocusListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	private Logic lg;
+	
 	private JFileChooser fileChooser; 
-	 
-	
-	
 	private JTabbedPane jtp;
 	
+	//Menu Bar objects
 	private JMenu mnFile;
 	private JMenuBar menuBar;
 	private JMenuItem mntmCreateNewEvent;
 	private JMenuItem mntmLoadEvent;
 	private JMenuItem mntmSaveEvent;
-	
-	private Vector<String> guestCols;
-	private Vector<String> programmeCols;
 	
 	//GUI0 objects
 	private JLabel lbl0_Step1;
@@ -56,13 +52,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI2 objects
 	private JPanel panel2;
-	private JScrollPane scrollPane2;
 	private JButton btn2_Export;
 	private JButton btn2_Load;
 	private JButton btn2_Next;
 	//private JButton btn2_Search;
 	private JButton btn2_AddContact;
 	private JTable table2;
+	private JScrollPane scrollPane2;
+	private Vector<String> guestCols;
 	//private JTextField textField2_Search;
 	private JCheckBox chckbx2_GuestListFinalised;
 	
@@ -72,6 +69,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JButton btn3_Next;
 	private JTable table3;
 	private JScrollPane scrollPane3;
+	private Vector<String> programmeCols;
 	private JCheckBox chckbx3_ProgrammeScheduleFinalised;
 	
 	//GUI4 objects
@@ -85,9 +83,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JCheckBox chckbx4_3Star;
 	private JCheckBox chckbx4_4Star;
 	private JCheckBox chckbx4_5Star;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private final ButtonGroup buttonGroup1 = new ButtonGroup();
 	
 	//GUI5 objects
+	private JPanel panel5;
+	private JTable table5;
+	private JScrollPane scrollPane5;
+	private Vector<String> tableCols;
 	private JButton btn5_Next;
 	
 	//GUI6 objects
@@ -519,7 +521,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setMealType(0);
         	}
         });
-        buttonGroup.add(rdbtn1_Lunch);
+        buttonGroup1.add(rdbtn1_Lunch);
         rdbtn1_Lunch.setBounds(120, 221, 109, 23);
         panel1.add(rdbtn1_Lunch);
         
@@ -529,7 +531,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setMealType(1);
         	}
         });
-        buttonGroup.add(rdbtn1_Dinner);
+        buttonGroup1.add(rdbtn1_Dinner);
         rdbtn1_Dinner.setBounds(264, 221, 109, 23);
         panel1.add(rdbtn1_Dinner);
 	}
@@ -617,7 +619,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	private void GUI3(){
 		panel3 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 3:</b><br>Programme</body></html>", null, panel3, "Manage the flow of events.");
+        jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 3:</b><br>Programme&nbsp;</body></html>", null, panel3, "Manage the flow of events.");
         panel3.setLayout(null);
         
         JLabel lbl3_ProgrammeSchedule = new JLabel("Programme Schedule");
@@ -663,7 +665,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	private void GUI4(){
 		JPanel panel4 = new JPanel();
-        jtp.addTab("<html><body marginwidth=15 marginheight=8><b>Step 4:</b><br>Hotel<br>Suggestions</body></html>", null, panel4, "View hotel suggestions");
+        jtp.addTab("<html><body marginwidth=15 marginheight=8><b>Step 4:</b><br>Hotel<br>Suggestions&nbsp;</body></html>", null, panel4, "View hotel suggestions");
         panel4.setLayout(null);
         
         JLabel lbl4_LocationSelection = new JLabel("Hotel Selection");
@@ -830,8 +832,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Drawing of everything in Step 5
 	 */
 	private void GUI5() {
-		JPanel panel5 = new JPanel();
-		jtp.addTab("<html><body marginwidth=15 marginheight=8><b>Step 5:</b><br>Table<br>Assignment</body></html>", null, panel5, "Assign guests to tables of 10.");
+		panel5 = new JPanel();
+		jtp.addTab("<html><body marginwidth=15 marginheight=8><b>Step 5:</b><br>Table<br>Assignment&nbsp;</body></html>", null, panel5, "Assign guests to tables of 10.");
 		panel5.setLayout(null);
         
 		JLabel lbl5_TableAssignment = new JLabel("Table Assignment");
@@ -839,10 +841,40 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl5_TableAssignment.setBounds(10, 10, 218, 30);
 		panel5.add(lbl5_TableAssignment);
 		
+		JLabel lbl5_ArrangeType = new JLabel("Select Arrangement Type: ");
+		lbl5_ArrangeType.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lbl5_ArrangeType.setBounds(10, 42, 165, 20);
+        panel5.add(lbl5_ArrangeType);
+		
+		tableCols = new Vector<String>();
+		
+		// To get table assignment here.
+		// GUI needs to get the tableCols (ie. "Table 1", "Table 2", ... (a variable number of tables))
+		// GUI needs to get the list of Guests assigned to the different tables --> 10 rows(guests) per column(table)
+		
+		createTable5 (new Vector<Vector<String>>(), tableCols);
+		
 		btn5_Next = new JButton("Next");
         btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn5_Next.setBounds(560, 490, 80, 30);
         panel5.add(btn5_Next);
+        
+        JRadioButton rdbtnRandom = new JRadioButton("Random");
+        rdbtnRandom.setBounds(181, 42, 80, 23);
+        panel5.add(rdbtnRandom);
+        
+        JRadioButton rdbtnByGroup = new JRadioButton("By Group");
+        rdbtnByGroup.setBounds(270, 42, 80, 23);
+        panel5.add(rdbtnByGroup);
+        
+        JComboBox<String> comboBox5_arrangerGroupType = new JComboBox<String>();
+        comboBox5_arrangerGroupType.setBounds(363, 43, 131, 20);
+        comboBox5_arrangerGroupType.addItem("Fast (poorer results)");
+        comboBox5_arrangerGroupType.addItem("Normal (default)");
+        comboBox5_arrangerGroupType.addItem("Slow (better results)");
+        comboBox5_arrangerGroupType.setSelectedIndex(1);
+        panel5.add(comboBox5_arrangerGroupType);
+        
         btn5_Next.addMouseListener(this);
 	}
 	
@@ -851,7 +883,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	private void GUI6() {
 		JPanel panel6 = new JPanel();
-		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 6:</b><br>Expenses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</body></html>", null, panel6, "Manage the expenses for this event.");
+		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 6:</b><br>Expenses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</body></html>", null, panel6, "Manage the expenses for this event.");
 		panel6.setLayout(null);
         
 		JLabel lbl6_Expenses = new JLabel("Expenses");
@@ -881,107 +913,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	/*
-	 * Method for creation and initlialisation of table3, found in 
-	 */
-	void createTable3(Vector<Vector<String>> data, Vector<String> cols){
-		table3 = new JTable(data, cols);
-		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table3.getTableHeader().setReorderingAllowed(false);
-        scrollPane3 = new JScrollPane(table3);
-        scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane3.setBounds(10, 70, 600, 370);
-        panel3.add(scrollPane3);
-        
-        scrollPane3.setViewportView(table3);
-        table3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        table3.setPreferredScrollableViewportSize(new Dimension(600,370));
-        table3.setFillsViewportHeight(true);
-        table3.setColumnSelectionAllowed(true);
-        table3.setCellSelectionEnabled(true);
-        table3.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        table3.setAutoCreateRowSorter(true);
-        
-        table3.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table3.getColumnModel().getColumn(1).setPreferredWidth(100);
-        table3.getColumnModel().getColumn(2).setPreferredWidth(250);
-        table3.getColumnModel().getColumn(3).setPreferredWidth(150);
-        
-        
-        final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
-        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
-        
-        table3.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyPressed(KeyEvent e) {
-        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
-        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
-        		} 
-        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelProgramme.addRow(new Vector<Object>(4));  
-        			lg.addProgramme();
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
-        		}
-        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-        			int[] rowIndices = table3.getSelectedRows();
- //       			if(rowNumber == -1)
- //       				return;
-        			for (int i=0;i< rowIndices.length;i++) {
-        				modelProgramme.removeRow(rowIndices[i]);
-        				lg.removeProgramme(rowIndices[i]);
-        			}
-        			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
-        				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
-        		}
-        	}
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        	}
-        	@Override
-        	public void keyTyped(KeyEvent e) {
-        	}
-        });
-        
-        table3.getModel().addTableModelListener(new TableModelListener(){
-        	@Override
-        	public void tableChanged(TableModelEvent e){
-        		//get information about change
-        		int row = e.getFirstRow();
-        		int column = e.getColumn();
-        		TableModel model = (TableModel)e.getSource();
-        		String columnName = model.getColumnName(column);
-        		if(row == -1 || column == -1)
-        			return;
-        		String data = (String)model.getValueAt(row, column);
-        		
-        		//pass to logic to save
-        		if(column == 0 || column == 1){
-        			try{
-        				Integer.parseInt(data);
-        			} catch(NumberFormatException ex){
-        				data = "0";
-        				model.setValueAt("0", row, column);
-        				return;
-        			}
-        		}
-        		lg.setProgrammeInfo(row, columnName, data);
-        		
-        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
-        		chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
-
-        		//if chckBx is checked, it shld be unchecked
-        		if(chckbx3_ProgrammeScheduleFinalised.isSelected()){
-        			chckbx3_ProgrammeScheduleFinalised.setSelected(false);
-        			lg.setProgrammeScheduleFinalised(false);
-        		}
-        		
-        	}
-        });
-	}
-	
-	/*
-	 * Method for creation and initilisation of table2 used in Step 2
+	 * Method for creation and initilisation of table2 (Guest List) in Step 2
 	 */
 	void createTable2(Vector<Vector<String>> data, Vector<String> cols){
 		table2 = new JTable(data, cols);
@@ -1097,6 +1029,209 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         });
 	}
 	
+	/*
+	 * Method for creation and initlialisation of table3 (Programme Schedule) in Step 3
+	 */
+	void createTable3(Vector<Vector<String>> data, Vector<String> cols){
+		table3 = new JTable(data, cols);
+		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table3.getTableHeader().setReorderingAllowed(false);
+        scrollPane3 = new JScrollPane(table3);
+        scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane3.setBounds(10, 70, 600, 370);
+        panel3.add(scrollPane3);
+        
+        scrollPane3.setViewportView(table3);
+        table3.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        table3.setPreferredScrollableViewportSize(new Dimension(600,370));
+        table3.setFillsViewportHeight(true);
+        table3.setColumnSelectionAllowed(true);
+        table3.setCellSelectionEnabled(true);
+        table3.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table3.setAutoCreateRowSorter(true);
+        
+        table3.getColumnModel().getColumn(0).setPreferredWidth(100);
+        table3.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table3.getColumnModel().getColumn(2).setPreferredWidth(250);
+        table3.getColumnModel().getColumn(3).setPreferredWidth(150);
+        
+        
+        final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
+        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        
+        table3.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+        		} 
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        			modelProgramme.addRow(new Vector<Object>(4));  
+        			lg.addProgramme();
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
+        		}
+        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+        			int[] rowIndices = table3.getSelectedRows();
+ //       			if(rowNumber == -1)
+ //       				return;
+        			for (int i=0;i< rowIndices.length;i++) {
+        				modelProgramme.removeRow(rowIndices[i]);
+        				lg.removeProgramme(rowIndices[i]);
+        			}
+        			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
+        				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+        		}
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        	}
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        	}
+        });
+        
+        table3.getModel().addTableModelListener(new TableModelListener(){
+        	@Override
+        	public void tableChanged(TableModelEvent e){
+        		//get information about change
+        		int row = e.getFirstRow();
+        		int column = e.getColumn();
+        		TableModel model = (TableModel)e.getSource();
+        		String columnName = model.getColumnName(column);
+        		if(row == -1 || column == -1)
+        			return;
+        		String data = (String)model.getValueAt(row, column);
+        		
+        		//pass to logic to save
+        		if(column == 0 || column == 1){
+        			try{
+        				Integer.parseInt(data);
+        			} catch(NumberFormatException ex){
+        				data = "0";
+        				model.setValueAt("0", row, column);
+        				return;
+        			}
+        		}
+        		lg.setProgrammeInfo(row, columnName, data);
+        		
+        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
+        		chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+
+        		//if chckBx is checked, it shld be unchecked
+        		if(chckbx3_ProgrammeScheduleFinalised.isSelected()){
+        			chckbx3_ProgrammeScheduleFinalised.setSelected(false);
+        			lg.setProgrammeScheduleFinalised(false);
+        		}
+        		
+        	}
+        });
+	}
+	
+	/*
+	 * Method for creation and initlialisation of table5 (Table Assignment) in Step 5
+	 */
+	void createTable5(Vector<Vector<String>> data, Vector<String> cols){
+		table5 = new JTable(data, cols);
+		table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table5.getTableHeader().setReorderingAllowed(false);
+        scrollPane5 = new JScrollPane(table5);
+        scrollPane5.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane5.setBounds(10, 92, 600, 370);
+        panel5.add(scrollPane5);
+        
+        scrollPane5.setViewportView(table5);
+        table5.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        table5.setPreferredScrollableViewportSize(new Dimension(600,370));
+        table5.setFillsViewportHeight(true);
+        table5.setColumnSelectionAllowed(true);
+        table5.setCellSelectionEnabled(true);
+        //table5.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table5.setAutoCreateRowSorter(false);
+        
+/*       
+        table5.getColumnModel().getColumn(0).setPreferredWidth(100);
+        table5.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table5.getColumnModel().getColumn(2).setPreferredWidth(250);
+        table5.getColumnModel().getColumn(3).setPreferredWidth(150);
+       
+        
+        final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
+        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        
+        table3.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+        		} 
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        			modelProgramme.addRow(new Vector<Object>(4));  
+        			lg.addProgramme();
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
+        		}
+        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+        			int[] rowIndices = table3.getSelectedRows();
+ //       			if(rowNumber == -1)
+ //       				return;
+        			for (int i=0;i< rowIndices.length;i++) {
+        				modelProgramme.removeRow(rowIndices[i]);
+        				lg.removeProgramme(rowIndices[i]);
+        			}
+        			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
+        				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
+        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+        		}
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        	}
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        	}
+        });
+        
+        table3.getModel().addTableModelListener(new TableModelListener(){
+        	@Override
+        	public void tableChanged(TableModelEvent e){
+        		//get information about change
+        		int row = e.getFirstRow();
+        		int column = e.getColumn();
+        		TableModel model = (TableModel)e.getSource();
+        		String columnName = model.getColumnName(column);
+        		if(row == -1 || column == -1)
+        			return;
+        		String data = (String)model.getValueAt(row, column);
+        		
+        		//pass to logic to save
+        		if(column == 0 || column == 1){
+        			try{
+        				Integer.parseInt(data);
+        			} catch(NumberFormatException ex){
+        				data = "0";
+        				model.setValueAt("0", row, column);
+        				return;
+        			}
+        		}
+        		lg.setProgrammeInfo(row, columnName, data);
+        		
+        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
+        		chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
+
+        		//if chckBx is checked, it shld be unchecked
+        		if(chckbx3_ProgrammeScheduleFinalised.isSelected()){
+        			chckbx3_ProgrammeScheduleFinalised.setSelected(false);
+        			lg.setProgrammeScheduleFinalised(false);
+        		}
+        		
+        	}
+        });
+        
+*/
+	}
+	
 	//refresh all fields
 	void updateAll(){
 		updateStep1();
@@ -1105,8 +1240,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		updateStep4();
 		updateStep0();
 	}
-	
-	
+		
 	void updateStep0() {
 		
 		switch(lg.step1Status()) {
@@ -1419,6 +1553,4 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
                 return this;
         }
 	}
-	
-	
 }
