@@ -1007,16 +1007,19 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
             		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
             		chckbx2_GuestListFinalised.setEnabled(false);
         		}
+        		
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-        			int rowNumber = table2.getSelectedRow();
-        			if(rowNumber == -1)
-        				return;
-        			modelGuest.removeRow(rowNumber);
-        			lg.removeGuest(rowNumber);
+        			int[] rowIndices = table2.getSelectedRows();        			
+        		              			
+        			for (int i = 0; i < rowIndices.length; i++) {       			
+        				modelGuest.removeRow(rowIndices[0]);
+        				lg.removeGuest(rowIndices[0]);
+        			}
         			if(chckbx2_GuestListFinalised.isSelected())
         				chckbx2_GuestListFinalised.setSelected(false);
         			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		}
+     		
         	}
         	@Override
         	public void keyReleased(KeyEvent e) {
@@ -1098,17 +1101,26 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         		}
         		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-        			int[] rowIndices = table3.getSelectedRows();
- //       			if(rowNumber == -1)
- //       				return;
-        			for (int i=0;i< rowIndices.length;i++) {
-        				modelProgramme.removeRow(rowIndices[i]);
-        				lg.removeProgramme(rowIndices[i]);
+        			int[] rowIndices = table3.getSelectedRows();        			
+        		              			
+        			for (int i = 0; i < rowIndices.length; i++) {       			
+        				modelProgramme.removeRow(rowIndices[0]);
+        				lg.removeProgramme(rowIndices[0]);
         			}
         			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
         				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		}
+        		
+/*        		if (e.getKeyCode() == KeyEvent.VK_HOME) {
+        			int[] rowIndices2 = table3.getSelectedRows();
+        			int[] columnIndices = table3.getSelectedColumns();
+        			
+        			for (int nRow = rowIndices2[0] ; nRow < rowIndices2.length ; nRow++)
+        				for (int nColumn = columnIndices[0] ; nColumn < columnIndices.length ; nColumn++)
+        						modelProgramme.setValueAt("", nRow, nColumn);
+        		}
+*/        		
         	}
         	@Override
         	public void keyReleased(KeyEvent e) {
