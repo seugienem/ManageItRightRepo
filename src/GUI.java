@@ -56,7 +56,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JButton btn2_Load;
 	private JButton btn2_Next;
 	//private JButton btn2_Search;
-	private JButton btn2_AddContact;
+	private JButton btn2_AddGuest;
+	private JButton btn2_DeleteGuest;
 	private JTable table2;
 	private JScrollPane scrollPane2;
 	private Vector<String> guestCols;
@@ -565,16 +566,26 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        lbl2_GuestList.setBounds(10, 10, 81, 30);
 	        panel2.add(lbl2_GuestList);
 	        
-	        btn2_AddContact = new JButton("Add Guest");
-	        btn2_AddContact.addActionListener(new ActionListener() {
+	        btn2_AddGuest = new JButton("Add Guest");
+	        btn2_AddGuest.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent arg0) {
 	        	}
 	        });
 	        
-	        btn2_AddContact.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        btn2_AddContact.setBounds(10, 58, 110, 23);
-	        panel2.add(btn2_AddContact);
+	        btn2_AddGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
+	        btn2_AddGuest.setBounds(10, 58, 110, 23);
+	        panel2.add(btn2_AddGuest);
 	        
+	        btn2_DeleteGuest = new JButton("Delete Guest");	        
+	        btn2_DeleteGuest.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent arg0) {
+	        	}
+	        });
+	        btn2_DeleteGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
+	        btn2_DeleteGuest.setBounds(145, 58, 110, 23);
+	        panel2.add(btn2_DeleteGuest);
+	        
+	       
 	        /*
 	        textField2_Search = new JTextField();
 	        textField2_Search.setToolTipText("Search Guest List");
@@ -644,6 +655,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel3.add(lbl3_ProgrammeSchedule);
         
         programmeCols = new Vector<String>();
+        programmeCols.add("Date");
         programmeCols.add("Start Time");
         programmeCols.add("End Time");
         programmeCols.add("Programme");
@@ -1022,11 +1034,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void createTable2(Vector<Vector<String>> data, Vector<String> cols){
 		table2 = new JTable(data, cols);
 		table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table2.getTableHeader().setReorderingAllowed(false);
+        table2.getTableHeader().setReorderingAllowed(false);            
         scrollPane2 = new JScrollPane(table2);
         scrollPane2.setBounds(10, 92, 600, 370);
-        panel2.add(scrollPane2);
-        
+        panel2.add(scrollPane2);        
         scrollPane2.setViewportView(table2);
         table2.setFont(new Font("Tahoma", Font.PLAIN, 12));
         table2.setPreferredScrollableViewportSize(new Dimension(600,370));
@@ -1045,7 +1056,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         TableColumn genderCol = table2.getColumnModel().getColumn(1);
         
-        JComboBox<String> comboBox_Gender = new JComboBox<String>();
+        JComboBox<String> comboBox_Gender = new JComboBox<String>();        
         comboBox_Gender.addItem("Select");
         comboBox_Gender.addItem("Male");
         comboBox_Gender.addItem("Female");
@@ -1053,19 +1064,37 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         final DefaultTableModel modelGuest = (DefaultTableModel)table2.getModel();
         
-        MouseListener [] listeners = btn2_AddContact.getMouseListeners();
+        MouseListener [] listeners = btn2_AddGuest.getMouseListeners();
         if(listeners.length != 0){
         	for(int i = 0; i < listeners.length; i++){
-        		btn2_AddContact.removeMouseListener(listeners[i]);
+        		btn2_AddGuest.removeMouseListener(listeners[i]);
         	}
-        }
+        }       
         
-        btn2_AddContact.addMouseListener(new MouseAdapter() {
+        btn2_AddGuest.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         		lg.addGuest();
         		modelGuest.addRow(new Vector<String>(6));
         		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);       		
+        		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
+        		chckbx2_GuestListFinalised.setEnabled(false);
+        	}
+        });
+        
+        MouseListener [] listeners2 = btn2_DeleteGuest.getMouseListeners();
+        if(listeners2.length != 0){
+        	for(int i = 0; i < listeners2.length; i++){
+        		btn2_DeleteGuest.removeMouseListener(listeners2[i]);
+        	}
+        }       
+        
+        btn2_DeleteGuest.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {       		
+        		int row = table2.getSelectedRow();
+        		lg.removeGuest(row);
+        		modelGuest.removeRow(row);     		
         		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
         		chckbx2_GuestListFinalised.setEnabled(false);
         	}
@@ -1166,14 +1195,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table3.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table3.setAutoCreateRowSorter(true);
         
-        table3.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table3.getColumnModel().getColumn(1).setPreferredWidth(100);
-        table3.getColumnModel().getColumn(2).setPreferredWidth(249);
-        table3.getColumnModel().getColumn(3).setPreferredWidth(150);
+        table3.getColumnModel().getColumn(0).setPreferredWidth(80);
+        table3.getColumnModel().getColumn(1).setPreferredWidth(80);
+        table3.getColumnModel().getColumn(2).setPreferredWidth(80);
+        table3.getColumnModel().getColumn(3).setPreferredWidth(240);
+        table3.getColumnModel().getColumn(4).setPreferredWidth(120);
         
+        TableColumn dateCol = table3.getColumnModel().getColumn(0);
         
+/*        JComboBox<String> comboBox_Date = new JComboBox<String>();
+        comboBox_Date.addItem("Select");        
+        dateCol.setCellEditor(new DefaultCellEditor(comboBox_Date));
+*/        
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
-        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());   
+        
         
         table3.addKeyListener(new KeyAdapter() {
         	@Override
@@ -1183,7 +1219,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelProgramme.addRow(new Vector<Object>(4));  
+        			modelProgramme.addRow(new Vector<Object>(5));  
         			lg.addProgramme();
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         		}
@@ -1230,7 +1266,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		String data = (String)model.getValueAt(row, column);
         		
         		//pass to logic to save
-        		if(column == 0 || column == 1){
+        		if(column == 1 || column == 2){
         			try{
         				Integer.parseInt(data);
         			} catch(NumberFormatException ex){
@@ -1771,7 +1807,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	public class LineWrapCellRenderer  extends JTextArea implements TableCellRenderer {
 
-        @Override
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
         public Component getTableCellRendererComponent(
                         JTable table,
                         Object value,
