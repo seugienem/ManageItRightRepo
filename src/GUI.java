@@ -993,7 +993,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				chckbx2_GuestListFinalised.setSelected(false);
         			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		}
-     		
+        		
+        		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+        			int[] rowIndices2 = table2.getSelectedRows();
+        			int[] columnIndices = table2.getSelectedColumns();
+        			       			
+        			for (int nRow = rowIndices2[0] ; nRow <= rowIndices2[rowIndices2.length-1] ; nRow++)
+        				for (int nColumn = columnIndices[0] ; nColumn <= columnIndices[columnIndices.length-1] ; nColumn++)
+        						modelGuest.setValueAt("", nRow, nColumn);
+        		}
+        		
         	}
         	@Override
         	public void keyReleased(KeyEvent e) {
@@ -1086,15 +1095,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		}
         		
-/*        		if (e.getKeyCode() == KeyEvent.VK_HOME) {
+        		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
         			int[] rowIndices2 = table3.getSelectedRows();
         			int[] columnIndices = table3.getSelectedColumns();
-        			
-        			for (int nRow = rowIndices2[0] ; nRow < rowIndices2.length ; nRow++)
-        				for (int nColumn = columnIndices[0] ; nColumn < columnIndices.length ; nColumn++)
+        			       			
+        			for (int nRow = rowIndices2[0] ; nRow <= rowIndices2[rowIndices2.length-1] ; nRow++)
+        				for (int nColumn = columnIndices[0] ; nColumn <= columnIndices[columnIndices.length-1] ; nColumn++)
         						modelProgramme.setValueAt("", nRow, nColumn);
         		}
-*/        		
+        		
         	}
         	@Override
         	public void keyReleased(KeyEvent e) {
