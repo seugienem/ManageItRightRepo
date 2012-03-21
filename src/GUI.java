@@ -87,13 +87,29 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI5 objects
 	private JPanel panel5;
+	private JRadioButton rdbtn5_Random;
+	private JRadioButton rdbtn5_ByGroup;
+	private JComboBox<String> comboBox5_arrangerGroupType;
+	private JButton btn5_Generate;
 	private JTable table5;
 	private JScrollPane scrollPane5;
 	private Vector<String> tableCols;
 	private JButton btn5_Next;
 	
 	//GUI6 objects
+	private JPanel panel6;
+	private JButton btn6_AddExpense;
+	private JButton btn6_DeleteExpense;
+	private JTextPane textPane6_TotalBudget;
+	private JTextPane textPane6_Spent;
+	private JTextPane textPane6_Remaining;
+	private JTable table6;
+	private JScrollPane scrollPane6;
+	private Vector<String> expensesCols;
+	private JCheckBox chckbx6_ExpensesFinalised;
+	private JButton btn6_Export;
 	private JButton btn6_ViewSummary;
+	private final ButtonGroup buttonGroup5 = new ButtonGroup();
 	
 	//GUI7 objects
 
@@ -556,7 +572,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        });
 	        
 	        btn2_AddContact.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        btn2_AddContact.setBounds(10, 58, 119, 23);
+	        btn2_AddContact.setBounds(10, 58, 110, 23);
 	        panel2.add(btn2_AddContact);
 	        
 	        /*
@@ -596,13 +612,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        
 	        btn2_Export = new JButton("Export");
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
-	        btn2_Export.setBounds(11, 490, 80, 30);
+	        btn2_Export.setBounds(460, 490, 80, 30);
 	        panel2.add(btn2_Export);
 	        btn2_Export.addActionListener(new ExportImportButtonsListener());
 	        
 	        btn2_Load = new JButton("Load");
 	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
-	        btn2_Load.setBounds(460, 490, 80, 30);
+	        btn2_Load.setBounds(11, 490, 80, 30);
 	        panel2.add(btn2_Load);
 	        btn2_Load.addActionListener(new ExportImportButtonsListener());
 	        
@@ -636,7 +652,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         createTable3(new Vector<Vector<String>>(), programmeCols);
         
         chckbx3_ProgrammeScheduleFinalised = new JCheckBox("Programme Schedule Finalised");
-        chckbx3_ProgrammeScheduleFinalised.setBounds(10, 447, 217, 23);
+        chckbx3_ProgrammeScheduleFinalised.setBounds(10, 463, 217, 23);
         panel3.add(chckbx3_ProgrammeScheduleFinalised);
         chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
         chckbx3_ProgrammeScheduleFinalised.addActionListener(new ActionListener(){
@@ -841,9 +857,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl5_TableAssignment.setBounds(10, 10, 218, 30);
 		panel5.add(lbl5_TableAssignment);
 		
-		JLabel lbl5_ArrangeType = new JLabel("Select Arrangement Type: ");
+		JLabel lbl5_ArrangeType = new JLabel("Select Assignment Type: ");
 		lbl5_ArrangeType.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl5_ArrangeType.setBounds(10, 42, 165, 20);
+		lbl5_ArrangeType.setBounds(10, 42, 154, 20);
         panel5.add(lbl5_ArrangeType);
 		
 		tableCols = new Vector<String>();
@@ -853,28 +869,45 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		// GUI needs to get the list of Guests assigned to the different tables --> 10 rows(guests) per column(table)
 		
 		createTable5 (new Vector<Vector<String>>(), tableCols);
-		
-		btn5_Next = new JButton("Next");
-        btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btn5_Next.setBounds(560, 490, 80, 30);
-        panel5.add(btn5_Next);
         
-        JRadioButton rdbtnRandom = new JRadioButton("Random");
-        rdbtnRandom.setBounds(181, 42, 80, 23);
-        panel5.add(rdbtnRandom);
+        rdbtn5_Random = new JRadioButton("Random");
+        buttonGroup5.add(rdbtn5_Random);
+        rdbtn5_Random.setBounds(163, 42, 65, 23);
+        panel5.add(rdbtn5_Random);
+        rdbtn5_Random.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		comboBox5_arrangerGroupType.setEnabled(false);
+        	}
+        });
         
-        JRadioButton rdbtnByGroup = new JRadioButton("By Group");
-        rdbtnByGroup.setBounds(270, 42, 80, 23);
-        panel5.add(rdbtnByGroup);
+        rdbtn5_ByGroup = new JRadioButton("By Group");
+        buttonGroup5.add(rdbtn5_ByGroup);
+        rdbtn5_ByGroup.setBounds(240, 42, 69, 23);
+        panel5.add(rdbtn5_ByGroup);
+        rdbtn5_ByGroup.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		comboBox5_arrangerGroupType.setEnabled(true);
+        	}
+        });
         
-        JComboBox<String> comboBox5_arrangerGroupType = new JComboBox<String>();
-        comboBox5_arrangerGroupType.setBounds(363, 43, 131, 20);
+        comboBox5_arrangerGroupType = new JComboBox<String>();
+        comboBox5_arrangerGroupType.setBounds(330, 43, 137, 20);
+        comboBox5_arrangerGroupType.setEnabled(false);
         comboBox5_arrangerGroupType.addItem("Fast (poorer results)");
         comboBox5_arrangerGroupType.addItem("Normal (default)");
         comboBox5_arrangerGroupType.addItem("Slow (better results)");
         comboBox5_arrangerGroupType.setSelectedIndex(1);
         panel5.add(comboBox5_arrangerGroupType);
         
+        btn5_Generate = new JButton("Generate");
+        btn5_Generate.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn5_Generate.setBounds(510, 42, 100, 30);
+        panel5.add(btn5_Generate);
+        
+        btn5_Next = new JButton("Next");
+        btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn5_Next.setBounds(560, 490, 80, 30);
+        panel5.add(btn5_Next);
         btn5_Next.addMouseListener(this);
 	}
 	
@@ -882,7 +915,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Drawing of everything in Step 6
 	 */
 	private void GUI6() {
-		JPanel panel6 = new JPanel();
+		panel6 = new JPanel();
 		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Step 6:</b><br>Expenses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</body></html>", null, panel6, "Manage the expenses for this event.");
 		panel6.setLayout(null);
         
@@ -890,11 +923,82 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl6_Expenses.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lbl6_Expenses.setBounds(10, 10, 166, 30);
 		panel6.add(lbl6_Expenses);
+        
+        btn6_AddExpense = new JButton("Add Entry");
+        btn6_AddExpense.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        btn6_AddExpense.setBounds(10, 58, 110, 23);
+        panel6.add(btn6_AddExpense);
+        
+        btn6_DeleteExpense = new JButton("Delete Entry");
+        btn6_DeleteExpense.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        btn6_DeleteExpense.setBounds(141, 58, 110, 23);
+        panel6.add(btn6_DeleteExpense);
+        
+        JLabel lbl6_TotalBudget = new JLabel("Total Budget");
+        lbl6_TotalBudget.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl6_TotalBudget.setBounds(271, 35, 100, 14);
+        panel6.add(lbl6_TotalBudget);
+        
+        textPane6_TotalBudget = new JTextPane();
+        textPane6_TotalBudget.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+        textPane6_TotalBudget.setEditable(false);
+        textPane6_TotalBudget.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textPane6_TotalBudget.setBounds(271, 53, 100, 25);
+        panel6.add(textPane6_TotalBudget);
+        
+        JLabel lbl6_Spent = new JLabel("Total Spent");
+        lbl6_Spent.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl6_Spent.setBounds(391, 35, 100, 14);
+        panel6.add(lbl6_Spent);
+        
+        textPane6_Spent = new JTextPane();
+        textPane6_Spent.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+        textPane6_Spent.setEditable(false);
+        textPane6_Spent.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textPane6_Spent.setBounds(391, 53, 100, 25);
+        panel6.add(textPane6_Spent);
+        
+        JLabel lbl6_Remaining = new JLabel("Remaining Budget");
+        lbl6_Remaining.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl6_Remaining.setBounds(511, 35, 100, 14);
+        panel6.add(lbl6_Remaining);
+        
+        textPane6_Remaining = new JTextPane();
+        textPane6_Remaining.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+        textPane6_Remaining.setEditable(false);
+        textPane6_Remaining.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textPane6_Remaining.setBounds(511, 53, 100, 25);
+        panel6.add(textPane6_Remaining);
+		
+		expensesCols = new Vector<String>();
+		expensesCols.add("Item Name");
+		expensesCols.add("Unit Cost");
+		expensesCols.add("Quantity");
+		expensesCols.add("Total Cost");
+        
+        createTable6(new Vector<Vector<String>>(), expensesCols);
+        
+        chckbx6_ExpensesFinalised = new JCheckBox("Expenses Finalised");
+        chckbx6_ExpensesFinalised.setBounds(10, 463, 217, 23);
+        panel6.add(chckbx6_ExpensesFinalised);
+        chckbx6_ExpensesFinalised.setEnabled(false);
+        chckbx6_ExpensesFinalised.addActionListener(new ActionListener(){
+			@Override	//change here
+			public void actionPerformed(ActionEvent e) {
+				//lg.setProgrammeScheduleFinalised(chckbx6_ExpensesFinalised.isSelected());
+			}
+        });
+      
+        btn6_Export = new JButton("Export");
+        btn6_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn6_Export.setBounds(410, 490, 80, 30);
+        panel6.add(btn6_Export);
+        btn6_Export.addActionListener(new ExportImportButtonsListener());
 		
 		btn6_ViewSummary = new JButton("View Summary");
 		btn6_ViewSummary.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btn6_ViewSummary.setBounds(510, 490, 130, 30);
-        panel6.add(btn6_ViewSummary);
+        panel6.add(btn6_ViewSummary);        
         btn6_ViewSummary.addMouseListener(this);
 	}
 	
@@ -1050,7 +1154,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table3.getTableHeader().setReorderingAllowed(false);
         scrollPane3 = new JScrollPane(table3);
         scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane3.setBounds(10, 70, 600, 370);
+        scrollPane3.setBounds(10, 92, 600, 370);
         panel3.add(scrollPane3);
         
         scrollPane3.setViewportView(table3);
@@ -1064,7 +1168,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         table3.getColumnModel().getColumn(0).setPreferredWidth(100);
         table3.getColumnModel().getColumn(1).setPreferredWidth(100);
-        table3.getColumnModel().getColumn(2).setPreferredWidth(250);
+        table3.getColumnModel().getColumn(2).setPreferredWidth(249);
         table3.getColumnModel().getColumn(3).setPreferredWidth(150);
         
         
@@ -1171,7 +1275,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         //table5.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table5.setAutoCreateRowSorter(false);
         
-/*       
+/* duplicated code from table 3
+       
         table5.getColumnModel().getColumn(0).setPreferredWidth(100);
         table5.getColumnModel().getColumn(1).setPreferredWidth(100);
         table5.getColumnModel().getColumn(2).setPreferredWidth(250);
@@ -1253,12 +1358,114 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 */
 	}
 	
+	/*
+	 * Method for creation and initlialisation of table3 (Programme Schedule) in Step 3
+	 */
+	void createTable6(Vector<Vector<String>> data, Vector<String> cols){
+		table6 = new JTable(data, cols);
+		table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table6.getTableHeader().setReorderingAllowed(false);
+        scrollPane6 = new JScrollPane(table6);
+        scrollPane6.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane6.setBounds(10, 92, 600, 370);
+        panel6.add(scrollPane6);
+        
+        scrollPane6.setViewportView(table6);
+        table6.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        table6.setPreferredScrollableViewportSize(new Dimension(600,370));
+        table6.setFillsViewportHeight(true);
+        table6.setColumnSelectionAllowed(true);
+        table6.setCellSelectionEnabled(true);
+        table6.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table6.setAutoCreateRowSorter(true);
+        
+        table6.getColumnModel().getColumn(0).setPreferredWidth(324);
+        table6.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table6.getColumnModel().getColumn(2).setPreferredWidth(55);
+        table6.getColumnModel().getColumn(3).setPreferredWidth(120);
+        
+        
+        final DefaultTableModel modelExpense = (DefaultTableModel)table6.getModel();
+        //table6.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
+        
+        table6.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
+        			table6.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
+        			//chckbx6_ExpensesFinalised.setEnabled(lg.completedProgrammeFields());
+        		} 
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        			modelExpense.addRow(new Vector<Object>(4));  
+        			//lg.addProgramme();
+        			chckbx6_ExpensesFinalised.setEnabled(false);
+        		}
+        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
+        			int[] rowIndices = table6.getSelectedRows();        			
+        		              			
+        			for (int i = 0; i < rowIndices.length; i++) {       			
+        				modelExpense.removeRow(rowIndices[0]);
+        				//lg.removeProgramme(rowIndices[0]);
+        			}
+        			if(chckbx6_ExpensesFinalised.isSelected())
+        				chckbx6_ExpensesFinalised.setSelected(false);
+        			//chckbx6_ExpensesFinalised.setEnabled(lg.completedProgrammeFields());
+        		}      		
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        	}
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        	}
+        });
+        
+        table6.getModel().addTableModelListener(new TableModelListener(){
+        	@Override
+        	public void tableChanged(TableModelEvent e){
+        		//get information about change
+        		int row = e.getFirstRow();
+        		int column = e.getColumn();
+        		TableModel model = (TableModel)e.getSource();
+        		String columnName = model.getColumnName(column);
+        		if(row == -1 || column == -1)
+        			return;
+        		String data = (String)model.getValueAt(row, column);
+        		
+        		//pass to logic to save
+        		if(column == 0 || column == 1){
+        			try{
+        				Integer.parseInt(data);
+        			} catch(NumberFormatException ex){
+        				data = "0";
+        				model.setValueAt("0", row, column);
+        				return;
+        			}
+        		}
+        		//lg.setProgrammeInfo(row, columnName, data);
+        		
+        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
+        		//chckbx6_ExpensesFinalised.setEnabled(lg.completedProgrammeFields());
+
+        		//if chckBx is checked, it shld be unchecked
+        		if(chckbx6_ExpensesFinalised.isSelected()){
+        			chckbx6_ExpensesFinalised.setSelected(false);
+        			//lg.setProgrammeScheduleFinalised(false);
+        		}
+        		
+        	}
+        });
+	}
+	
 	//refresh all fields
 	void updateAll(){
 		updateStep1();
 		updateStep2();
 		updateStep3();
 		updateStep4();
+		updateStep5();
+		updateStep6();
+		updateStep7();
 		updateStep0();
 	}
 		
@@ -1330,7 +1537,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep1(){
-		//step 1
 		comboBox1.setSelectedIndex(lg.getEventType() + 1);
 		textField1_EventName.setText(lg.getEventName());
 		spinner1_StartTimeH.setValue(lg.getStartTimeH());
@@ -1388,6 +1594,19 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		if (checkbox[2] == true )
 			chckbx4_5Star.setSelected(true);
 		else chckbx4_5Star.setSelected(false);
+	}
+	
+	void updateStep5(){
+		
+	}
+	
+	void updateStep6(){
+		textPane6_TotalBudget.setText(String.valueOf(lg.getBudget()));
+		
+	}
+	
+	void updateStep7(){
+		
 	}
 	
 	/*
