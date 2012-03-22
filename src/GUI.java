@@ -590,7 +590,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        });
 	        
 	        btn2_AddGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        btn2_AddGuest.setBounds(10, 58, 110, 25);
+	        btn2_AddGuest.setBounds(10, 56, 110, 25);
 	        panel2.add(btn2_AddGuest);
 	        
 	        btn2_DeleteGuest = new JButton("Delete Guest");	        
@@ -599,7 +599,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        	}
 	        });
 	        btn2_DeleteGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        btn2_DeleteGuest.setBounds(145, 58, 110, 25);
+	        btn2_DeleteGuest.setBounds(140, 56, 110, 25);
 	        panel2.add(btn2_DeleteGuest);
 	        
 	       
@@ -672,19 +672,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel3.add(lbl3_ProgrammeSchedule);
         
         btn3_AddEntry = new JButton("Add Entry");
+        btn3_AddEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btn3_AddEntry.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         	}
         });
-        btn3_AddEntry.setBounds(10, 58, 100, 25);
+        btn3_AddEntry.setBounds(10, 56, 110, 25);
         panel3.add(btn3_AddEntry);
         
         btn3_DeleteEntry = new JButton("Delete Entry");
+        btn3_DeleteEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btn3_DeleteEntry.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         	}
         });
-        btn3_DeleteEntry.setBounds(135, 58, 100, 25);
+        btn3_DeleteEntry.setBounds(140, 56, 110, 25);
         panel3.add(btn3_DeleteEntry);
         
         programmeCols = new Vector<String>();
@@ -971,12 +973,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         btn6_AddExpense = new JButton("Add Entry");
         btn6_AddExpense.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btn6_AddExpense.setBounds(10, 58, 110, 23);
+        btn6_AddExpense.setBounds(10, 56, 110, 25);
         panel6.add(btn6_AddExpense);
         
         btn6_DeleteExpense = new JButton("Delete Entry");
+        btn6_DeleteExpense.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        	}
+        });
         btn6_DeleteExpense.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btn6_DeleteExpense.setBounds(141, 58, 110, 23);
+        btn6_DeleteExpense.setBounds(140, 56, 110, 25);
         panel6.add(btn6_DeleteExpense);
         
         JLabel lbl6_TotalBudget = new JLabel("Total Budget");
