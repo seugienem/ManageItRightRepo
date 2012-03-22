@@ -72,6 +72,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JScrollPane scrollPane3;
 	private Vector<String> programmeCols;
 	private JCheckBox chckbx3_ProgrammeScheduleFinalised;
+	private JComboBox<String> comboBox_Date;
 	
 	//GUI4 objects
 	private JButton btn4_Suggest;
@@ -451,14 +452,23 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		if (dateChooser1_EndDate.getDate()!= null) {
         			Date EndDate = dateChooser1_EndDate.getDate();
 //        	        String dateString = String.format("%1$td/%1$tm/%1$tY", StartDate); 
+        			        			
         			lg.setEventEndDate(EndDate);        		 	
-					 
+					         			
         			if (lg.checkDate() == false) {
         				JOptionPane.showMessageDialog(new JFrame(), "End Date cannot " +
         						"be before Start Date!", "End Date Error", JOptionPane.ERROR_MESSAGE );
         				dateChooser1_EndDate.setDate(dateChooser1_StartDate.getDate());
         			}
-				}
+        			
+        			else {
+        				if (lg.getEventStartDate() != null) {
+        				// update programme schedule
+        					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
+        					updateStep3();
+        				}
+        			}
+        		}
         	}
         });
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
@@ -1203,10 +1213,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         TableColumn dateCol = table3.getColumnModel().getColumn(0);
         
-/*        JComboBox<String> comboBox_Date = new JComboBox<String>();
-        comboBox_Date.addItem("Select");        
+        comboBox_Date = new JComboBox<String>();
+        if (!lg.getDateList().isEmpty()) {
+        	Iterator<String> itr = lg.getDateList().iterator();
+        	while(itr.hasNext()) {
+        		comboBox_Date.addItem(itr.next());
+        	}
+        	
+        }
+//        comboBox_Date.addItem("Select");        
         dateCol.setCellEditor(new DefaultCellEditor(comboBox_Date));
-*/        
+        
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
         //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());   
         
@@ -1463,7 +1480,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		int row = e.getFirstRow();
         		int column = e.getColumn();
         		TableModel model = (TableModel)e.getSource();
-        		String columnName = model.getColumnName(column);
+//        		String columnName = model.getColumnName(column);
         		if(row == -1 || column == -1)
         			return;
         		String data = (String)model.getValueAt(row, column);

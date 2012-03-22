@@ -21,6 +21,7 @@ public class Event implements Serializable{
 	private boolean guestListFinalised;
 	private boolean programmeScheduleFinalised;
 	private boolean[] checkBox;
+	private Vector<String> dateList;
 	
 	
 	public Event(){
@@ -39,8 +40,8 @@ public class Event implements Serializable{
 		budgetRatio = 50;
 		guestListFinalised = false;
 		programmeScheduleFinalised = false;
-		checkBox = new boolean[3];
-		
+		checkBox = new boolean[3];		
+		dateList = new Vector<String>();
 	}
 	
 /*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
@@ -98,6 +99,13 @@ public class Event implements Serializable{
 		this.endDateAndTime = Parser.parseStringToCalendar(endDateAndTime);
 	}
 */	
+	public void setDateList(Vector<String> dateList) {
+		this.dateList = dateList;
+	}
+	
+	public Vector<String> getDateList(){
+		return this.dateList;
+	}
 	public void setMealType(MealType mealType) {
 		this.mealType = mealType;
 	}

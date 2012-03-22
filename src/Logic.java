@@ -200,8 +200,8 @@ public class Logic {
 		
 		startCal.setDayOfTheWeek(date.getDay());
 		startCal.setDate(date.getDate());
-		startCal.setMonth(date.getMonth());
-		startCal.setYear(date.getYear());
+		startCal.setMonth(date.getMonth()+1);
+		startCal.setYear(date.getYear()+1900);
 		event.setStartDateAndTime(startCal);
 	}
 	
@@ -228,8 +228,8 @@ public class Logic {
 		
 		endCal.setDayOfTheWeek(date.getDay());
 		endCal.setDate(date.getDate());
-		endCal.setMonth(date.getMonth());
-		endCal.setYear(date.getYear());
+		endCal.setMonth(date.getMonth()+1);
+		endCal.setYear(date.getYear()+1900);
 		event.setEndDateAndTime(endCal);
 	}
 	
@@ -259,6 +259,27 @@ public class Logic {
 			return false;
 		else
 			return true;
+	}
+	
+	@SuppressWarnings("deprecation")
+	void setDateList(Date StartDate, Date EndDate){
+		
+		Vector<String> dateList = event.getDateList();		
+		      
+		int startDate = StartDate.getDate();
+        int endDate = EndDate.getDate();
+        
+        
+        for (int i=startDate;i<=endDate;i++) {       	
+        	String dateString = Integer.toString(i) + "/" + Integer.toString(StartDate.getMonth()) + "/" + Integer.toString(StartDate.getYear());
+        	dateList.add(dateString); 
+        }               
+        
+        event.setDateList(dateList);
+	}
+	
+	Vector<String> getDateList(){
+		return event.getDateList();
 	}
 	
 	void setStartTimeH(int startH){
