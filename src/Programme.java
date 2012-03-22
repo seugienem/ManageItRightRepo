@@ -6,10 +6,12 @@ public class Programme implements Serializable{
 	private int endTime;
 	private String title;
 	private String inCharge;
+	private String date;
 	
 	public Programme(){
-		startTime = -1;
-		endTime = -1;
+		date = "";
+		startTime = 0;
+		endTime = 0;
 		title = "";
 		inCharge = "";
 	}
@@ -28,6 +30,14 @@ public class Programme implements Serializable{
 		this.inCharge = inCharge;
 	}
 */
+	public String getDate() {
+		return date;
+	}
+	
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
 	public int getStartTime() {
 		return startTime;
 	}

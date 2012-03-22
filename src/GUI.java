@@ -411,8 +411,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
             					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
             					updateStep3();
             				}
+        				
         			}
-        			
+       			
         		}	
         	}
         });

@@ -264,7 +264,7 @@ public class Logic {
 	@SuppressWarnings("deprecation")
 	void setDateList(Date StartDate, Date EndDate){
 		
-		Vector<String> dateList = event.getDateList();		
+		Vector<String> dateList = new Vector<String>();		
 		      
 		int startDate = StartDate.getDate();
         int endDate = EndDate.getDate();
