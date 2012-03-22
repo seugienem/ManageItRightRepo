@@ -404,6 +404,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         						"be after End Date!", "Start Date Error", JOptionPane.ERROR_MESSAGE );
         				dateChooser1_StartDate.setDate(dateChooser1_EndDate.getDate());
         			}
+        			else {
+        				if (lg.getEventEndDate() != null) {
+            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
+            					updateStep3();
+            				}
+        			}
         			
         		}	
         	}
@@ -462,8 +468,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			}
         			
         			else {
-        				if (lg.getEventStartDate() != null) {
-        				// update programme schedule
+        				if (lg.getEventStartDate() != null) {       			
         					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
         					updateStep3();
         				}
@@ -1220,8 +1225,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		comboBox_Date.addItem(itr.next());
         	}
         	
-        }
-//        comboBox_Date.addItem("Select");        
+        }       
         dateCol.setCellEditor(new DefaultCellEditor(comboBox_Date));
         
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
