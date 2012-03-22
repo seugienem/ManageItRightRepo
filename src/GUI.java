@@ -66,6 +66,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI3 objects
 	private JPanel panel3;
+	private JButton btn3_AddEntry;
+	private JButton btn3_DeleteEntry;
 	private JButton btn3_Export;
 	private JButton btn3_Next;
 	private JTable table3;
@@ -588,7 +590,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        });
 	        
 	        btn2_AddGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        btn2_AddGuest.setBounds(10, 58, 110, 23);
+	        btn2_AddGuest.setBounds(10, 58, 110, 25);
 	        panel2.add(btn2_AddGuest);
 	        
 	        btn2_DeleteGuest = new JButton("Delete Guest");	        
@@ -597,7 +599,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        	}
 	        });
 	        btn2_DeleteGuest.setFont(new Font("Tahoma", Font.PLAIN, 12));
-	        btn2_DeleteGuest.setBounds(145, 58, 110, 23);
+	        btn2_DeleteGuest.setBounds(145, 58, 110, 25);
 	        panel2.add(btn2_DeleteGuest);
 	        
 	       
@@ -668,6 +670,22 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl3_ProgrammeSchedule.setFont(new Font("Tahoma", Font.BOLD, 16));
         lbl3_ProgrammeSchedule.setBounds(10, 10, 191, 30);
         panel3.add(lbl3_ProgrammeSchedule);
+        
+        btn3_AddEntry = new JButton("Add Entry");
+        btn3_AddEntry.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        	}
+        });
+        btn3_AddEntry.setBounds(10, 58, 100, 25);
+        panel3.add(btn3_AddEntry);
+        
+        btn3_DeleteEntry = new JButton("Delete Entry");
+        btn3_DeleteEntry.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        	}
+        });
+        btn3_DeleteEntry.setBounds(135, 58, 100, 25);
+        panel3.add(btn3_DeleteEntry);
         
         programmeCols = new Vector<String>();
         programmeCols.add("Date");
@@ -1196,6 +1214,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		table3 = new JTable(data, cols);
 		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table3.getTableHeader().setReorderingAllowed(false);
+              
         scrollPane3 = new JScrollPane(table3);
         scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane3.setBounds(10, 92, 600, 370);
@@ -1231,6 +1250,38 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
         //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());   
         
+        MouseListener [] listeners = btn3_AddEntry.getMouseListeners();
+        if(listeners.length != 0){
+        	for(int i = 0; i < listeners.length; i++){
+        		btn3_AddEntry.removeMouseListener(listeners[i]);
+        	}
+        }       
+        
+        btn3_AddEntry.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		lg.addProgramme();
+        		modelProgramme.addRow(new Vector<String>(5));      		
+        		chckbx3_ProgrammeScheduleFinalised.setEnabled(false);       	
+        	}
+        });
+        
+        MouseListener [] listeners2 = btn3_DeleteEntry.getMouseListeners();
+        if(listeners2.length != 0){
+        	for(int i = 0; i < listeners2.length; i++){
+        		btn3_DeleteEntry.removeMouseListener(listeners2[i]);
+        	}
+        }       
+        
+        btn3_DeleteEntry.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {       		
+        		int row = table3.getSelectedRow();
+        		lg.removeProgramme(row);
+        		modelProgramme.removeRow(row);     		        		
+        		chckbx3_ProgrammeScheduleFinalised.setEnabled(false);   
+        	}
+        });
         
         table3.addKeyListener(new KeyAdapter() {
         	@Override
