@@ -34,6 +34,11 @@ public class Logic {
 	
 	void saveEvent(File out){
 		saved = true;
+		
+		//enforce file extension
+		if(!out.toString().toUpperCase().endsWith(".MIR")){
+			out = new File(out.toString().concat(".MIR"));
+		}
 		dm.save(out, event);
 	}
 	
@@ -57,10 +62,16 @@ public class Logic {
 	}
 	
 	void exportGuest(File out){
+		if(!out.toString().toUpperCase().endsWith(".CSV")){
+			out = new File(out.toString().concat(".CSV"));
+		}
 		dm.exportGuest(out, event.getGuestList());
 	}
 	
 	void exportProgramme(File out){
+		if(!out.toString().toUpperCase().endsWith(".CSV")){
+			out = new File(out.toString().concat(".CSV"));
+		}
 		dm.exportProgramme(out, event.getProgrammeSchedule());
 	}
 	
@@ -606,14 +617,6 @@ public class Logic {
 		event.setProgrammeScheduleFinalised(value);
 	}
 	
-	boolean[] getcheckBox() {
-		return event.getcheckBox();
-	}
-	
-	void setcheckBox(boolean[] value) {
-		event.setcheckBox(value);
-	}
-	
 	
 	/**************************************************************************
 	 * 
@@ -691,7 +694,7 @@ public class Logic {
 	}
 	
 	int getSelectedHotelIdx() {
-		System.out.println(event.getSelectedHotelIdx());
+		//System.out.println(event.getSelectedHotelIdx());
 		return event.getSelectedHotelIdx();
 	}
 	
@@ -699,6 +702,14 @@ public class Logic {
 		saved = false;
 		//System.out.println("Set index: " + idx);
 		event.setSelectedHotelIdx(idx);
+	}
+	
+	boolean[] getcheckBox() {
+		return event.getcheckBox();
+	}
+	
+	void setcheckBox(boolean[] value) {
+		event.setcheckBox(value);
 	}
 	
 }	

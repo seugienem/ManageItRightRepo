@@ -166,13 +166,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
         			switch(choice){
         			case 0:
-        				fileChooser.showSaveDialog(new JFrame());
-        				File file = fileChooser.getSelectedFile();
-        				if(file == null)
-        					return;
-        				lg.saveEvent(file);
+        				fileChooser = new JFileChooser(".");
+        				fileChooser.setFileFilter(new mirFilter());
+        				
+        				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
+        				
+        				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
+        					File file = fileChooser.getSelectedFile();
+            				if(file == null)
+            					return;
+            				lg.saveEvent(file);
+        				}
         				lg.createNewEvent();
         				updateAll();
+        				jtp.setSelectedIndex(1);
         				break;
         			case 1:
         				lg.createNewEvent();
@@ -256,27 +263,34 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		 	@Override
 		 	public void mouseClicked(MouseEvent arg0) {
 		 		if(!lg.getSavedStatus()){
-		 			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
-		 			switch(choice){
-		 			case 0:
-		 				fileChooser.showSaveDialog(new JFrame());
-		 				File file = fileChooser.getSelectedFile();
-		 				if(file == null)
-		 					return;
-		 				lg.saveEvent(file);
-		 				lg.createNewEvent();
-		 				updateAll();
-		 				break;
-		 			case 1:
-		 				lg.createNewEvent();
-		 				updateAll();
-		 				jtp.setSelectedIndex(1);
-		 				break;
-		 			case 2:
-		 				break;
-		 			}
-		 		}
-		 		else jtp.setSelectedIndex(1);
+        			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
+        			switch(choice){
+        			case 0:
+        				fileChooser = new JFileChooser(".");
+        				fileChooser.setFileFilter(new mirFilter());
+        				
+        				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
+        				
+        				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
+        					File file = fileChooser.getSelectedFile();
+            				if(file == null)
+            					return;
+            				lg.saveEvent(file);
+        				}
+        				lg.createNewEvent();
+        				updateAll();
+        				jtp.setSelectedIndex(1);
+        				break;
+        			case 1:
+        				lg.createNewEvent();
+        				updateAll();
+        				jtp.setSelectedIndex(1);
+        				break;
+        			case 2:
+        				break;
+        			}
+        		}
+        		else jtp.setSelectedIndex(1);
 		 	}
 		 });
 		 
@@ -1221,15 +1235,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Method for creation and initlialisation of table3 (Programme Schedule) in Step 3
 	 * 
 	 ***************************************************************************************/
-	void createTable3(Vector<Vector<String>> data, Vector<String> cols){
-		//test print of data
-		for(Vector<String> record : data){
-			for(String field : record){
-				System.out.print(field + " ");
-			}
-			System.out.println();
-		}
-		
+	void createTable3(Vector<Vector<String>> data, Vector<String> cols){		
 		table3 = new JTable(data, cols);
 		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table3.getTableHeader().setReorderingAllowed(false);
@@ -1714,7 +1720,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void updateStep2(){	
 		panel2.remove(scrollPane2);
 		createTable2(lg.getGuestList(), guestCols);
-		if(lg.getGuestList().size() >= 1)
+		if(lg.completedGuestFields())
 			chckbx2_GuestListFinalised.setEnabled(true);
 		if(lg.getGuestListFinalised() == true)
 			chckbx2_GuestListFinalised.setSelected(true);
@@ -1723,7 +1729,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void updateStep3(){
 		panel3.remove(scrollPane3);
 		createTable3(lg.getProgrammeSchedule(), programmeCols);
-		if(lg.getProgrammeSchedule().size() >= 1)
+		if(lg.completedProgrammeFields())
 			chckbx3_ProgrammeScheduleFinalised.setEnabled(true);
 		if(lg.getProgrammeScheduleFinalised() == true)
 			chckbx3_ProgrammeScheduleFinalised.setSelected(true);
@@ -1764,7 +1770,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	
 	/*******************************
+	 * 
 	 * Listeners Starts Here
+	 * 
 	 *******************************/
 	class ComboBox1Listener implements ActionListener{
 		@Override
@@ -1807,64 +1815,142 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		public void actionPerformed(ActionEvent e) {
 			Object obj = e.getSource();
 			JFrame frame = new JFrame();
+			
 			if(obj == btn2_Load){
-				fileChooser.showOpenDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				if(file == null)
-					return;
-				try{
-					lg.importGuest(file);
-				} catch(DataFormatException ex){
-					JOptionPane.showMessageDialog(new JFrame(), "Error importing CSV file. Make sure file is properly formatted");
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new csvFilter());
+				int choice = fileChooser.showOpenDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
+						return;
+					try{
+						lg.importGuest(file);
+					} catch(DataFormatException ex){
+						JOptionPane.showMessageDialog(new JFrame(), "Error importing CSV file. Make sure file is properly formatted");
+					}
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
 				}
 				
 				updateStep2();
 			}
 			else if(obj == btn2_Export){
-				fileChooser.showSaveDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				if(file == null)
-					return;
-				lg.exportGuest(file);
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new csvFilter());
+				int choice = fileChooser.showSaveDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
+						return;
+					lg.exportGuest(file);
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
+				}
 			}
 			else if(obj == btn3_Export){
-				fileChooser.showSaveDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				if(file == null)
-					return;
-				lg.exportProgramme(file);
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new csvFilter());
+				int choice = fileChooser.showSaveDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
+						return;
+					lg.exportProgramme(file);
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
+				}
 			}
 			else if(obj == mntmLoadEvent || obj == btn0_Load){
+				//checks if current event needs to be saved, if so go on to save file
 				if(!lg.getSavedStatus()){
 					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
 					if(ans == 0){
-						fileChooser.showSaveDialog(frame);
-						File file = fileChooser.getSelectedFile();
-						if(file == null)
-							return;
-						lg.saveEvent(file);
+						fileChooser = new JFileChooser(".");
+						fileChooser.setFileFilter(new mirFilter());
+						int choice = fileChooser.showSaveDialog(frame);
+						
+						switch(choice){
+						case JFileChooser.APPROVE_OPTION:
+							File file = fileChooser.getSelectedFile();
+							if(file == null)
+								return;
+							lg.saveEvent(file);
+							break;
+						case JFileChooser.CANCEL_OPTION:
+							break;
+						case JFileChooser.ERROR_OPTION:
+							System.out.println("fileChooser error");
+							break;
+						}
+						
 					}
 					else if(ans == 2)
 						return;
 				}
-				fileChooser.showOpenDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				if(file == null)
-					return;
-				try{
-					lg.loadEvent(file);
-				} catch (Exception ex){
-					JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
+				
+				//do actual loading here
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new mirFilter());
+				int choice = fileChooser.showOpenDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
+						return;
+					try{
+						lg.loadEvent(file);
+					} catch (Exception ex){
+						JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
+					}
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
 				}
+				
 				updateAll();
 				lg.setSavedStatus(true);
 			}
 			else if (obj == mntmSaveEvent){
-				fileChooser.showSaveDialog(frame);
-				File file = fileChooser.getSelectedFile();
-				if(file == null)	//no file selected
-					return;
-				lg.saveEvent(file);
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new mirFilter());
+				int choice = fileChooser.showSaveDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
+						return;
+					lg.saveEvent(file);
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
+				}
 			}
 		}
 	};
@@ -1922,6 +2008,42 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			//System.out.println(lg.getBudget());
 		}
 	}
+	
+	
+	/******************************************
+	 * 
+	 * FileFilters start here
+	 * 
+	 ******************************************/
+	class csvFilter extends javax.swing.filechooser.FileFilter{
+		@Override
+		public boolean accept(File file) {
+			if(file.getName().toUpperCase().endsWith(".CSV")){
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return "*.csv";
+		}
+	};
+	
+	class mirFilter extends javax.swing.filechooser.FileFilter{
+		@Override
+		public boolean accept(File file){
+			if(file.getName().toUpperCase().endsWith(".MIR")){
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public String getDescription(){
+			return "*.mir";
+		}
+	};
 	
 	public class LineWrapCellRenderer  extends JTextArea implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
