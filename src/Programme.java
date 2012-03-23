@@ -1,41 +1,29 @@
 import java.io.*;
+import java.util.Date;
+
 
 public class Programme implements Serializable{
 	private static final long serialVersionUID = 1L;
+	private String programmeDate;
 	private int startTime;
 	private int endTime;
 	private String title;
 	private String inCharge;
-	private String date;
 	
 	public Programme(){
-		date = "";
+		programmeDate = "";
 		startTime = 0;
 		endTime = 0;
 		title = "";
 		inCharge = "";
 	}
 	
-/*	public Programme(Calendar startTime, Calendar endTime, String title, String inCharge) {
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.title = title;
-		this.inCharge = inCharge;
-	}
-	
-	public Programme(String startTime, String endTime, String title, String inCharge){
-		this.startTime = Parser.parseStringToCalendarTime(startTime);
-		this.endTime = Parser.parseStringToCalendarTime(endTime);
-		this.title = title;
-		this.inCharge = inCharge;
-	}
-*/
 	public String getDate() {
-		return date;
+		return programmeDate;
 	}
 	
 	public void setDate(String date) {
-		this.date = date;
+		this.programmeDate = date;
 	}
 	
 	public int getStartTime() {

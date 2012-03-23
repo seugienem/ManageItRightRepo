@@ -1214,9 +1214,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         });
 	}
 	
-	/*
+	
+	/***************************************************************************************
 	 * Method for creation and initlialisation of table3 (Programme Schedule) in Step 3
-	 */
+	 ***************************************************************************************/
 	void createTable3(Vector<Vector<String>> data, Vector<String> cols){
 		table3 = new JTable(data, cols);
 		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -1244,19 +1245,28 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         TableColumn dateCol = table3.getColumnModel().getColumn(0);
         
+        
+        /*****************************
+         * COMBO BOX ADDING CODE HERE
+         *****************************/
         comboBox_Date = new JComboBox<String>();
+
         if (!lg.getDateList().isEmpty()) {
         	Iterator<String> itr = lg.getDateList().iterator();
         	while(itr.hasNext()) {
         		comboBox_Date.addItem(itr.next());
         	}
-        	
         }       
         dateCol.setCellEditor(new DefaultCellEditor(comboBox_Date));
         
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
         //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());   
         
+        
+        /***********************************************
+         * Mouse Listeners for Add and Delete buttons
+         ***********************************************/   
+        //When creating a new table for the second time, we need to remove the previous table's mouse listener
         MouseListener [] listeners = btn3_AddEntry.getMouseListeners();
         if(listeners.length != 0){
         	for(int i = 0; i < listeners.length; i++){
@@ -1273,6 +1283,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	}
         });
         
+        //When creating a new table for the second time, we need to remove the previous table's mouse listener        
         MouseListener [] listeners2 = btn3_DeleteEntry.getMouseListeners();
         if(listeners2.length != 0){
         	for(int i = 0; i < listeners2.length; i++){
@@ -1290,6 +1301,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	}
         });
         
+        
+        /****************************
+         * Keyboard Listeners here
+         ****************************/
         table3.addKeyListener(new KeyAdapter() {
         	@Override
         	public void keyPressed(KeyEvent e) {
@@ -1332,6 +1347,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	}
         });
         
+        
+        /****************************
+         * Table Change Listener Here
+         *****************************/
         table3.getModel().addTableModelListener(new TableModelListener(){
         	@Override
         	public void tableChanged(TableModelEvent e){
@@ -1344,7 +1363,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			return;
         		String data = (String)model.getValueAt(row, column);
         		
-        		//pass to logic to save
+        		//if column == 1 or 2 means event start time and end time
         		if(column == 1 || column == 2){
         			try{
         				Integer.parseInt(data);
@@ -1354,6 +1373,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			}
         		}
+        		
         		lg.setProgrammeInfo(row, columnName, data);
         		
         		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
@@ -1572,7 +1592,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         });
 	}
 	
-	//refresh all fields
+	
+	/**********************************
+	 * Update of GUI Starts Here
+	 **********************************/
 	void updateAll(){
 		updateStep1();
 		updateStep2();
@@ -1724,9 +1747,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		
 	}
 	
-	/*
-	 * Overrides for ComboBox1
-	 */
+	
+	/*******************************
+	 * Listeners Starts Here
+	 *******************************/
 	class ComboBox1Listener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
@@ -1885,10 +1909,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	public class LineWrapCellRenderer  extends JTextArea implements TableCellRenderer {
-
-        /**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override

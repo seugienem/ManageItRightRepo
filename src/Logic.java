@@ -255,10 +255,24 @@ public class Logic {
 		if ( endCal.getYear() == 0  || endCal.getMonth() == 0 || endCal.getDate() == 0)
 			return true;
 		
-		if ( endCal.getYear() < startCal.getYear() || endCal.getMonth() < startCal.getMonth() || endCal.getDate() < startCal.getDate() )
+		if(endCal.getYear() < startCal.getYear())
 			return false;
-		else
+		else if(endCal.getYear() > startCal.getYear())
 			return true;
+		
+		//If code reaches here, Year is the same
+		if(endCal.getMonth() < startCal.getMonth())
+			return false;
+		else if(endCal.getMonth() > startCal.getMonth())
+			return true;
+		
+		//If code reaches here, Year and Month are the same
+		if(endCal.getDate() < startCal.getDate())
+			return false;
+		else if(endCal.getDate() >= startCal.getDate())
+			return true; 
+		
+		return true;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -358,9 +372,7 @@ public class Logic {
 	
 	double getBudget(){
 		return event.getEventBudget();
-	}
-	
-	
+	}	
 	
 	void clearHotelSuggestions(){
 		event.setSuggestedHotels(new Vector<Hotel>());
@@ -467,6 +479,7 @@ public class Logic {
 	boolean getGuestListFinalised(){
 		return event.getGuestListFinalised();
 	}
+	
 	////STEP 3: PROGRAMME TAB\\\\
 	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
@@ -528,6 +541,9 @@ public class Logic {
 	void setProgrammeInfo(int index, String field, String data){
 		saved = false;
 		switch(field){
+		case "Date":
+			//TODO
+			break;
 		case "Start Time":
 			event.getProgrammeSchedule().get(index).setStartTime(Integer.parseInt(data));
 			break;
@@ -655,4 +671,3 @@ public class Logic {
 	}
 	
 }	
-
