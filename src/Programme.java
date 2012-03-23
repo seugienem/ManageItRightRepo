@@ -12,18 +12,18 @@ public class Programme implements Serializable{
 	
 	public Programme(){
 		programmeDate = "";
-		startTime = 0;
-		endTime = 0;
+		startTime = -1;
+		endTime = -1;
 		title = "";
 		inCharge = "";
 	}
 	
-	public String getDate() {
-		return programmeDate;
+	public void setProgrammeDate(String date) {
+		this.programmeDate = date;
 	}
 	
-	public void setDate(String date) {
-		this.programmeDate = date;
+	public String getProgrammeDate(){
+		return programmeDate;
 	}
 	
 	public int getStartTime() {

@@ -117,10 +117,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI7 objects
 
-	
-	/*
-	 * Constructor
-	 */
 	public GUI(final Logic lg) {
 		this.lg = lg;
     	
@@ -408,10 +404,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			}
         			else {
         				if (lg.getEventEndDate() != null) {
-            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
+            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());
+            					lg.checkProgrammeDates();
             					updateStep3();
-            				}
-        				
+            			}
         			}
        			
         		}	
@@ -473,6 +469,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			else {
         				if (lg.getEventStartDate() != null) {       			
         					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
+        					lg.checkProgrammeDates();
         					updateStep3();
         				}
         			}
@@ -1068,9 +1065,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		panel7.add(lbl7_Summary);
 	}
 	
-	/*
+	/***************************************************************************
+	 * 
 	 * Method for creation and initilisation of table2 (Guest List) in Step 2
-	 */
+	 * 
+	 ***************************************************************************/
 	void createTable2(Vector<Vector<String>> data, Vector<String> cols){
 		table2 = new JTable(data, cols);
 		table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -1133,6 +1132,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	@Override
         	public void mouseClicked(MouseEvent e) {       		
         		int row = table2.getSelectedRow();
+        		if(row == -1)
+        			return;
         		lg.removeGuest(row);
         		modelGuest.removeRow(row);     		
         		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
@@ -1216,9 +1217,19 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	
 	/***************************************************************************************
+	 * 
 	 * Method for creation and initlialisation of table3 (Programme Schedule) in Step 3
+	 * 
 	 ***************************************************************************************/
 	void createTable3(Vector<Vector<String>> data, Vector<String> cols){
+		//test print of data
+		for(Vector<String> record : data){
+			for(String field : record){
+				System.out.print(field + " ");
+			}
+			System.out.println();
+		}
+		
 		table3 = new JTable(data, cols);
 		table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table3.getTableHeader().setReorderingAllowed(false);
@@ -1295,6 +1306,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	@Override
         	public void mouseClicked(MouseEvent e) {       		
         		int row = table3.getSelectedRow();
+        		if(row == -1)
+        			return;
         		lg.removeProgramme(row);
         		modelProgramme.removeRow(row);     		        		
         		chckbx3_ProgrammeScheduleFinalised.setEnabled(false);   
@@ -1594,7 +1607,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	
 	/**********************************
+	 * 
 	 * Update of GUI Starts Here
+	 * 
 	 **********************************/
 	void updateAll(){
 		updateStep1();

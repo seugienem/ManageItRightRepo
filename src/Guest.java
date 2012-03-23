@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Guest implements Comparable<Guest>{
+public class Guest implements Comparable<Guest>, Serializable{
 	private String name;
 	private String emailAddress;
 	private String description;

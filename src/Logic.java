@@ -18,6 +18,12 @@ public class Logic {
 		hotelSuggester = new HotelSuggest();
 	}
 
+	
+	/************************************************************************
+	 * 
+	 * Misc. functions here
+	 * 
+	 ************************************************************************/
 	boolean getSavedStatus(){
 		return saved;
 	}
@@ -62,8 +68,13 @@ public class Logic {
 		this.event = new Event();
 	}
 	
-	////OVERVIEW TAB\\\\
-
+	
+	
+	/**************************************************************************
+	 * 
+	 * Overview Tab Here
+	 * 
+	 **************************************************************************/
 	//Get Event Name
 	String getEventName(){
 		return event.getEventName();
@@ -133,7 +144,12 @@ public class Logic {
 		else return 0;
 	}
 	
-	////STEP 1: EVENT DETAILS TAB\\\\
+	
+	/*********************************************************************************
+	 * 
+	 * Step 1 Functions here
+	 * 
+	 *********************************************************************************/
 	void setEventType(int eventType){
 		saved = false;
 		EventType eType = null;
@@ -200,8 +216,8 @@ public class Logic {
 		
 		startCal.setDayOfTheWeek(date.getDay());
 		startCal.setDate(date.getDate());
-		startCal.setMonth(date.getMonth()+1);
-		startCal.setYear(date.getYear()+1900);
+		startCal.setMonth(date.getMonth());
+		startCal.setYear(date.getYear());
 		event.setStartDateAndTime(startCal);
 	}
 	
@@ -228,8 +244,8 @@ public class Logic {
 		
 		endCal.setDayOfTheWeek(date.getDay());
 		endCal.setDate(date.getDate());
-		endCal.setMonth(date.getMonth()+1);
-		endCal.setYear(date.getYear()+1900);
+		endCal.setMonth(date.getMonth());
+		endCal.setYear(date.getYear());
 		event.setEndDateAndTime(endCal);
 	}
 	
@@ -276,19 +292,22 @@ public class Logic {
 	}
 	
 	@SuppressWarnings("deprecation")
-	void setDateList(Date StartDate, Date EndDate){
+	void setDateList(Date startDate, Date endDate){
 		
-		Vector<String> dateList = new Vector<String>();		
-		      
-		int startDate = StartDate.getDate();
-        int endDate = EndDate.getDate();
-        
-        
-        for (int i=startDate;i<=endDate;i++) {       	
-        	String dateString = Integer.toString(i) + "/" + Integer.toString(StartDate.getMonth()) + "/" + Integer.toString(StartDate.getYear());
-        	dateList.add(dateString); 
-        }               
-        
+		Vector<String> dateList = new Vector<String>();
+		
+		long interval = 24*1000 * 60 * 60; //1 hour in milliseconds
+		long endTime = endDate.getTime();	//end
+		long startTime = startDate.getTime();
+		
+		while(startTime <= endTime){
+			Date newDate = new Date(startTime);
+			String test = newDate.toGMTString();
+			test = test.substring(0, 11);;
+			
+			dateList.add(test);
+			startTime += interval;
+		}           
         event.setDateList(dateList);
 	}
 	
@@ -377,8 +396,13 @@ public class Logic {
 	void clearHotelSuggestions(){
 		event.setSuggestedHotels(new Vector<Hotel>());
 	}
+
 	
-	///STEP 2: GUEST LIST\\\\
+	/**************************************************************************
+	 * 
+	 * Step 2 Functions here
+	 * 
+	 **************************************************************************/
 	Vector<Vector<String>> getGuestList(){
 		Vector<Guest> guestList = event.getGuestList();
 		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
@@ -479,8 +503,13 @@ public class Logic {
 	boolean getGuestListFinalised(){
 		return event.getGuestListFinalised();
 	}
-	
-	////STEP 3: PROGRAMME TAB\\\\
+
+
+	/**************************************************************************
+	 * 
+	 * Step 3 Functions here
+	 * 
+	 **************************************************************************/
 	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
 		Vector<Vector<String>> programmeVector = new Vector<Vector<String>>();
@@ -495,28 +524,22 @@ public class Logic {
 			//Get programme from event programme list
 			currProgramme = programmeList.get(i);
 			
-			//Parse startTime to String
-			/*
-			hourInt = currProgramme.getStartTime();
-			minInt = currProgramme.getStartTime();			
-			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
-			*/
-			timeStr = String.valueOf(currProgramme.getStartTime());
+			//Add programmeDate
+			programmeDetail.add(currProgramme.getProgrammeDate());
 			
 			//Add start time to programme detail
-			programmeDetail = new Vector<String>();
-			programmeDetail.add(timeStr);
-			
-			//Parse endTime to String
-			/*
-			hourInt = currProgramme.getEndTime();
-			minInt = currProgramme.getEndTime();			
-			timeStr = String.format("%02d", hourInt.toString()) + ":" + String.format("%02d", minInt.toString());
-			*/
 			timeStr = String.valueOf(currProgramme.getStartTime());
-			
+			if(timeStr.equals("-1"))
+				programmeDetail.add("");
+			else
+				programmeDetail.add(timeStr);
+
 			//Add end time to programme detail
-			programmeDetail.add(timeStr);
+			timeStr = String.valueOf(currProgramme.getEndTime());
+			if(timeStr.equals("-1"))
+				programmeDetail.add("");
+			else
+				programmeDetail.add(timeStr);
 			
 			//Add title and inCharge to programme detail
 			programmeDetail.add(currProgramme.getTitle());
@@ -542,7 +565,7 @@ public class Logic {
 		saved = false;
 		switch(field){
 		case "Date":
-			//TODO
+			event.getProgrammeSchedule().get(index).setProgrammeDate(data);
 			break;
 		case "Start Time":
 			event.getProgrammeSchedule().get(index).setStartTime(Integer.parseInt(data));
@@ -570,6 +593,10 @@ public class Logic {
 		return true;
 	}
 	
+	void checkProgrammeDates(){
+		
+	}
+	
 	boolean getProgrammeScheduleFinalised(){
 		return event.getProgrammeScheduleFinalised();
 	}
@@ -588,7 +615,11 @@ public class Logic {
 	}
 	
 	
-	////STEP 4: HOTEL SUGGESTIONS TAB\\\\
+	/**************************************************************************
+	 * 
+	 * Step 4 Functions here
+	 * 
+	 **************************************************************************/
 	double calculateHotelBudget(){
 		return (event.getEventBudget() * event.getBudgetRatio()/100.0);
 	}
