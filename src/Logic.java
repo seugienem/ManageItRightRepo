@@ -712,4 +712,21 @@ public class Logic {
 		event.setcheckBox(value);
 	}
 	
+	
+	/**************************************************************************
+	 * 
+	 * Step 6 Functions here
+	 * 
+	 **************************************************************************/
+	double getExpense(){
+		return event.getExpense();
+	}
+	
+	void addExpense(double expense){
+		event.addExpense(expense);
+	}
+	
+	void removeExpense(double expense){
+		event.removeExpense(expense);
+	}
 }	
