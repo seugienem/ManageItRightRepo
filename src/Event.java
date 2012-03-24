@@ -22,7 +22,7 @@ public class Event implements Serializable{
 	private boolean programmeScheduleFinalised;
 	private boolean[] hotelCheckBox;
 	private Vector<String> dateList;
-	private double expense;
+	private Vector<Expense> expenseList;
 	
 	public Event(){
 		//init all variables here
@@ -42,7 +42,7 @@ public class Event implements Serializable{
 		programmeScheduleFinalised = false;
 		hotelCheckBox = new boolean[3];		
 		dateList = new Vector<String>();
-		expense = 0;
+		expenseList = new Vector<Expense>();
 	}
 	
 /*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
@@ -199,18 +199,18 @@ public class Event implements Serializable{
 		return hotelCheckBox;
 	}
 
-	public double getExpense() {
-		return expense;
+	public Vector<Expense> getExpense() {
+		return expenseList;
 	}
 
-	public void addExpense(double expense) {
-		this.expense += expense;
-		eventBudget -= expense;
+	public void addExpense(Expense expense) {
+		expenseList.add(expense);
+		eventBudget -= expense.getTotalCost();
 	}
 	
-	public void removeExpense(double expense) {
-		this.expense -= expense;
-		eventBudget += expense;
+	public void removeExpense(Expense expense) {
+		expenseList.remove(expense);
+		eventBudget += expense.getTotalCost();
 	}
 		
 }

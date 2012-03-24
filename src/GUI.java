@@ -1636,7 +1636,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			}
         		}
-
+        		
+        		//lg.setProgrammeInfo(row, columnName, data);
+        		
         		//chckbx6_ExpensesFinalised.setEnabled(lg.completedProgrammeFields());
 
         		//if chckBx is checked, it shld be unchecked

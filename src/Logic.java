@@ -718,16 +718,16 @@ public class Logic {
 	 * Step 6 Functions here
 	 * 
 	 **************************************************************************/
-	double getExpense(){
+	Vector<Expense> getExpense(){
 		return event.getExpense();
 	}
 	
-	void addExpense(double expense){
+	void addExpense(Expense expense){
 		saved = false;
 		event.addExpense(expense);
 	}
 	
-	void removeExpense(double expense){
+	void removeExpense(Expense expense){
 		saved = false;
 		event.removeExpense(expense);
 	}
