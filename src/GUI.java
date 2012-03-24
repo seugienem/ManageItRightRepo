@@ -2,9 +2,6 @@ import java.util.*;
 import java.util.zip.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -1288,9 +1285,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         dateCol.setCellEditor(new DefaultCellEditor(comboBox_Date));
         
         final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
-        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());   
-        
-        
+//        table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());   
+       		
+      
         /***********************************************
          * Mouse Listeners for Add and Delete buttons
          ***********************************************/   
@@ -1377,6 +1374,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	}
         });
         
+        
+        // Wraps the text for the column "programme"
+        table3.getColumnModel().getColumn(3).setCellRenderer(new TableCellWrapText());
         
         /****************************
          * Table Change Listener Here
@@ -2056,29 +2056,31 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		}
 	};
 	
-	public class LineWrapCellRenderer  extends JTextArea implements TableCellRenderer {
+	public class TableCellWrapText extends JTextArea implements TableCellRenderer{  
+		  
+	    /**
+		 * 
+		 */
 		private static final long serialVersionUID = 1L;
 
-		@Override
-        public Component getTableCellRendererComponent(
-                        JTable table,
-                        Object value,
-                        boolean isSelected,
-                        boolean hasFocus,
-                        int row,
-                        int column) {
-                this.setText((String)value);
-                this.setWrapStyleWord(true);                    
-                this.setLineWrap(true);      
-                
-                this.setBackground(Color.YELLOW);
-                
-                int fontHeight = this.getFontMetrics(this.getFont()).getHeight();
-                int textLength = this.getText().length();
-                int lines = textLength / this.getColumns() +1;//+1, because we need at least 1 row.                       
-                int height = fontHeight * lines;                        
-                table.setRowHeight(row, height);
-                return this;
-        }
-	}
+		@Override  
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {  
+	        this.setText((String)value);  
+	        this.setWrapStyleWord(true);  
+	        this.setLineWrap(true);   
+	        this.setFont(new Font("Tahoma", Font.PLAIN, 11));
+	  
+	        //set the JTextArea to the width of the table column  
+	        setSize(table.getColumnModel().getColumn(column).getWidth(),getPreferredSize().height);  
+	        if (table.getRowHeight(row) != getPreferredSize().height) {  
+	            //set the height of the table row to the calculated height of the JTextArea  
+	            table.setRowHeight(row, getPreferredSize().height);  
+	        }  
+	  
+	        return this;  
+	    }  
+	  
+	} 
+	
+	
 }
