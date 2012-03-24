@@ -1389,14 +1389,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		int column = e.getColumn();
         		TableModel model = (TableModel)e.getSource();
         		String columnName = model.getColumnName(column);
-        		if(row == -1 || column == -1)
+        		if(row == -1 || column == -1)	//empty table
         			return;
         		String data = (String)model.getValueAt(row, column);
         		
         		//if column == 1 or 2 means event start time and end time
         		if(column == 1 || column == 2){
         			try{
-        				Integer.parseInt(data);
+        				Integer time = Integer.parseInt(data);
+        				if(time<0 || time>2359){
+        					data = "0";
+        					model.setValueAt("0", row, column);
+        				}
         			} catch(NumberFormatException ex){
         				data = "0";
         				model.setValueAt("0", row, column);
