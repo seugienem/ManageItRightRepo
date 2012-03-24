@@ -2,6 +2,9 @@ import java.util.*;
 import java.util.zip.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -117,7 +120,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI7 objects
 
-	public GUI(final Logic lg) {
+	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
     	
         setTitle("Manage It Right! v0.1");
@@ -247,13 +250,19 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	/*
 	 * Draw everything in Overview tab
 	 */
-	private void GUI0(){
+	private void GUI0() throws IOException{
 		JPanel panel0 = new JPanel();
 		jtp.addTab("<html><body marginwidth=15 marginheight=15><b>Overview</b></body></html>", null, panel0, null);
 		
 		JLabel lbl0_Overview = new JLabel("Overview");
 		lbl0_Overview.setBounds(10, 11, 76, 30);
 		lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
+		
+		ImageIcon myPicture = new ImageIcon(this.getClass().getResource("MIR_logo.jpg"));
+		JLabel lbl0_Logo = new JLabel(myPicture);
+        lbl0_Logo.setBounds(351, 52, 300, 115);
+        panel0.add(lbl0_Logo);
+		
 		
 		 btn0_New = new JButton("New");        
 		
@@ -311,36 +320,38 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl0_Step1 = new JLabel();
         lbl0_Step1.setText("Event Details are empty.");
         lbl0_Step1.setForeground(Color.RED);
-        lbl0_Step1.setBounds(10, 52, 630, 30);
+        lbl0_Step1.setBounds(10, 52, 310, 30);
         panel0.add(lbl0_Step1);
         
         lbl0_Step2 = new JLabel("Guest List is empty.");
         lbl0_Step2.setForeground(Color.RED);
-        lbl0_Step2.setBounds(10, 116, 630, 30);
+        lbl0_Step2.setBounds(10, 116, 310, 30);
         panel0.add(lbl0_Step2);
         
         lbl0_Step3 = new JLabel("Programme Schedule is empty.");
         lbl0_Step3.setForeground(Color.RED);
-        lbl0_Step3.setBounds(10, 181, 630, 30);
+        lbl0_Step3.setBounds(10, 180, 310, 30);
         panel0.add(lbl0_Step3);
         
         lbl0_Step4 = new JLabel("Location not chosen.");
         lbl0_Step4.setForeground(Color.RED);
-        lbl0_Step4.setBounds(10, 249, 630, 30);
+        lbl0_Step4.setBounds(10, 249, 310, 30);
         panel0.add(lbl0_Step4);
         
         lbl0_Step5 = new JLabel("Guests are not assigned to tables.");
         lbl0_Step5.setForeground(Color.RED);
-        lbl0_Step5.setBounds(10, 317, 630, 30);
+        lbl0_Step5.setBounds(10, 317, 310, 30);
         panel0.add(lbl0_Step5);
         
         lbl0_Step6 = new JLabel("Expenses List is empty.");
         lbl0_Step6.setForeground(Color.RED);
-        lbl0_Step6.setBounds(10, 385, 630, 30);
+        lbl0_Step6.setBounds(10, 385, 310, 30);
         panel0.add(lbl0_Step6);
         
         panel0.add(btn0_New);
         panel0.add(btn0_Load);
+        
+        
 	}
 	
 	/*

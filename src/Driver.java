@@ -1,8 +1,10 @@
 import java.awt.Dimension;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 class Driver {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
         DataManager dm = new DataManager();
         Event event = new Event();
         Logic lg = new Logic(event, dm);
