@@ -1395,8 +1395,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		
         		//if column == 1 or 2 means event start time and end time
         		if(column == 1 || column == 2){
+        			Integer time;
+        			Integer compareTime;	//time to be compared to
+        		
         			try{
-        				Integer time = Integer.parseInt(data);
+        				time = Integer.parseInt(data);
         				if(time<0 || time>2359){
         					data = "0";
         					model.setValueAt("0", row, column);
@@ -1405,6 +1408,24 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				data = "0";
         				model.setValueAt("0", row, column);
         				return;
+        			}     			   			
+        			
+        			switch (column){
+        			case 1:	//if startTime was modified, compare it with endTime for error
+        				compareTime = Integer.parseInt((String)model.getValueAt(row, 2));
+        				if (time >= compareTime){
+        					data = "0";
+        					model.setValueAt("0", row, column);
+        				}
+        				break;
+
+        			case 2:	//if endTime was modified, compare it with startTime for error
+        				compareTime = Integer.parseInt((String)model.getValueAt(row, 1));
+        				if (time <= compareTime){
+        					data = "0";
+        					model.setValueAt("0", row, column);
+        				}
+        				break;
         			}
         		}
         		
@@ -1601,19 +1622,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			return;
         		String data = (String)model.getValueAt(row, column);
         		
-        		//pass to logic to save
-        		if(column == 0 || column == 1){
+        		//1 and 2 refers to the Cost and Quantity columns respectively 
+        		if(column == 1 || column == 2){
         			try{
-        				Integer.parseInt(data);
+        				Integer value = Integer.parseInt(data);
+        				if (value <= 0){
+        					data = "0";
+            				model.setValueAt("0", row, column);
+        				}
         			} catch(NumberFormatException ex){
         				data = "0";
         				model.setValueAt("0", row, column);
         				return;
         			}
         		}
-        		//lg.setProgrammeInfo(row, columnName, data);
-        		
-        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
+
         		//chckbx6_ExpensesFinalised.setEnabled(lg.completedProgrammeFields());
 
         		//if chckBx is checked, it shld be unchecked

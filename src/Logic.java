@@ -723,10 +723,12 @@ public class Logic {
 	}
 	
 	void addExpense(double expense){
+		saved = false;
 		event.addExpense(expense);
 	}
 	
 	void removeExpense(double expense){
+		saved = false;
 		event.removeExpense(expense);
 	}
 }	
