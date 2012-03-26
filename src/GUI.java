@@ -1400,7 +1400,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		
         			try{
         				time = Integer.parseInt(data);
-        				if(time<0 || time>2359){
+        				if(time<0 || (time%100 >59)){
         					data = "0";
         					model.setValueAt("0", row, column);
         				}
@@ -1410,6 +1410,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			}     			   			
         			
+        			/*
         			switch (column){
         			case 1:	//if startTime was modified, compare it with endTime for error
         				compareTime = Integer.parseInt((String)model.getValueAt(row, 2));
@@ -1427,6 +1428,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				}
         				break;
         			}
+        			*/
         		}
         		
         		lg.setProgrammeInfo(row, columnName, data);
