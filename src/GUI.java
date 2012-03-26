@@ -1400,7 +1400,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		
         			try{
         				time = Integer.parseInt(data);
-        				if(time<0 || (time%100 >59)){
+        				if(time<0 || time>2359 || (time%100 > 59)){
         					data = "0";
         					model.setValueAt("0", row, column);
         				}
