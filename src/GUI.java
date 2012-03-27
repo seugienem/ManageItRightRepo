@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.zip.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -970,6 +971,34 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn5_Generate.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn5_Generate.setBounds(510, 42, 100, 30);
         panel5.add(btn5_Generate);
+        btn5_Generate.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//send relevant settings to tableAssigner
+				int tableArrangerSetting = 0;
+				
+				if(rdbtn5_Random.isSelected()){
+					tableArrangerSetting = -1;
+				}
+				else if(rdbtn5_ByGroup.isSelected()){
+					tableArrangerSetting = comboBox5_arrangerGroupType.getSelectedIndex();
+				} 
+				else{		//none selected
+					JOptionPane.showMessageDialog(new JFrame(), "Please select Assignment Type.");
+					return;
+				}
+				
+				Vector<Vector<String>> arrangement = lg.generateArrangement(tableArrangerSetting);
+				
+				//generate table cols
+				tableCols = new Vector<String>();
+				for(int i = 1; i <= arrangement.get(0).size(); i++){
+					tableCols.add("Table " + i);
+				}
+				panel5.remove(scrollPane5);
+				createTable5(arrangement, tableCols);
+			}
+        });
         
         btn5_Next = new JButton("Next");
         btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -1453,8 +1482,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		table5 = new JTable(data, cols);
 		table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table5.getTableHeader().setReorderingAllowed(false);
+        
         scrollPane5 = new JScrollPane(table5);
         scrollPane5.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane5.setBounds(10, 92, 600, 370);
         panel5.add(scrollPane5);
         
@@ -1466,88 +1497,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table5.setCellSelectionEnabled(true);
         //table5.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table5.setAutoCreateRowSorter(false);
-        
-/* duplicated code from table 3
-       
-        table5.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table5.getColumnModel().getColumn(1).setPreferredWidth(100);
-        table5.getColumnModel().getColumn(2).setPreferredWidth(250);
-        table5.getColumnModel().getColumn(3).setPreferredWidth(150);
-       
-        
-        final DefaultTableModel modelProgramme = (DefaultTableModel)table3.getModel();
-        //table3.setDefaultRenderer(Object.class, new LineWrapCellRenderer());
-        
-        table3.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyPressed(KeyEvent e) {
-        		if (e.getKeyCode()==KeyEvent.VK_TAB) {
-        			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
-        		} 
-        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelProgramme.addRow(new Vector<Object>(4));  
-        			lg.addProgramme();
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
-        		}
-        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
-        			int[] rowIndices = table3.getSelectedRows();
- //       			if(rowNumber == -1)
- //       				return;
-        			for (int i=0;i< rowIndices.length;i++) {
-        				modelProgramme.removeRow(rowIndices[i]);
-        				lg.removeProgramme(rowIndices[i]);
-        			}
-        			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
-        				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
-        			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
-        		}
-        	}
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        	}
-        	@Override
-        	public void keyTyped(KeyEvent e) {
-        	}
-        });
-        
-        table3.getModel().addTableModelListener(new TableModelListener(){
-        	@Override
-        	public void tableChanged(TableModelEvent e){
-        		//get information about change
-        		int row = e.getFirstRow();
-        		int column = e.getColumn();
-        		TableModel model = (TableModel)e.getSource();
-        		String columnName = model.getColumnName(column);
-        		if(row == -1 || column == -1)
-        			return;
-        		String data = (String)model.getValueAt(row, column);
-        		
-        		//pass to logic to save
-        		if(column == 0 || column == 1){
-        			try{
-        				Integer.parseInt(data);
-        			} catch(NumberFormatException ex){
-        				data = "0";
-        				model.setValueAt("0", row, column);
-        				return;
-        			}
-        		}
-        		lg.setProgrammeInfo(row, columnName, data);
-        		
-        		//if there exist 1 guest, and all fields are updated, chckBx3_ProgrammeScheduleFinalised should be enabled.
-        		chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
-
-        		//if chckBx is checked, it shld be unchecked
-        		if(chckbx3_ProgrammeScheduleFinalised.isSelected()){
-        			chckbx3_ProgrammeScheduleFinalised.setSelected(false);
-        			lg.setProgrammeScheduleFinalised(false);
-        		}
-        		
-        	}
-        });
-        
-*/
 	}
 	
 	/*

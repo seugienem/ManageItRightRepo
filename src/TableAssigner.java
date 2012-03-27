@@ -4,6 +4,8 @@ public class TableAssigner {
 	private Vector<Guest> guests;
 	private int tableSize;
 	
+	private boolean random;
+	
 	private Vector<Chromosome> currPopulation;
 	private Vector<Chromosome> newPopulation;
 	private int fitnessSumOfCurrPopulation;		//sum of fitness values of all chromosomes in currPopulation
@@ -30,9 +32,18 @@ public class TableAssigner {
 		
 		this.minTableSize = 7;
 		this.populationSize = 60;
-		this.numberOfGenerations = 10000;
-
+		this.numberOfGenerations = 1000;
+		this.random = false;
+		
 		this.rnd = new Random();
+	}
+	
+	public boolean getRandom(){
+		return random;
+	}
+	
+	public void setRandom(boolean random){
+		this.random = random;
 	}
 	
 	public int getMinTableSize(){
@@ -41,6 +52,10 @@ public class TableAssigner {
 	
 	public int getPopulationSize(){
 		return populationSize;
+	}
+	
+	public void setPopulationSize(int popSize){
+		this.populationSize = popSize;
 	}
 	
 	public int getNumberOfGenerations(){
@@ -56,46 +71,81 @@ public class TableAssigner {
 	}
 	
 	//overall method called
-	public Vector<Vector<Guest>> generateArrangement(Vector<Guest> guestList, int tableSize){
-		//init
-		this.currPopulation = new Vector<Chromosome>();
-		this.newPopulation = new Vector<Chromosome>();
-		this.seatsPerTable = new Vector<Integer>();
-		this.fitnessSumOfCurrPopulation = 0;
-		this.fitnessSumOfNewPopulation = 0;
+	public Vector<Vector<String>> generateArrangement(Vector<Guest> guestList, int tableSize){
+		Chromosome bestChromosome = null;
 		this.guests = guestList;
-		this.singlePointCross = guests.size()/2;
 		this.tableSize = tableSize;
+		this.seatsPerTable = new Vector<Integer>();
 		
-		findOptimalSeatsPerTable();
-		
-		generateInitialPopulation();
-		
-		for(int k = 0; k < numberOfGenerations; k++){
-			evolve();
-		}
+
+		if(random){
+			findOptimalSeatsPerTable();
 			
-		Chromosome bestChromosome = currPopulation.get(eliteIndex);
-		System.out.println(bestChromosome.getFitnessValue());
-		Vector<Vector<Guest>> seatingList = new Vector<Vector<Guest>>();
+			Vector<Integer> random = new Vector<Integer>();
+			for(int i = 0; i < guests.size(); i++)
+				random.add(i);
+			Collections.shuffle(random);
+			
+			bestChromosome = new Chromosome(random);
+		}
+		else{
+			//init
+			this.currPopulation = new Vector<Chromosome>();
+			this.newPopulation = new Vector<Chromosome>();
+			this.fitnessSumOfCurrPopulation = 0;
+			this.fitnessSumOfNewPopulation = 0;
+			this.singlePointCross = guests.size()/2;
+					
+			findOptimalSeatsPerTable();
+					
+			generateInitialPopulation();
+
+			for(int k = 0; k < numberOfGenerations; k++){
+				evolve();
+			}
+				
+			bestChromosome = currPopulation.get(eliteIndex);
+			System.out.println(bestChromosome.getFitnessValue());
+		}
 		
+		Vector<Vector<String>> seatingList = new Vector<Vector<String>>();		
+		//this returns Tables in columns 
+		for(int i = 0; i < tableSize; i++){
+			seatingList.add(new Vector<String>());
+		}
 		int index = 0;
 		for(int i = 0; i < seatsPerTable.size(); i++){
 			int currTableSize = seatsPerTable.get(i);
-			Vector<Guest> currTable = new Vector<Guest>();
 			
 			for(int j = 0; j < currTableSize; j++){
-				currTable.add(guests.get(bestChromosome.getChromosome().get(index+j)));
+				seatingList.get(j).add(guests.get(bestChromosome.getChromosome().get(index+j)).getName());
+			}
+			index += currTableSize;
+		}
+		
+		/*
+		 *this return Table in rows instead of columns
+		int index = 0;
+		for(int i = 0; i < seatsPerTable.size(); i++){
+			int currTableSize = seatsPerTable.get(i);
+			Vector<String> currTable = new Vector<String>();
+			
+			for(int j = 0; j < currTableSize; j++){
+				currTable.add(guests.get(bestChromosome.getChromosome().get(index+j)).getName());
 			}
 			seatingList.add(currTable);
 			index += currTableSize;
 		}
-		
+		*/	
 		return seatingList;
 	}
 	
 	private void findOptimalSeatsPerTable(){
 		int totalGuests = guests.size();
+		if(totalGuests < tableSize){
+			seatsPerTable.add(totalGuests);
+			return;
+		}
 		//greedily select for tables
 		//result: will have tables with max capacity + 1 table with totalGuests%tableSize number
 		for(int i = 0; i < guests.size();){
@@ -290,7 +340,6 @@ public class TableAssigner {
 	//idea: count frequency of each group type in a table
 	//if there exist a group with only 1 representative, subtract points
 	//use weights to favour certain number. eg. 2 is not as desirable as 5 or 6
-	//2 - 1, 3 - 2, 4 - 3, 5 - 5, 6 - 5, 7 - 3, 8 - 2, 9 - 2, 10 - 2
 	
 	private int fitnessFunction(Chromosome chrom){
 		int fitness = 100;
@@ -319,9 +368,9 @@ public class TableAssigner {
 					subtract += 20;
 					break;
 				case 2:
-					//fitness += 2;
 					break;
 				case 3:
+					break;
 				case 4:
 				case 5:
 					fitness += currFrequency*2;
