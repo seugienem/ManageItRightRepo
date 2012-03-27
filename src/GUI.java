@@ -111,6 +111,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JScrollPane scrollPane6;
 	private Vector<String> expensesCols;
 	private JCheckBox chckbx6_ExpensesFinalised;
+	private JTextPane textPane6_CostPerHead;
 	private JButton btn6_Export;
 	private JButton btn6_ViewSummary;
 	private final ButtonGroup buttonGroup5 = new ButtonGroup();
@@ -1059,7 +1060,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				//lg.setProgrammeScheduleFinalised(chckbx6_ExpensesFinalised.isSelected());
 			}
         });
-      
+        
+        JLabel lbl6_CostPerHead = new JLabel("Cost per head estimate");
+        lbl6_CostPerHead.setBounds(10, 493, 120, 14);
+        panel6.add(lbl6_CostPerHead);
+        
+        textPane6_CostPerHead = new JTextPane();
+        textPane6_CostPerHead.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+        textPane6_CostPerHead.setEditable(false);
+        textPane6_CostPerHead.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textPane6_CostPerHead.setBounds(127, 487, 150, 25);
+        panel6.add(textPane6_CostPerHead);
+        
         btn6_Export = new JButton("Export");
         btn6_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn6_Export.setBounds(410, 490, 80, 30);
