@@ -121,7 +121,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
     	
-        setTitle("Manage It Right! v0.1");
+        setTitle("Manage It Right! v0.2");
         jtp = new JTabbedPane();
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
@@ -305,9 +305,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		 btn0_Load.setBounds(560, 490, 80, 30);
 		 btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
 		 btn0_Load.addActionListener(new ExportImportButtonsListener());
+		 
 		 panel0.setLayout(null);
 		 panel0.add(lbl0_Overview);
-		 
         
         textPane0_EventName = new JTextPane();
         textPane0_EventName.setEditable(false);
@@ -316,40 +316,56 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel0.add(textPane0_EventName);
         
         lbl0_Step1 = new JLabel();
-        lbl0_Step1.setText("Event Details are empty.");
-        lbl0_Step1.setForeground(Color.RED);
-        lbl0_Step1.setBounds(10, 52, 310, 30);
+        lbl0_Step1.setText("  Event Details are empty.");
+        lbl0_Step1.setOpaque(true);
+        lbl0_Step1.setBackground(Color.PINK);
+        lbl0_Step1.setForeground(Color.BLACK);
+        lbl0_Step1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl0_Step1.setBounds(10, 66, 310, 30);
         panel0.add(lbl0_Step1);
         
-        lbl0_Step2 = new JLabel("Guest List is empty.");
-        lbl0_Step2.setForeground(Color.RED);
-        lbl0_Step2.setBounds(10, 116, 310, 30);
+        lbl0_Step2 = new JLabel("  Guest List is empty.");
+        lbl0_Step2.setOpaque(true);
+        lbl0_Step2.setBackground(Color.PINK);
+        lbl0_Step2.setForeground(Color.BLACK);
+        lbl0_Step2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl0_Step2.setBounds(10, 132, 310, 30);
         panel0.add(lbl0_Step2);
         
-        lbl0_Step3 = new JLabel("Programme Schedule is empty.");
-        lbl0_Step3.setForeground(Color.RED);
-        lbl0_Step3.setBounds(10, 180, 310, 30);
+        lbl0_Step3 = new JLabel("  Programme Schedule is empty.");
+        lbl0_Step3.setOpaque(true);
+        lbl0_Step3.setBackground(Color.PINK);
+        lbl0_Step3.setForeground(Color.BLACK);
+        lbl0_Step3.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl0_Step3.setBounds(10, 198, 310, 30);
         panel0.add(lbl0_Step3);
         
-        lbl0_Step4 = new JLabel("Location not chosen.");
-        lbl0_Step4.setForeground(Color.RED);
-        lbl0_Step4.setBounds(10, 249, 310, 30);
+        lbl0_Step4 = new JLabel("  Location not chosen.");
+        lbl0_Step4.setOpaque(true);
+        lbl0_Step4.setBackground(Color.PINK);
+        lbl0_Step4.setForeground(Color.BLACK);
+        lbl0_Step4.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl0_Step4.setBounds(10, 264, 310, 30);
         panel0.add(lbl0_Step4);
         
-        lbl0_Step5 = new JLabel("Guests are not assigned to tables.");
-        lbl0_Step5.setForeground(Color.RED);
-        lbl0_Step5.setBounds(10, 317, 310, 30);
+        lbl0_Step5 = new JLabel("  Guests are not assigned to tables.");
+        lbl0_Step5.setOpaque(true);
+        lbl0_Step5.setBackground(Color.PINK);
+        lbl0_Step5.setForeground(Color.BLACK);
+        lbl0_Step5.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl0_Step5.setBounds(10, 332, 310, 30);
         panel0.add(lbl0_Step5);
         
-        lbl0_Step6 = new JLabel("Expenses List is empty.");
-        lbl0_Step6.setForeground(Color.RED);
-        lbl0_Step6.setBounds(10, 385, 310, 30);
+        lbl0_Step6 = new JLabel("  Expenses List is empty.");
+        lbl0_Step6.setOpaque(true);
+        lbl0_Step6.setBackground(Color.PINK);
+        lbl0_Step6.setForeground(Color.BLACK);
+        lbl0_Step6.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl0_Step6.setBounds(10, 400, 310, 30);
         panel0.add(lbl0_Step6);
         
         panel0.add(btn0_New);
-        panel0.add(btn0_Load);
-        
-        
+        panel0.add(btn0_Load);   
 	}
 	
 	/*
@@ -1687,64 +1703,64 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		switch(lg.step1Status()) {
 			case 0:
 				textPane0_EventName.setText(lg.getEventName());
-				lbl0_Step1.setText("Event Details are empty.");
-				lbl0_Step1.setForeground(Color.RED);
+				lbl0_Step1.setText("  Event Details are empty.");
+				lbl0_Step1.setBackground(Color.PINK);
 				break;
 			case 1:
-				lbl0_Step1.setText("Event Details are incomplete.");
-				lbl0_Step1.setForeground(Color.RED);
+				lbl0_Step1.setText("  Event Details are incomplete.");
+				lbl0_Step1.setBackground(Color.PINK);
 				break;
 			case 2:
-				lbl0_Step1.setText("Event Details are completed.");
-				lbl0_Step1.setForeground(Color.GREEN);
+				lbl0_Step1.setText("  Event Details are completed.");
+				lbl0_Step1.setBackground(new Color(152, 251, 152));
 				break;
 		}
 		
 		switch(lg.step2Status()){
 			case 0:
-				lbl0_Step2.setText("Guest list is empty.");
-				lbl0_Step2.setForeground(Color.RED);
+				lbl0_Step2.setText("  Guest list is empty.");
+				lbl0_Step2.setBackground(Color.PINK);
 				break;
 			case 1:
-				lbl0_Step2.setText("Guest list contains missing details.");
-				lbl0_Step2.setForeground(Color.RED);
+				lbl0_Step2.setText("  Guest list contains missing details.");
+				lbl0_Step2.setBackground(Color.PINK);
 				break;
 			case 2:
-				lbl0_Step2.setText("Guest list is not finalised.");
-				lbl0_Step2.setForeground(Color.RED);
+				lbl0_Step2.setText("  Guest list is not finalised.");
+				lbl0_Step2.setBackground(Color.PINK);
 				break;
 			case 3:
-				lbl0_Step2.setText("Guest list is finalised.");
-				lbl0_Step2.setForeground(Color.GREEN);
+				lbl0_Step2.setText("  Guest list is finalised.");
+				lbl0_Step2.setBackground(new Color(152, 251, 152));
 				break;
 		}
 		
 		switch(lg.step3Status()){
 			case 0:
-				lbl0_Step3.setText("Programme Schedule is empty.");
-				lbl0_Step3.setForeground(Color.RED);
+				lbl0_Step3.setText("  Programme Schedule is empty.");
+				lbl0_Step3.setBackground(Color.PINK);
 				break;
 			case 1:
-				lbl0_Step3.setText("Programme Schedule contains missing details.");
-				lbl0_Step3.setForeground(Color.RED);
+				lbl0_Step3.setText("  Programme Schedule contains missing details.");
+				lbl0_Step3.setBackground(Color.PINK);
 				break;
 			case 2:
-				lbl0_Step3.setText("Programme Schedule is not finalised.");
-				lbl0_Step3.setForeground(Color.RED);
+				lbl0_Step3.setText("  Programme Schedule is not finalised.");
+				lbl0_Step3.setBackground(Color.PINK);
 				break;
 			case 3:
-				lbl0_Step3.setText("Programme Schedule is finalised.");
-				lbl0_Step3.setForeground(Color.GREEN);
+				lbl0_Step3.setText("  Programme Schedule is finalised.");
+				lbl0_Step3.setBackground(new Color(152, 251, 152));
 				break;
 		}
 		switch(lg.step4Status()){
 			case 0:
-				lbl0_Step4.setText("Location not selected.");
-				lbl0_Step4.setForeground(Color.RED);
+				lbl0_Step4.setText("  Location not selected.");
+				lbl0_Step4.setBackground(Color.PINK);
 				break;
 			case 1:
-				lbl0_Step4.setText("Location has been selected.");
-				lbl0_Step4.setForeground(Color.GREEN);
+				lbl0_Step4.setText("  Location has been selected.");
+				lbl0_Step4.setBackground(new Color(152, 251, 152));
 				break;
 		}
 	}
