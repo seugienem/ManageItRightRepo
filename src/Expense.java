@@ -1,5 +1,9 @@
+import java.io.Serializable;
 
-public class Expense {
+
+public class Expense implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private String itemName;
 	private double unitCost;
 	private int quantity;

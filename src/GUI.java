@@ -1815,7 +1815,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep6(){
 		textPane6_TotalBudget.setText(String.valueOf(lg.getBudget()));
-		
+//		textPane6_Remaining.setText(String.valueOf(lg.getRemainingBudget()));
+//		textPane6_Spent.setText(String.valueOf(lg.getBudgetSpent()));		
+//		textPane6_CostPerHead.setText(String.valueOf(lg.getCostPerHead()));
 	}
 	
 	void updateStep7(){
