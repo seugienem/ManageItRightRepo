@@ -759,8 +759,48 @@ public class Logic {
 		event.addExpense(expense);
 	}
 	
-	void removeExpense(Expense expense){
-		saved = false;
+	void removeExpense(Expense expense){	
 		event.removeExpense(expense);
+	}
+	
+	double getBudgetSpent() {
+		return event.getBudgetSpent();
+	}
+	
+/*	void setBudgetSpent() {
+		double eventBudget = event.getEventBudget();
+		
+		doubel budgetSpent = eventBudget - Sum of all the total cost in expenses
+		
+		event.setBudgetSpent(budgetSpent);
+	}
+*/	
+	double getRemainingBudget() {
+		return event.getRemainingBudget();
+	}
+	
+	void setRemainingBudget() {
+		double eventBudget = event.getEventBudget();
+		int hotelBudgetRatio = event.getBudgetRatio();
+		double budgetSpent = event.getBudgetSpent();
+		
+		double remainingBudget = eventBudget - (hotelBudgetRatio/100*eventBudget) - budgetSpent;
+		
+		event.setRemainingBudget(remainingBudget);
+	}
+
+	double getCostPerHead() {
+		return event.getCostPerHead();
+	}
+
+	void setCostPerHead() {
+		double eventBudget = event.getEventBudget();
+		int hotelBudgetRatio = event.getBudgetRatio();
+		double budgetSpent = event.getBudgetSpent();
+		int numberOfGuest = event.getGuestList().size();
+		
+		double costPerHead = ((hotelBudgetRatio/100*eventBudget) + budgetSpent) / numberOfGuest;
+		
+		event.setCostPerHead(costPerHead);
 	}
 }	
