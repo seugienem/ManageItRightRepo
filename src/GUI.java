@@ -2042,6 +2042,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			if(file.getName().toUpperCase().endsWith(".CSV")){
 				return true;
 			}
+			if(file.isDirectory())
+				return true;
 			return false;
 		}
 
@@ -2057,6 +2059,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			if(file.getName().toUpperCase().endsWith(".MIR")){
 				return true;
 			}
+			if(file.isDirectory())
+				return true;
 			return false;
 		}
 		
