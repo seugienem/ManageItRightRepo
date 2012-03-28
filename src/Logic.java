@@ -720,7 +720,6 @@ public class Logic {
 	 * 
 	 **************************************************************************/
 	Vector<Vector<String>> generateArrangement(int setting){
-		System.out.println(setting);
 		switch(setting){
 		case -1:
 			tableAssigner.setRandom(true);

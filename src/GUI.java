@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.zip.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,6 +10,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import java.io.*;
 import java.beans.*;
+
 import com.toedter.calendar.*;
 
 public class GUI extends JFrame implements FocusListener, MouseListener {
@@ -100,6 +102,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JScrollPane scrollPane5;
 	private Vector<String> tableCols;
 	private JButton btn5_Next;
+	private ProgressMonitor progressMonitor5;
 	
 	//GUI6 objects
 	private JPanel panel6;
@@ -1005,15 +1008,26 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					return;
 				}
 				
-				Vector<Vector<String>> arrangement = lg.generateArrangement(tableArrangerSetting);
+				progressMonitor5 = new ProgressMonitor(GUI.this, "Generating Arrangement...", "", 0, 100);
+				progressMonitor5.setProgress(0);
 				
-				//generate table cols
-				tableCols = new Vector<String>();
-				for(int i = 1; i <= arrangement.get(0).size(); i++){
-					tableCols.add("Table " + i);
-				}
-				panel5.remove(scrollPane5);
-				createTable5(arrangement, tableCols);
+				//disable button
+				btn5_Generate.setEnabled(false);
+				GenerateArrangementTask generateTask = new GenerateArrangementTask(tableArrangerSetting);
+				generateTask.addPropertyChangeListener(new PropertyChangeListener(){
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						if("progress" == evt.getPropertyName()){
+							int progress = (Integer) evt.getNewValue();
+							System.out.println(progress);
+							progressMonitor5.setProgress(progress);
+							
+							if(progressMonitor5.isCanceled()){
+							}
+						}
+					}
+				});
+				generateTask.execute();
 			}
         });
         
@@ -1022,6 +1036,44 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn5_Next.setBounds(560, 490, 80, 30);
         panel5.add(btn5_Next);
         btn5_Next.addMouseListener(this);
+	}
+	
+	class GenerateArrangementTask extends SwingWorker<Vector<Vector<String>>, Void>{
+		int tableArrangerSetting;
+		
+		public GenerateArrangementTask(int setting){
+			this.tableArrangerSetting = setting;
+		}
+		
+		@Override
+		protected Vector<Vector<String>> doInBackground() throws Exception {			
+			Vector<Vector<String>> arrangement = lg.generateArrangement(tableArrangerSetting);
+
+			return arrangement;
+		}
+		
+		@Override
+		public void done(){
+			btn5_Generate.setEnabled(true);
+			
+			Vector<Vector<String>> arrangement;
+			try {
+				arrangement = this.get();
+				
+				//generate table cols
+				tableCols = new Vector<String>();
+				for(int i = 1; i <= arrangement.get(0).size(); i++){
+					tableCols.add("Table " + i);
+				}
+				
+				panel5.remove(scrollPane5);
+				createTable5(arrangement, tableCols);
+				
+			} catch (InterruptedException | ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	/*
