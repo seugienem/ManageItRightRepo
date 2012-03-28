@@ -210,14 +210,14 @@ public class Event implements Serializable{
 		return expenseList;
 	}
 
-	public void addExpense(Expense expense) {
+/*	public void addExpense(Expense expense) {
 		expenseList.add(expense);
 	}
 	
 	public void removeExpense(Expense expense) {
 		expenseList.remove(expense);
 	}
-	
+*/	
 	public boolean getExpenseFinalised(){
 		return expenseFinalised;
 	}
