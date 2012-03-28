@@ -23,6 +23,7 @@ public class Event implements Serializable{
 	private boolean[] hotelCheckBox;
 	private Vector<String> dateList;
 	private Vector<Expense> expenseList;
+	private boolean expenseFinalised;
 	private double budgetSpent;
 	private double remainingBudget;
 	private double costPerHead;
@@ -211,12 +212,18 @@ public class Event implements Serializable{
 
 	public void addExpense(Expense expense) {
 		expenseList.add(expense);
-//		eventBudget -= expense.getTotalCost();
 	}
 	
 	public void removeExpense(Expense expense) {
 		expenseList.remove(expense);
-//		eventBudget += expense.getTotalCost();
+	}
+	
+	public boolean getExpenseFinalised(){
+		return expenseFinalised;
+	}
+	
+	public void setExpenseFinalised(boolean value){
+		this.expenseFinalised = value;
 	}
 	
 	public double getBudgetSpent() {
