@@ -807,9 +807,11 @@ public class Logic {
 			event.getExpense().get(index).setQuantity(Integer.parseInt(data));
 			break;
 		case "Total Cost":
-			event.getExpense().get(index).setTotalCost(Double.parseDouble(data));
+			event.getExpense().get(index).setTotalCost();
 			break;
 		}
+		
+		event.setBudgetSpent(event.getBudgetSpent()+event.getExpense().get(index).getTotalCost());
 	}
 	
 	boolean completedExpenseFields(){
@@ -837,43 +839,31 @@ public class Logic {
 		return event.getExpense();
 	}
 	
-	void addExpense(Expense expense){
+	void addExpense(){
 		saved = false;
-		event.addExpense(expense);
+		event.getExpense().add(new Expense());
 	}
 	
-	void removeExpense(Expense expense){	
-		event.removeExpense(expense);
+	void removeExpense(int index){	
+		event.getExpense().remove(index);
 	}
-	
+			
 	double getBudgetSpent() {
 		return event.getBudgetSpent();
 	}
 	
-	double getTotalCost(Expense expense){
-		return expense.getUnitCost()*expense.getQuantity();
+	void setBudgetSpent(double hotelBudget) {
+				
+		double budgetSpent = event.getBudgetSpent();		
+		event.setBudgetSpent(budgetSpent+hotelBudget);
 	}
 	
-/*	void setBudgetSpent() {
-		double eventBudget = event.getEventBudget();
-		
-		doubel budgetSpent = eventBudget - Sum of all the total cost in expenses
-		
-		event.setBudgetSpent(budgetSpent);
-	}
-*/	
 	double getRemainingBudget() {
 		return event.getRemainingBudget();
 	}
 	
 	void setRemainingBudget() {
-		double eventBudget = event.getEventBudget();
-		int hotelBudgetRatio = event.getBudgetRatio();
-		double budgetSpent = event.getBudgetSpent();
-		
-		double remainingBudget = eventBudget - (hotelBudgetRatio/100*eventBudget) - budgetSpent;
-		
-		event.setRemainingBudget(remainingBudget);
+		event.setRemainingBudget(event.getEventBudget()-event.getBudgetSpent());
 	}
 
 	double getCostPerHead() {

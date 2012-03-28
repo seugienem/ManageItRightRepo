@@ -9,7 +9,7 @@ public class Expense implements Serializable {
 	private int quantity;
 	private double totalCost;
 	
-	public Expense(String itemName, double unitCost, int quantity,double totalCost) {
+	public Expense() {
 		this.itemName = "";
 		this.unitCost = 0.0;
 		this.quantity = 0;
@@ -44,8 +44,8 @@ public class Expense implements Serializable {
 		return totalCost;
 	}
 
-	public void setTotalCost(double totalCost) {
-		this.totalCost = totalCost;
+	public void setTotalCost() {		
+		this.totalCost = this.getQuantity() * this.getUnitCost();
 	}
 	
 }
