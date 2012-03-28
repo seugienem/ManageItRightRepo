@@ -761,6 +761,7 @@ public class Logic {
 		expenseList = event.getExpense();
 
 		for (int i=0; i<expenseList.size(); ++i){
+			//expenseDetail points to new Vector<String>
 			expenseDetail = new Vector<String>();
 
 			//Get current expense item
