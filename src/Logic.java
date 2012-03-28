@@ -10,12 +10,14 @@ public class Logic {
 	private DataManager dm;
 	private boolean saved;
 	private HotelSuggest hotelSuggester;
+	private TableAssigner tableAssigner;
 
 	public Logic(Event event, DataManager dm){ //logic instance has a Event and DataManager parameter
 		this.event = event;
 		this.dm = dm;
 		saved = true;
 		hotelSuggester = new HotelSuggest();
+		tableAssigner = new TableAssigner();
 	}
 
 	
@@ -712,6 +714,36 @@ public class Logic {
 		event.setcheckBox(value);
 	}
 	
+	/**************************************************************************
+	 * 
+	 * Step 5 Functions here
+	 * 
+	 **************************************************************************/
+	Vector<Vector<String>> generateArrangement(int setting){
+		System.out.println(setting);
+		switch(setting){
+		case -1:
+			tableAssigner.setRandom(true);
+			break;
+		case 0:
+			tableAssigner.setRandom(false);
+			tableAssigner.setPopulationSize(40);
+			tableAssigner.setNumberOfGenerations(800);
+			break;
+		case 1:
+			tableAssigner.setRandom(false);
+			tableAssigner.setPopulationSize(50);
+			tableAssigner.setNumberOfGenerations(2000);
+			break;
+		case 2:
+			tableAssigner.setRandom(false);
+			tableAssigner.setPopulationSize(60);
+			tableAssigner.setNumberOfGenerations(3500);
+			break;
+		}
+		
+		return tableAssigner.generateArrangement(event.getGuestList(), 10);
+	}
 	
 	/**************************************************************************
 	 * 
@@ -727,8 +759,48 @@ public class Logic {
 		event.addExpense(expense);
 	}
 	
-	void removeExpense(Expense expense){
-		saved = false;
+	void removeExpense(Expense expense){	
 		event.removeExpense(expense);
+	}
+	
+	double getBudgetSpent() {
+		return event.getBudgetSpent();
+	}
+	
+/*	void setBudgetSpent() {
+		double eventBudget = event.getEventBudget();
+		
+		doubel budgetSpent = eventBudget - Sum of all the total cost in expenses
+		
+		event.setBudgetSpent(budgetSpent);
+	}
+*/	
+	double getRemainingBudget() {
+		return event.getRemainingBudget();
+	}
+	
+	void setRemainingBudget() {
+		double eventBudget = event.getEventBudget();
+		int hotelBudgetRatio = event.getBudgetRatio();
+		double budgetSpent = event.getBudgetSpent();
+		
+		double remainingBudget = eventBudget - (hotelBudgetRatio/100*eventBudget) - budgetSpent;
+		
+		event.setRemainingBudget(remainingBudget);
+	}
+
+	double getCostPerHead() {
+		return event.getCostPerHead();
+	}
+
+	void setCostPerHead() {
+		double eventBudget = event.getEventBudget();
+		int hotelBudgetRatio = event.getBudgetRatio();
+		double budgetSpent = event.getBudgetSpent();
+		int numberOfGuest = event.getGuestList().size();
+		
+		double costPerHead = ((hotelBudgetRatio/100*eventBudget) + budgetSpent) / numberOfGuest;
+		
+		event.setCostPerHead(costPerHead);
 	}
 }	
