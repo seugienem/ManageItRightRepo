@@ -416,7 +416,7 @@ public class Logic {
 	 * Step 2 Functions here
 	 * 
 	 **************************************************************************/
-	Vector<Vector<String>> getGuestList(){
+	Vector<Vector<String>> getGuestNameList(){
 		Vector<Guest> guestList = event.getGuestList();
 		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
 		Vector<String> guestDetail;
@@ -506,6 +506,10 @@ public class Logic {
 			return false;
 		}
 		return true;
+	}
+	
+	Vector<Guest> getGuestList(){
+		return event.getGuestList();
 	}
 	
 	void setGuestListFinalised(boolean value){
@@ -719,6 +723,7 @@ public class Logic {
 	 * Step 5 Functions here
 	 * 
 	 **************************************************************************/
+	//not actually required now. this has been handled in the gui
 	Vector<Vector<String>> generateArrangement(int setting){
 		switch(setting){
 		case -1:
