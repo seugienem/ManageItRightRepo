@@ -1,5 +1,6 @@
 
 import java.util.*;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.*;
 import java.awt.*;
@@ -1019,23 +1020,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				
 				progressMonitor5 = new ProgressMonitor(GUI.this, "Generating Arrangement...", "", 0, 100);
 				progressMonitor5.setProgress(0);
+				progressMonitor5.setMillisToPopup(0);
+				progressMonitor5.setMillisToDecideToPopup(0);
 				
 				//disable button
 				btn5_Generate.setEnabled(false);
 				GenerateArrangementTask generateTask = new GenerateArrangementTask(tableArrangerSetting);
-				generateTask.addPropertyChangeListener(new PropertyChangeListener(){
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						if("progress" == evt.getPropertyName()){
-							int progress = (Integer) evt.getNewValue();
-							System.out.println(progress);
-							progressMonitor5.setProgress(progress);
-							
-							if(progressMonitor5.isCanceled()){
-							}
-						}
-					}
-				});
+				generateTask.addPropertyChangeListener(new ArrangementPropertyListener(generateTask));
 				generateTask.execute();
 			}
         });
@@ -1047,17 +1038,77 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn5_Next.addMouseListener(this);
 	}
 	
+	/**************************************************************************************************
+	 * PropertyListener for SwingTask. This listens for any changes happening during execution of task.
+	 **************************************************************************************************/
+	class ArrangementPropertyListener implements PropertyChangeListener{
+		private GenerateArrangementTask generateTask;
+		
+		public ArrangementPropertyListener(GenerateArrangementTask generateTask){
+			this.generateTask = generateTask;
+		}
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if("progress" == evt.getPropertyName()){
+				int progress = (Integer) evt.getNewValue();
+				progressMonitor5.setProgress(progress);
+				
+				if(progressMonitor5.isCanceled()){
+					generateTask.cancel(true);
+					
+				}
+			}
+		}
+		
+	};
+	
+	/**************************************************************************************************
+	 * A subclass of SwingWorker. This allows threading to do the table assigner.
+	 **************************************************************************************************/
 	class GenerateArrangementTask extends SwingWorker<Vector<Vector<String>>, Void>{
 		int tableArrangerSetting;
+		int counter;
 		
 		public GenerateArrangementTask(int setting){
 			this.tableArrangerSetting = setting;
 		}
 		
 		@Override
-		protected Vector<Vector<String>> doInBackground() throws Exception {			
-			Vector<Vector<String>> arrangement = lg.generateArrangement(tableArrangerSetting);
-
+		protected Vector<Vector<String>> doInBackground(){	
+			setProgress(0);
+			TableAssigner tableAssigner = new TableAssigner();
+			
+			tableAssigner.addEventListener(new ProgressListener(){
+				@Override
+				public void progressEventOccured(ProgressEvent evt) {
+					setProgress(evt.getProgress());
+				}
+			});
+			
+			switch(tableArrangerSetting){
+			case -1:
+				tableAssigner.setRandom(true);
+				break;
+			case 0:
+				tableAssigner.setRandom(false);
+				tableAssigner.setPopulationSize(40);
+				tableAssigner.setNumberOfGenerations(800);
+				break;
+			case 1:
+				tableAssigner.setRandom(false);
+				tableAssigner.setPopulationSize(50);
+				tableAssigner.setNumberOfGenerations(2000);
+				break;
+			case 2:
+				tableAssigner.setRandom(false);
+				tableAssigner.setPopulationSize(60);
+				tableAssigner.setNumberOfGenerations(3500);
+				break;
+			}
+			
+			Vector<Vector<String>> arrangement = tableAssigner.generateArrangement(lg.getGuestList(), 10);
+			setProgress(100);
 			return arrangement;
 		}
 		
@@ -1078,9 +1129,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				panel5.remove(scrollPane5);
 				createTable5(arrangement, tableCols);
 				
-			} catch (InterruptedException | ExecutionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch(CancellationException ex){
+				
+			} catch (InterruptedException ex){
+				System.out.println("here");
+			} catch (ExecutionException ex){
+				System.out.println("here");
 			}
 		}
 	}
@@ -1950,7 +2004,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep2(){	
 		panel2.remove(scrollPane2);
-		createTable2(lg.getGuestList(), guestCols);
+		createTable2(lg.getGuestNameList(), guestCols);
 		if(lg.completedGuestFields())
 			chckbx2_GuestListFinalised.setEnabled(true);
 		if(lg.getGuestListFinalised() == true)
@@ -2375,8 +2429,5 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	    }
 
 	}
-	
-	
-	
 	
 }

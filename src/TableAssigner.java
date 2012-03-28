@@ -21,6 +21,8 @@ public class TableAssigner {
 	
 	private Random rnd;
 	
+	protected javax.swing.event.EventListenerList listenerList = new javax.swing.event.EventListenerList();
+	
 	public TableAssigner(){
 		/*
 		this.currPopulation = new Vector<Chromosome>();
@@ -70,6 +72,24 @@ public class TableAssigner {
 		return currPopulation.get(eliteIndex).getFitnessValue();
 	}
 	
+	public void addEventListener(ProgressListener listener){
+		listenerList.add(ProgressListener.class, listener);
+	}
+	
+	public void removeEventListener(ProgressListener listener){
+		listenerList.remove(ProgressListener.class, listener);
+	}
+	
+	public void fireEvent(ProgressEvent evt){
+		Object[] listeners = listenerList.getListenerList();
+		
+		for(int i = 0; i < listeners.length; i+=2){
+			if(listeners[i] == ProgressListener.class){
+				((ProgressListener)listeners[i+1]).progressEventOccured(evt);
+			}
+		}
+	}
+	
 	//overall method called
 	public Vector<Vector<String>> generateArrangement(Vector<Guest> guestList, int tableSize){
 		Chromosome bestChromosome = null;
@@ -101,6 +121,10 @@ public class TableAssigner {
 			generateInitialPopulation();
 
 			for(int k = 0; k < numberOfGenerations; k++){
+				float progress = (float)k / (float)numberOfGenerations;
+				progress *= 100;
+				fireEvent(new ProgressEvent(this, (int)progress));
+				
 				evolve();
 			}
 				
@@ -123,6 +147,7 @@ public class TableAssigner {
 			index += currTableSize;
 		}
 		
+		fireEvent(new ProgressEvent(this, 100));
 		/*
 		 *this return Table in rows instead of columns
 		int index = 0;
