@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.Component;
 import java.awt.FontMetrics;
 
@@ -12,7 +13,7 @@ import javax.swing.table.TableColumn;
 public class ColumnsAutoSizer {
 	public static  void sizeColumnsToFit(JTable table) {
 	      
-        sizeColumnsToFit(table, 7);
+        sizeColumnsToFit(table, 5);
 
     }
 
@@ -23,11 +24,11 @@ public class ColumnsAutoSizer {
         if(tableHeader == null) {
 
             // can't auto size a table without a header
-
+        	
             return;
 
         }
-  
+             
         FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
 
         int[] minWidths = new int[table.getColumnCount()];

@@ -1,7 +1,13 @@
+
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -1505,7 +1511,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		//if column == 1 or 2 means event start time and end time
         		if(column == 1 || column == 2){
         			Integer time;
-        			Integer compareTime;	//time to be compared to
+//        			Integer compareTime;	//time to be compared to
         		
         			try{
         				time = Integer.parseInt(data);
@@ -1561,23 +1567,95 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void createTable5(Vector<Vector<String>> data, Vector<String> cols){
 		table5 = new JTable(data, cols);
 		table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table5.getTableHeader().setReorderingAllowed(false);
-        
+		table5.setPreferredScrollableViewportSize(new Dimension(600,370));
+		table5.getTableHeader().setReorderingAllowed(false);
+		table5.setFillsViewportHeight(true);
+		
         scrollPane5 = new JScrollPane(table5);
         scrollPane5.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPane5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane5.setBounds(10, 92, 600, 370);
-        panel5.add(scrollPane5);
-        
+        panel5.add(scrollPane5);     
         scrollPane5.setViewportView(table5);
-        table5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        table5.setPreferredScrollableViewportSize(new Dimension(600,370));
-        table5.setFillsViewportHeight(true);
+        table5.setFont(new Font("Tahoma", Font.PLAIN, 12));    
+        
         table5.setColumnSelectionAllowed(true);
-        table5.setCellSelectionEnabled(true);
-        //table5.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table5.setCellSelectionEnabled(true);        
         table5.setAutoCreateRowSorter(false);
-	}
+      
+      //Calls the method to adjust column width to fit the longest string in the column
+      		calcColumnWidths(table5);
+      		table5.getModel().addTableModelListener(new TableModelListener() {			
+      			    public void tableChanged(TableModelEvent e) {
+      			    	calcColumnWidths(table5);
+      			    }			
+      		});
+        
+/*      	DefaultTableModel modelTableAssigner = (DefaultTableModel)table5.getModel();
+      	table5.setDragEnabled(true);
+        table5.setDropMode(DropMode.USE_SELECTION);
+        table5.setModel(modelTableAssigner);
+        table5.setTransferHandler(new TransferHandler() {
+        	
+
+			public int getSourceActions(JComponent c) {  
+                 return DnDConstants.ACTION_COPY_OR_MOVE;  
+             }  
+    
+             public Transferable createTransferable(JComponent comp)  
+             {  
+                 JTable table=(JTable)comp;  
+                 int row=table.getSelectedRow();  
+                 int col=table.getSelectedColumn();  
+    
+                 String value = (String)table.getModel().getValueAt(row,col);  
+                 StringSelection transferable = new StringSelection(value);  
+                 table.getModel().setValueAt(null,row,col);  
+                 return transferable;  
+             }  
+             public boolean canImport(TransferHandler.TransferSupport info){  
+                 if (!info.isDataFlavorSupported(DataFlavor.stringFlavor)){  
+                     return false;  
+                 }  
+    
+                 return true;  
+             }  
+    
+             public boolean importData(TransferSupport support) {  
+    
+                 if (!support.isDrop()) {  
+                     return false;  
+                 }  
+    
+                 if (!canImport(support)) {  
+                     return false;  
+                 }  
+    
+                 JTable table=(JTable)support.getComponent();  
+                 DefaultTableModel tableModel=(DefaultTableModel)table.getModel();  
+                   
+                JTable.DropLocation dl = (JTable.DropLocation)support.getDropLocation();  
+    
+                 int row = dl.getRow();  
+                 int col=dl.getColumn();  
+    
+                 String data;  
+                 try {  
+                     data = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);  
+                 } catch (UnsupportedFlavorException e) {  
+                     return false;  
+                 } catch (IOException e) {  
+                     return false;  
+                 }  
+    
+                 tableModel.setValueAt(data, row, col);  
+    
+                 return true;  
+             }  
+    
+         }); 
+*/  
+        }
 	
 	/*
 	 * Method for creation and initlialisation of table3 (Programme Schedule) in Step 3
@@ -1808,7 +1886,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep4(){
 		textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
-		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget()));	
+		textPane4_Budget.setText(String.valueOf("$"+lg.calculateHotelBudget()));	
 		list4.setListData(lg.getSuggestedHotelsNames());
 		list4.setSelectedIndex(lg.getSelectedHotelIdx());
 		slider4.setValue(lg.getBudgetRatio());
@@ -1831,7 +1909,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep6(){
-		textPane6_TotalBudget.setText(String.valueOf(lg.getBudget()));
+		textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
 //		textPane6_Remaining.setText(String.valueOf(lg.getRemainingBudget()));
 //		textPane6_Spent.setText(String.valueOf(lg.getBudgetSpent()));		
 //		textPane6_CostPerHead.setText(String.valueOf(lg.getCostPerHead()));
@@ -2146,7 +2224,72 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        return this;  
 	    }  
 	  
-	} 
+	}
+	
+	//Method to adjust column width to fit the longest string in the column
+	public static void calcColumnWidths(JTable table)
+	{
+	    JTableHeader header = table.getTableHeader();
+
+	    TableCellRenderer defaultHeaderRenderer = null;
+
+	    if (header != null)
+	        defaultHeaderRenderer = header.getDefaultRenderer();
+
+	    TableColumnModel columns = table.getColumnModel();
+	    TableModel data = table.getModel();
+
+	    int margin = columns.getColumnMargin(); // only JDK1.3
+
+	    int rowCount = data.getRowCount();
+
+	    int totalWidth = 0;
+
+	    for (int i = columns.getColumnCount() - 1; i >= 0; --i)
+	    {
+	        TableColumn column = columns.getColumn(i);
+	            
+	        int columnIndex = column.getModelIndex();
+	            
+	        int width = -1; 
+
+	        TableCellRenderer h = column.getHeaderRenderer();
+	          
+	        if (h == null)
+	            h = defaultHeaderRenderer;
+	            
+	        if (h != null) // Not explicitly impossible
+	        {
+	            Component c = h.getTableCellRendererComponent
+	                   (table, column.getHeaderValue(),
+	                    false, false, -1, i);
+	                    
+	            width = c.getPreferredSize().width;
+	        }
+	       
+	        for (int row = rowCount - 1; row >= 0; --row)
+	        {
+	            TableCellRenderer r = table.getCellRenderer(row, i);
+	                 
+	            Component c = r.getTableCellRendererComponent
+	               (table,
+	                data.getValueAt(row, columnIndex),
+	                false, false, row, i);
+	        
+	                width = Math.max(width, c.getPreferredSize().width);
+	        }
+
+	        if (width >= 0)
+	            column.setPreferredWidth(width + margin); 
+	        else
+	            ; 
+	            
+	        totalWidth += column.getPreferredWidth();
+	    }
+
+	}
+	
+	
 	
 	
 }
