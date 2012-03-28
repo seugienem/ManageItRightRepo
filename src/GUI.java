@@ -1396,7 +1396,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		//if column == 1 or 2 means event start time and end time
         		if(column == 1 || column == 2){
         			Integer time;
-        			Integer compareTime;	//time to be compared to
+        			Integer compareTime = null;	//time to be compared to
         		
         			try{
         				time = Integer.parseInt(data);
@@ -1409,26 +1409,41 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				model.setValueAt("0", row, column);
         				return;
         			}     			   			
-        			
-        			/*
+
         			switch (column){
         			case 1:	//if startTime was modified, compare it with endTime for error
-        				compareTime = Integer.parseInt((String)model.getValueAt(row, 2));
-        				if (time >= compareTime){
-        					data = "0";
-        					model.setValueAt("0", row, column);
+        				try{
+        					compareTime = Integer.parseInt((String)model.getValueAt(row, 2));
+
+        					if (compareTime != null){
+        						if (time >= compareTime){
+        							//data = "0";
+        							System.out.println("TEST");
+        							//model.setValueAt("0", row, column);
+        						}
+        					}
+        				} catch (NumberFormatException ex){
+        					return;
         				}
         				break;
 
         			case 2:	//if endTime was modified, compare it with startTime for error
-        				compareTime = Integer.parseInt((String)model.getValueAt(row, 1));
-        				if (time <= compareTime){
-        					data = "0";
-        					model.setValueAt("0", row, column);
+        				try{
+        					compareTime = Integer.parseInt((String)model.getValueAt(row, 1));
+
+        					if (compareTime != null){
+        						if (time <= compareTime){
+        							//data = "0";
+        							System.out.println("TEST2");
+        							//model.setValueAt("0", row, column);
+        						}
+        					}
+        				} catch (NumberFormatException ex){
+        					return;
         				}
         				break;
         			}
-        			*/
+
         		}
         		
         		lg.setProgrammeInfo(row, columnName, data);
