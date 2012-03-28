@@ -1474,9 +1474,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 
         					if (compareTime != null){
         						if (time >= compareTime){
-        							//data = "0";
+        							data = "0";
         							System.out.println("TEST");
-        							//model.setValueAt("0", row, column);
+        							model.setValueAt(data, row, column);
         						}
         					}
         				} catch (NumberFormatException ex){
@@ -1490,9 +1490,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 
         					if (compareTime != null){
         						if (time <= compareTime){
-        							//data = "0";
+        							data = "0";
         							System.out.println("TEST2");
-        							//model.setValueAt("0", row, column);
+        							model.setValueAt(data, row, column);
         						}
         					}
         				} catch (NumberFormatException ex){

@@ -750,6 +750,45 @@ public class Logic {
 	 * Step 6 Functions here
 	 * 
 	 **************************************************************************/
+	Vector<Vector<String>> getExpenseList(){
+		Vector<Expense> expenseList;
+		Vector<String> expenseDetail=null;
+		Vector<Vector<String>> expenseVector = new Vector<Vector<String>>();
+		Expense expense;
+		String quantityStr, unitCostStr, totalCostStr;
+
+
+		//Get expenseList from event
+		expenseList = event.getExpense();
+
+		for (int i=0; i<expenseList.size(); ++i){
+			expenseDetail = new Vector<String>();
+
+			//Get current expense item
+			expense = expenseList.get(i);
+
+			//Add Item Name
+			expenseDetail.add(expense.getItemName());
+
+			//Add Unit Cost
+			unitCostStr = Double.toString(expense.getUnitCost());
+			expenseDetail.add(unitCostStr);
+
+			//Add Quantity
+			quantityStr = Integer.toString(expense.getQuantity());
+			expenseDetail.add(quantityStr);
+
+			//Add Total Cost
+			totalCostStr = Double.toString(expense.getTotalCost());
+			expenseDetail.add(totalCostStr);
+
+			//Add expenseDetail to expenseVector
+			expenseVector.add(expenseDetail);
+		}
+		
+		return expenseVector;
+	}
+	
 	Vector<Expense> getExpense(){
 		return event.getExpense();
 	}
@@ -765,6 +804,10 @@ public class Logic {
 	
 	double getBudgetSpent() {
 		return event.getBudgetSpent();
+	}
+	
+	double getTotalCost(Expense expense){
+		return expense.getUnitCost()*expense.getQuantity();
 	}
 	
 /*	void setBudgetSpent() {
