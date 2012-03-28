@@ -761,7 +761,7 @@ public class Logic {
 		expenseList = event.getExpense();
 
 		for (int i=0; i<expenseList.size(); ++i){
-			//expenseDetail points to new Vector<String>
+			//expenseDetail points to a new Vector<String> for each expense iteration
 			expenseDetail = new Vector<String>();
 
 			//Get current expense item
@@ -787,6 +787,45 @@ public class Logic {
 		}
 		
 		return expenseVector;
+	}
+	
+	void setExpenseInfo(int index, String field, String data){
+		saved = false;
+		switch(field){
+		case "Item Name":
+			event.getExpense().get(index).setItemName(data);
+			break;
+		case "Unit Cost":
+			event.getExpense().get(index).setUnitCost(Double.parseDouble(data));
+			break;
+		case "Quantity":
+			event.getExpense().get(index).setQuantity(Integer.parseInt(data));
+			break;
+		case "Total Cost":
+			event.getExpense().get(index).setTotalCost(Double.parseDouble(data));
+			break;
+		}
+	}
+	
+	boolean completedExpenseFields(){
+		if(event.getExpense().size() == 0){
+			return false;
+		}
+		for (Expense expenseCheck : event.getExpense()){
+			if(expenseCheck.getItemName().equals("") || expenseCheck.getQuantity() == 0
+					|| expenseCheck.getUnitCost() == 0.0 || expenseCheck.getTotalCost() == 0.0)
+				return false;
+		}
+		return true;
+	}
+	
+	boolean getExpenseFinalised(){
+		return event.getExpenseFinalised();
+	}
+	
+	void setExpenseFinalised(boolean value){
+		saved = false;
+		event.setExpenseFinalised(value);
 	}
 	
 	Vector<Expense> getExpense(){
