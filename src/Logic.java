@@ -749,6 +749,20 @@ public class Logic {
 		return tableAssigner.generateArrangement(event.getGuestList(), 10);
 	}
 	
+	void saveArrangement(Vector<Vector<String>> arrangement, Vector<Integer> seatsPerTable){
+		event.setSeatingArrangement(arrangement);
+		event.setSeatsPerTable(seatsPerTable);
+	}
+	
+	Vector<Vector<String>> getSeatingArrangement(){
+		return event.getSeatingArrangement();
+	}
+	
+	Vector<Integer> getSeatsPerTable(){
+		return event.getSeatsPerTable();
+	}
+	
+
 	/**************************************************************************
 	 * 
 	 * Step 6 Functions here
