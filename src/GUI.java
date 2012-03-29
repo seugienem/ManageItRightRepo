@@ -128,6 +128,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private final ButtonGroup buttonGroup5 = new ButtonGroup();
 	
 	//GUI7 objects
+	private JTextPane textPane7_Summary;
 
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
@@ -248,6 +249,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				case 4:
 					//updateStep4();
 					textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 7:
+					updateStep7();
+					break;
+				default:
 					break;
 				}
 				
@@ -1263,6 +1273,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl7_Summary.setBounds(10, 11, 76, 30);
 		lbl7_Summary.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel7.add(lbl7_Summary);
+		
+		textPane7_Summary = new JTextPane();
+		textPane7_Summary.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textPane7_Summary.setEditable(false);
+		textPane7_Summary.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		textPane7_Summary.setBounds(10, 56, 600, 400);
+        panel7.add(textPane7_Summary);
 	}
 	
 	/***************************************************************************
@@ -2056,7 +2073,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep7(){
-		
+		textPane7_Summary.setText("\n" +
+								  "  Name\t\t" + lg.getEventName() + "\n\n" + 
+								  "  Description\t\t" + lg.getEventDes() + "\n\n" +
+								  "  Where\t\t" + "test\n\n" +
+								  "  From\t\t" + lg.getEventStartDate() + "\n\n" +
+								  "  To\t\t" + lg.getEventEndDate() + "\n\n\n" +
+								  
+								  "  No. of Guests\t" + Integer.toString(lg.getGuestList().size()) + "\n\n" +
+								  "  Total expenses\ttest" );
 	}
 	
 	
