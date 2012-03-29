@@ -2,6 +2,7 @@
 .classpath
 .project
 .settings/org.eclipse.jdt.core.prefs
+bin/*
 bin/ManageItRightRepo/
 bin/Chromosome.class
 bin/DataManager.class
@@ -47,3 +48,6 @@ bin/GUI$23.class
 bin/GUI$25.class
 bin/GUI$21.class
 src/jcalendar-1.4.jar
+bin/Expense.class
+bin/Expense.class
+bin/Expense.class
