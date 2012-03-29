@@ -830,11 +830,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         slider4.addChangeListener(new ChangeListener() {
         	public void stateChanged(ChangeEvent e) {        		
-        		textPane4_Budget.setText(Double.toString(lg.calculateHotelBudget()));
         		lg.setBudgetRatio(slider4.getValue());
-        		lg.setBudgetSpent(lg.calculateHotelBudget());
-        		textPane6_Remaining.setText(String.valueOf("$"+ (lg.getBudget()- lg.calculateHotelBudget())));
-				textPane6_Spent.setText(String.valueOf("$"+lg.calculateHotelBudget()));
+        		double hotelBudgetSpent= lg.calculateHotelBudget();
+        		textPane4_Budget.setText(String.valueOf("$"+ hotelBudgetSpent));       		
+        		lg.setHotelBudgetSpent(hotelBudgetSpent);
+        		lg.setRemainingBudget();
+        		textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));
+				textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent()+lg.getExpenseSpent())));
         	}
         });
         
@@ -1722,8 +1724,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Method for creation and initlialisation of table6 (Expenses) in Step 6
 	 */
 	void createTable6(Vector<Vector<String>> data, Vector<String> cols){
-		table6 = new JTable(data, cols);
-		table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table6 = new JTable(data,cols);
+/*		table6 = new JTable(data, cols) {
+			public boolean isCellEditable(int row, int column) {
+        		if (column == 3)
+        			return false;
+        		else 
+        			return true;
+        	}
+		};
+*/		
+		table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);        
 		table6.getTableHeader().setReorderingAllowed(false);
         scrollPane6 = new JScrollPane(table6);
         scrollPane6.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -1744,22 +1755,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table6.getColumnModel().getColumn(1).setPreferredWidth(100);
         table6.getColumnModel().getColumn(2).setPreferredWidth(55);
         table6.getColumnModel().getColumn(3).setPreferredWidth(120);
-        
-        
- /*       DefaultTableModel tableModel = new DefaultTableModel() {
-        	@Override
-        	public boolean isCellEditable(int row, int column) {
-        		if (column == 3)
-        			return false;
-        		else 
-        			return true;
-        	}
-        };
-        
-        table6.setModel(tableModel);
- */       
+
+       
         final DefaultTableModel modelExpense = (DefaultTableModel)table6.getModel() ;
-        
+       
 
         /***********************************************
          * Mouse Listeners for Add and Delete buttons
@@ -1853,7 +1852,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			return;
         		String data = (String)model.getValueAt(row, column);
         		
-        		//1 and 2 refers to the Cost and Quantity columns respectively 
+        		// 1 refers to the Cost column
         		if(column == 1){
         			try{
         				Double value = Double.parseDouble(data);
@@ -1867,7 +1866,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				return;
         			}
         		}
-        		
+        		// 2 refers to the Quantity column
         		if(column == 2){
         			try{
         				Integer value = Integer.parseInt(data);
@@ -1884,6 +1883,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		
         		lg.setExpenseInfo(row, columnName, data);
         		
+/*        		Vector<Vector<String>> expenseVector = lg.getExpenseList();
+    			String total_cost = expenseVector.get(row).get(3);
+    			model.setValueAt(total_cost, row, column);
+*/    			
         		chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
 
         		//if chckBx is checked, it shld be unchecked
@@ -1892,7 +1895,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			lg.setExpenseFinalised(false);
         		}
         		updateStep6();
-        	}
+        	}      	
         });
 	}
 	
@@ -2046,9 +2049,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep6(){
 		textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
-		textPane6_Remaining.setText(String.valueOf(lg.getRemainingBudget()));
-		textPane6_Spent.setText(String.valueOf(lg.getBudgetSpent()));		
-		textPane6_CostPerHead.setText(String.valueOf(lg.getCostPerHead()));
+		textPane6_Remaining.setText(String.valueOf("$"+lg.getRemainingBudget()));
+		textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent()+lg.getExpenseSpent())));		
+		lg.setCostPerHead();
+		textPane6_CostPerHead.setText(String.valueOf("$"+lg.getCostPerHead()));
 	}
 	
 	void updateStep7(){
@@ -2288,9 +2292,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			try{
 				lg.setBudget(Double.parseDouble(textField1_budget.getText()));
 				textPane4_Budget.setText(String.valueOf("$"+lg.calculateHotelBudget()));
+				lg.setHotelBudgetSpent(lg.getBudget()- lg.calculateHotelBudget());
+				lg.setRemainingBudget();
 				textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
-				textPane6_Remaining.setText(String.valueOf("$"+ (lg.getBudget()- lg.calculateHotelBudget())));
-				textPane6_Spent.setText(String.valueOf("$"+lg.calculateHotelBudget()));
+				textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));
+				textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent() + lg.getExpenseSpent())));
 			} catch(NumberFormatException ex){
 				textField1_budget.setText("0");
 				textPane4_Budget.setText("0");
@@ -2368,8 +2374,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	//Method to adjust column width to fit the longest string in the column
-	public static void calcColumnWidths(JTable table)
-	{
+	public static void calcColumnWidths(JTable table) {
 	    JTableHeader header = table.getTableHeader();
 
 	    TableCellRenderer defaultHeaderRenderer = null;
@@ -2429,5 +2434,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	    }
 
 	}
+
 	
 }
