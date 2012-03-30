@@ -40,6 +40,10 @@ public class TableAssigner {
 		this.rnd = new Random();
 	}
 	
+	public Vector<Integer> getSeatsPerTable(){
+		return seatsPerTable;
+	}
+	
 	public boolean getRandom(){
 		return random;
 	}
@@ -142,7 +146,8 @@ public class TableAssigner {
 			int currTableSize = seatsPerTable.get(i);
 			
 			for(int j = 0; j < currTableSize; j++){
-				seatingList.get(j).add(guests.get(bestChromosome.getChromosome().get(index+j)).getName());
+				int currGuestIndex = bestChromosome.getChromosome().get(index+j);
+				seatingList.get(j).add(guests.get(currGuestIndex).getName());
 			}
 			index += currTableSize;
 		}

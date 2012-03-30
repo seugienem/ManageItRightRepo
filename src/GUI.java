@@ -1081,15 +1081,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	class GenerateArrangementTask extends SwingWorker<Vector<Vector<String>>, Void>{
 		int tableArrangerSetting;
 		int counter;
+		TableAssigner tableAssigner;
 		
 		public GenerateArrangementTask(int setting){
 			this.tableArrangerSetting = setting;
+			tableAssigner = new TableAssigner();
 		}
 		
 		@Override
 		protected Vector<Vector<String>> doInBackground(){	
 			setProgress(0);
-			TableAssigner tableAssigner = new TableAssigner();
 			
 			tableAssigner.addEventListener(new ProgressListener(){
 				@Override
@@ -1140,6 +1141,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				
 				panel5.remove(scrollPane5);
 				createTable5(arrangement, tableCols);
+				
+				Vector<Integer> seatsPerTable = tableAssigner.getSeatsPerTable();
+				
+				lg.saveArrangement(arrangement, seatsPerTable);
 				
 			} catch(CancellationException ex){
 				
@@ -1669,13 +1674,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table5.setAutoCreateRowSorter(false);
       
       //Calls the method to adjust column width to fit the longest string in the column
-      		calcColumnWidths(table5);
-      		table5.getModel().addTableModelListener(new TableModelListener() {			
-      			    public void tableChanged(TableModelEvent e) {
-      			    	calcColumnWidths(table5);
-      			    }			
-      		});
-        
+  		calcColumnWidths(table5);
+  		table5.getModel().addTableModelListener(new TableModelListener() {			
+  			    public void tableChanged(TableModelEvent e) {
+  			    	calcColumnWidths(table5);
+  			    }			
+  		});
+    
 /*      	DefaultTableModel modelTableAssigner = (DefaultTableModel)table5.getModel();
       	table5.setDragEnabled(true);
         table5.setDropMode(DropMode.USE_SELECTION);
@@ -2066,6 +2071,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep5(){
+		panel5.remove(scrollPane5);
+		Vector<Vector<String>> arrangement = lg.getSeatingArrangement();
+		tableCols = new Vector<String>();
+		for(int i = 1; i <= arrangement.get(0).size(); i++){
+			tableCols.add("Table " + i);
+		}
+		
+		createTable5(arrangement, tableCols);
+		
 		
 	}
 	
