@@ -608,6 +608,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel1.add(lblMeal);
         
         rdbtn1_Lunch = new JRadioButton("Lunch");
+        rdbtn1_Lunch.setEnabled(false);
         rdbtn1_Lunch.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		lg.setMealType(0);
@@ -618,6 +619,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel1.add(rdbtn1_Lunch);
         
         rdbtn1_Dinner = new JRadioButton("Dinner");
+        rdbtn1_Dinner.setEnabled(false);
         rdbtn1_Dinner.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		lg.setMealType(1);
@@ -2148,6 +2150,29 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			else if(obj == spinner1_EndTimeM){
 				lg.setEndTimeM((int)spinner1_EndTimeM.getValue());
 				//System.out.println(lg.getEndTimeM());
+			}
+			
+			// checks if the event time frame falls within Lunch or Dinner timings.
+			// Lunch: 1100 - 1459 hrs
+			// Dinner:  1900 - 2259 hrs
+			if((lg.getStartTimeH() <= 14) && (11 <= lg.getEndTimeH()))
+				rdbtn1_Lunch.setEnabled(true);
+			else {
+				rdbtn1_Lunch.setEnabled(false);
+				if (lg.getMealType() == 0) {
+					buttonGroup1.clearSelection();
+					lg.setMealType(-1);
+				}
+			}
+			
+			if((lg.getStartTimeH() <= 22) && (19 <= lg.getEndTimeH()))
+				rdbtn1_Dinner.setEnabled(true);
+			else {
+				rdbtn1_Dinner.setSelected(false);
+				if (lg.getMealType() == 1) {
+					buttonGroup1.clearSelection();
+					lg.setMealType(-1);
+				}
 			}
 		}
 	}
