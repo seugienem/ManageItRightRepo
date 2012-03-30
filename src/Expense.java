@@ -48,4 +48,8 @@ public class Expense implements Serializable {
 		this.totalCost = this.getQuantity() * this.getUnitCost();
 	}
 	
+	public void setTotalCost(double totalCost){
+		this.totalCost = totalCost;
+	}
+	
 }

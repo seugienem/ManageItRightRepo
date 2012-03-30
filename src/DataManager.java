@@ -14,12 +14,14 @@ public class DataManager{
 	ProgrammeDataManager programmeDataManager;
 	HotelDataManager hotelDataManager;
 	GuestDataManager guestDataManager;
+	ExpenseDataManager expenseDataManager;
 	
 	public DataManager(){
 		eventDataManager = new EventDataManager();
 		programmeDataManager = new ProgrammeDataManager();
 		hotelDataManager = new HotelDataManager();
 		guestDataManager = new GuestDataManager();
+		expenseDataManager = new ExpenseDataManager();
 	}
 	
 	
@@ -77,6 +79,20 @@ public class DataManager{
 		} catch(DataFormatException dataEx){
 			dataEx.printStackTrace();
 			return new Vector<Programme>();
+		}
+	}
+	
+	public void exportExpense(File out, Vector<Expense> expenseOut){
+		expenseDataManager.saveExpense(out, expenseOut);
+	}
+	
+	public Vector<Expense> importExpense(File in){
+		try{
+			Vector<Expense> expenseIn = expenseDataManager.loadExpense(in);
+			return expenseIn;
+		} catch(DataFormatException dataEx){
+			dataEx.printStackTrace();
+			return new Vector<Expense>();
 		}
 	}
 }
