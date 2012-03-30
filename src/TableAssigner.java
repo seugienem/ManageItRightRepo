@@ -32,7 +32,7 @@ public class TableAssigner {
 		this.fitnessSumOfNewPopulation = 0;
 		*/
 		
-		this.minTableSize = 7;
+		this.minTableSize = 9;
 		this.populationSize = 60;
 		this.numberOfGenerations = 1000;
 		this.random = false;
@@ -95,13 +95,13 @@ public class TableAssigner {
 	}
 	
 	//overall method called
-	public Vector<Vector<String>> generateArrangement(Vector<Guest> guestList, int tableSize){
+	public Vector<Integer> generateArrangement(Vector<Guest> guestList, int tableSize){
 		Chromosome bestChromosome = null;
 		this.guests = guestList;
 		this.tableSize = tableSize;
 		this.seatsPerTable = new Vector<Integer>();
 		
-
+		Collections.sort(guests);
 		if(random){
 			findOptimalSeatsPerTable();
 			
@@ -134,8 +134,14 @@ public class TableAssigner {
 				
 			bestChromosome = currPopulation.get(eliteIndex);
 			System.out.println(bestChromosome.getFitnessValue());
+			
+
 		}
 		
+		
+		fireEvent(new ProgressEvent(this, 100));
+		
+		/*
 		Vector<Vector<String>> seatingList = new Vector<Vector<String>>();		
 		//this returns Tables in columns 
 		for(int i = 0; i < tableSize; i++){
@@ -151,8 +157,7 @@ public class TableAssigner {
 			}
 			index += currTableSize;
 		}
-		
-		fireEvent(new ProgressEvent(this, 100));
+		*/
 		/*
 		 *this return Table in rows instead of columns
 		int index = 0;
@@ -167,7 +172,7 @@ public class TableAssigner {
 			index += currTableSize;
 		}
 		*/	
-		return seatingList;
+		return bestChromosome.getChromosome();
 	}
 	
 	private void findOptimalSeatsPerTable(){
@@ -274,6 +279,7 @@ public class TableAssigner {
 	private Chromosome cross(Chromosome parent1, Chromosome parent2){
 		//copy from chrom1 elements before singlePointCross
 		//scan chrom2, if element not in, copy over
+		singlePointCross = rnd.nextInt(parent1.getChromosome().size());
 		
 		Chromosome childChromosome = new Chromosome(new Vector<Integer>());
 		double hashCapacity = parent1.getChromosome().size() * 1.33;
@@ -395,22 +401,23 @@ public class TableAssigner {
 			for(Integer currFrequency : frequencies){
 				switch(currFrequency){
 				case 1:
-					subtract += 20;
+					subtract += 25;
 					break;
 				case 2:
+					subtract += 5;
 					break;
 				case 3:
 					break;
 				case 4:
 				case 5:
-					fitness += currFrequency*2;
+					fitness += currFrequency*3;
 					break;
 				case 6:
 				case 7:
 				case 8:
 				case 9:
 				case 10:
-					fitness += 20;
+					fitness += 35;
 					break;
 				}
 			}

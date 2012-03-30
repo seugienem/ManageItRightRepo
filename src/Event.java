@@ -22,7 +22,7 @@ public class Event implements Serializable{
 	private boolean programmeScheduleFinalised;
 	private boolean[] hotelCheckBox;
 	private Vector<Integer> seatsPerTable; 	//TODO
-	private Vector<Vector<String>> seatingArrangement; //TODO
+	private Vector<Integer> seatingArrangementIndex;
 	private Vector<String> dateList;
 	private Vector<Expense> expenseList;
 	private boolean expenseFinalised;
@@ -50,7 +50,6 @@ public class Event implements Serializable{
 		programmeScheduleFinalised = false;
 		hotelCheckBox = new boolean[3];	
 		seatsPerTable = new Vector<Integer>();
-		seatingArrangement = new Vector<Vector<String>>();
 		dateList = new Vector<String>();
 		expenseList = new Vector<Expense>();
 		hotelBudgetSpent = 0.0;
@@ -75,6 +74,13 @@ public class Event implements Serializable{
 		this.eventDescription = eventDescription;
 	}
 */
+	public Vector<Integer> getSeatingArrangementIndex(){
+		return seatingArrangementIndex;
+	}
+	
+	public void setSeatingArrangementIndex(Vector<Integer> seatingArrangementIndex){
+		this.seatingArrangementIndex = seatingArrangementIndex;
+	}
 	
 	public Vector<Integer> getSeatsPerTable(){
 		return seatsPerTable;
@@ -82,14 +88,6 @@ public class Event implements Serializable{
 	
 	public void setSeatsPerTable(Vector<Integer> seatsPerTable){
 		this.seatsPerTable = seatsPerTable;
-	}
-	
-	public Vector<Vector<String>> getSeatingArrangement(){
-		return seatingArrangement;
-	}
-	
-	public void setSeatingArrangement(Vector<Vector<String>> seatingArrangement){
-		this.seatingArrangement = seatingArrangement;
 	}
 	
 	public EventType getEventType(){
