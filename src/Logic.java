@@ -697,6 +697,23 @@ public class Logic {
 		return hotelDetails;
 	}
 	
+	String getHotelName(int index) {
+		String hotelName = "";
+		if (index > -1) {
+			Hotel item = event.getSuggestedHotels().get(index);				
+			hotelName = item.getName() + " (" + item.getStars() + "-star)\n";						
+		}
+		return hotelName;
+	}
+	 
+	double getSelectedHotelPricePerTable(int index) {
+		double PricePerTable = 0;
+		
+		return PricePerTable;
+	}
+	
+	
+	
 	int getSelectedHotelIdx() {
 		//System.out.println(event.getSelectedHotelIdx());
 		return event.getSelectedHotelIdx();
