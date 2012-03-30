@@ -401,10 +401,10 @@ public class TableAssigner {
 			for(Integer currFrequency : frequencies){
 				switch(currFrequency){
 				case 1:
-					subtract += 25;
+					subtract += 35;
 					break;
 				case 2:
-					subtract += 5;
+					subtract += 15;
 					break;
 				case 3:
 					break;
@@ -421,6 +421,9 @@ public class TableAssigner {
 					break;
 				}
 			}
+			
+			if(frequencies.size() == 1)
+				fitness += 5;
 			
 			chromosomeIndex += seats;
 		}

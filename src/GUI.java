@@ -243,6 +243,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					//updateStep1();
 					break;
 				case 2:
+					updateStep2();
 					break;
 				case 3:
 					break;
@@ -251,6 +252,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
 					break;
 				case 5:
+					updateStep5();
 					break;
 				case 6:
 					break;
@@ -2089,8 +2091,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		}
 		
 		createTable5(arrangement, tableCols);
-		
-		
 	}
 	
 	void updateStep6(){
