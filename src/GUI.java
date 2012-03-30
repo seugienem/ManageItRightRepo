@@ -243,6 +243,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					//updateStep1();
 					break;
 				case 2:
+					updateStep2();
 					break;
 				case 3:
 					break;
@@ -251,6 +252,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
 					break;
 				case 5:
+					updateStep5();
 					break;
 				case 6:
 					break;
@@ -1120,7 +1122,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				break;
 			}
 			
-			Vector<Vector<String>> arrangement = tableAssigner.generateArrangement(lg.getGuestList(), 10);
+			Vector<Integer> arrangementIndex = tableAssigner.generateArrangement(lg.getGuestList(), 10);
+			Vector<Integer> seatsPerTable = tableAssigner.getSeatsPerTable();
+			
+			lg.setArrangement(arrangementIndex, seatsPerTable);
+			Vector<Vector<String>> arrangement = lg.getArrangement();
+			
 			setProgress(100);
 			return arrangement;
 		}
@@ -1144,7 +1151,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				
 				Vector<Integer> seatsPerTable = tableAssigner.getSeatsPerTable();
 				
-				lg.saveArrangement(arrangement, seatsPerTable);
+				//TODO
 				
 			} catch(CancellationException ex){
 				
@@ -2099,15 +2106,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep5(){
 		panel5.remove(scrollPane5);
-		Vector<Vector<String>> arrangement = lg.getSeatingArrangement();
+		Vector<Vector<String>> arrangement = lg.getArrangement();
 		tableCols = new Vector<String>();
 		for(int i = 1; i <= arrangement.get(0).size(); i++){
 			tableCols.add("Table " + i);
 		}
 		
 		createTable5(arrangement, tableCols);
-		
-		
 	}
 	
 	void updateStep6(){

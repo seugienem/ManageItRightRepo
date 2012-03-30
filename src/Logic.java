@@ -10,14 +10,12 @@ public class Logic {
 	private DataManager dm;
 	private boolean saved;
 	private HotelSuggest hotelSuggester;
-	private TableAssigner tableAssigner;
 
 	public Logic(Event event, DataManager dm){ //logic instance has a Event and DataManager parameter
 		this.event = event;
 		this.dm = dm;
 		saved = true;
 		hotelSuggester = new HotelSuggest();
-		tableAssigner = new TableAssigner();
 	}
 
 	
@@ -740,6 +738,7 @@ public class Logic {
 	 * Step 5 Functions here
 	 * 
 	 **************************************************************************/
+	/*
 	//not actually required now. this has been handled in the gui
 	Vector<Vector<String>> generateArrangement(int setting){
 		switch(setting){
@@ -765,18 +764,40 @@ public class Logic {
 		
 		return tableAssigner.generateArrangement(event.getGuestList(), 10);
 	}
-	
-	void saveArrangement(Vector<Vector<String>> arrangement, Vector<Integer> seatsPerTable){
-		event.setSeatingArrangement(arrangement);
-		event.setSeatsPerTable(seatsPerTable);
-	}
-	
-	Vector<Vector<String>> getSeatingArrangement(){
-		return event.getSeatingArrangement();
-	}
+	*/
 	
 	Vector<Integer> getSeatsPerTable(){
 		return event.getSeatsPerTable();
+	}
+	
+	void setArrangement(Vector<Integer> indexes, Vector<Integer> seatsPerTable){
+		event.setSeatingArrangementIndex(indexes);
+		event.setSeatsPerTable(seatsPerTable);
+	}
+	
+	Vector<Vector<String>> getArrangement(){
+		Vector<Vector<String>> seatingList = new Vector<Vector<String>>();
+		
+		Vector<Guest> guests = event.getGuestList();
+		Vector<Integer> arrangementIndex = event.getSeatingArrangementIndex();
+		Vector<Integer> seatsPerTable = event.getSeatsPerTable();
+		
+		//this returns Tables in columns 
+		for(int i = 0; i < 10; i++){
+			seatingList.add(new Vector<String>());
+		}
+		int index = 0;
+		for(int i = 0; i < seatsPerTable.size(); i++){
+			int currTableSize = seatsPerTable.get(i);
+			
+			for(int j = 0; j < currTableSize; j++){
+				int currGuestIndex = arrangementIndex.get(index+j);
+				seatingList.get(j).add("[" + guests.get(currGuestIndex).getGroup() + "]"  + guests.get(currGuestIndex).getName());
+			}
+			index += currTableSize;
+		}
+		
+		return seatingList;
 	}
 	
 
