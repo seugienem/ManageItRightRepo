@@ -1802,7 +1802,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         		lg.addExpense();
-        		modelExpense.addRow(new Vector<String>(4));      		
+        		Vector<String> newRow= new Vector<String>();
+        		newRow.add("");
+        		newRow.add("0.0");
+        		newRow.add("0");
+        		newRow.add("0.0");
+        		modelExpense.addRow(newRow);      		
         		chckbx6_ExpensesFinalised.setEnabled(false);      	
         	}
         });
@@ -1910,10 +1915,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		
         		lg.setExpenseInfo(row, columnName, data);
         		
-/*        		Vector<Vector<String>> expenseVector = lg.getExpenseList();
+        		Vector<Vector<String>> expenseVector = lg.getExpenseList();
     			String total_cost = expenseVector.get(row).get(3);
     			model.setValueAt(total_cost, row, column);
-*/    			
+    			
         		chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
 
         		//if chckBx is checked, it shld be unchecked
