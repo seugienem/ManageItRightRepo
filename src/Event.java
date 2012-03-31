@@ -15,6 +15,7 @@ public class Event implements Serializable{
 	private Vector<Programme> programmeSchedule;
 	private EventType eventType;
 	private MealType mealType;
+	private boolean[] mealRadioButtonsEnabled;
 	private double eventBudget;
 	private int budgetRatio;
 	private String eventDescription;	
@@ -39,6 +40,7 @@ public class Event implements Serializable{
 		endDateAndTime = new MyCalendar();
 		eventType = null;
 		mealType = null;
+		mealRadioButtonsEnabled = new boolean[2];
 		eventBudget = 0.0;
 		eventDescription = "";
 		suggestedHotels = new Vector<Hotel>();
@@ -142,6 +144,14 @@ public class Event implements Serializable{
 	
 	public MealType getMealType() {
 		return mealType;
+	}
+	
+	public void setmealRadioButtons(int index, boolean value) {
+		mealRadioButtonsEnabled[index] = value;
+	}
+	
+	public boolean getmealRadioButtons(int index) {
+		return mealRadioButtonsEnabled[index];
 	}
 
 	public Vector<Guest> getGuestList() {

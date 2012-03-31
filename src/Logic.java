@@ -385,6 +385,14 @@ public class Logic {
 			return -1;
 		return event.getMealType().ordinal();
 	}
+	
+	public void setmealRadioButtons(int index, boolean value) {
+		event.setmealRadioButtons(index, value);
+	}
+	
+	public boolean getmealRadioButtons(int index) {
+		return event.getmealRadioButtons (index);
+	}
 
 	void setEventDes(String des){
 		saved = false;
