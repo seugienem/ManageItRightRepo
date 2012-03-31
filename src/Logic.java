@@ -685,11 +685,12 @@ public class Logic {
 					hotelDetails = hotelDetails + "Lunch ";
 				else
 					hotelDetails = hotelDetails + "Dinner ";
-					
+									
 				if(menuItem.getMenuType() == MenuType.HIGH)
 					hotelDetails = hotelDetails + "highest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
 				else
 					hotelDetails = hotelDetails + "lowest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
+							
 			}
 				
 				return hotelDetails;
@@ -706,10 +707,23 @@ public class Logic {
 		return hotelName;
 	}
 	 
-	double getSelectedHotelPricePerTable(int index) {
+	double getSelectedHotelPrice(int index) {
 		double PricePerTable = 0;
-		
-		return PricePerTable;
+		if (index > -1) {
+			Hotel item = event.getSuggestedHotels().get(index);
+			Vector<Menu> menu = item.getMenuList();
+				
+			for(Menu menuItem : menu){									
+				if(menuItem.getMenuType() == MenuType.HIGH)
+					PricePerTable = menuItem.getPricePerTable();
+				else
+					PricePerTable = menuItem.getPricePerTable();
+								
+			}
+				
+				return PricePerTable * ((getGuestList().size()/10) + 1);
+			}
+		return PricePerTable * ((getGuestList().size()/10) + 1);
 	}
 	
 	

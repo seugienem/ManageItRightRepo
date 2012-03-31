@@ -14,7 +14,7 @@ public class MyCalendar implements Serializable{
 	
 	
 	public MyCalendar(){
-		this.dayOfTheWeek = 0;
+		this.dayOfTheWeek = -1;
 		this.date = 0;
 		this.month = 0;
 		this.year = 0;

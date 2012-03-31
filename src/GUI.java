@@ -847,10 +847,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.setBudgetRatio(slider4.getValue());
         		double hotelBudgetSpent= lg.calculateHotelBudget();
         		textPane4_Budget.setText(String.valueOf("$"+ hotelBudgetSpent));       		
-        		lg.setHotelBudgetSpent(hotelBudgetSpent);
-        		lg.setRemainingBudget();
-        		textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));
-				textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent()+lg.getExpenseSpent())));
+        		updateStep6();
         	}
         });
         
@@ -936,7 +933,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					return;
 				}
 				textPane4_HotelDetails.setText(lg.getHotelInformation(list.getSelectedIndex()));
-				lg.setSelectedHotelIdx(list4.getSelectedIndex());
+				lg.setSelectedHotelIdx(list4.getSelectedIndex()); 
+				lg.setHotelBudgetSpent(lg.getSelectedHotelPrice(lg.getSelectedHotelIdx()));				
+				updateStep6();
 			}
         });
         
@@ -1831,9 +1830,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		lg.addExpense();
         		Vector<String> newRow= new Vector<String>();
         		newRow.add("");
-        		newRow.add("0.0");
         		newRow.add("0");
-        		newRow.add("0.0");
+        		newRow.add("0");
+        		newRow.add("0");
         		modelExpense.addRow(newRow);      		
         		chckbx6_ExpensesFinalised.setEnabled(false);      	
         	}
@@ -1874,9 +1873,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
         		} 
         		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
-        			modelExpense.addRow(new Vector<Object>(4));  
         			lg.addExpense();
-        			chckbx6_ExpensesFinalised.setEnabled(false);
+            		Vector<String> newRow= new Vector<String>();
+            		newRow.add("");
+            		newRow.add("0");
+            		newRow.add("0");
+            		newRow.add("0");
+            		modelExpense.addRow(newRow);      		
+            		chckbx6_ExpensesFinalised.setEnabled(false);    
         		}
 /*        		if (e.getKeyCode()==KeyEvent.VK_DELETE){
         			int[] rowIndices = table6.getSelectedRows();        			
@@ -1944,12 +1948,25 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			}
         		}
         		
+/*        		if ( column == 3)  {
+        			try{        				
+        				Vector<Vector<String>> expenseVector = lg.getExpenseList();
+            			String total_cost = expenseVector.get(row).get(3);
+            			model.setValueAt(total_cost, row, column);
+            			return;
+        			} catch(NumberFormatException ex){
+        				Vector<Vector<String>> expenseVector = lg.getExpenseList();
+            			String total_cost = expenseVector.get(row).get(3);
+            			model.setValueAt(total_cost, row, column);
+        				return;
+        			}
+        		}*/
         		lg.setExpenseInfo(row, columnName, data);
         		
-/*        		Vector<Vector<String>> expenseVector = lg.getExpenseList();
+        		Vector<Vector<String>> expenseVector = lg.getExpenseList();
     			String total_cost = expenseVector.get(row).get(3);
     			model.setValueAt(total_cost, row, column);
-*/    			
+    			
         		chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
 
         		//if chckBx is checked, it shld be unchecked
@@ -2119,22 +2136,25 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	void updateStep6(){
 		textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
+		lg.setRemainingBudget();
 		textPane6_Remaining.setText(String.valueOf("$"+lg.getRemainingBudget()));
 		textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent()+lg.getExpenseSpent())));		
-		lg.setCostPerHead();
-		textPane6_CostPerHead.setText(String.valueOf("$"+lg.getCostPerHead()));
+		if (lg.getGuestList().size()!= 0) {
+			lg.setCostPerHead();
+			textPane6_CostPerHead.setText(String.valueOf("$"+lg.getCostPerHead()));
+		}
 	}
 	
 	void updateStep7(){
 		textPane7_Summary.setText("\n" +
 								  "  Name\t\t" + lg.getEventName() + "\n\n" + 
-								  "  Description\t\t" + lg.getEventDes() + "\n\n" +
-								  "  Where\t\t" + "test\n\n" +
+								  "  Description\t" + lg.getEventDes() + "\n\n" +
+								  "  Where\t\t" + lg.getHotelName(lg.getSelectedHotelIdx()) + "\n\n" +
 								  "  From\t\t" + lg.getEventStartDate() + "\n\n" +
 								  "  To\t\t" + lg.getEventEndDate() + "\n\n\n" +
 								  
 								  "  No. of Guests\t" + Integer.toString(lg.getGuestList().size()) + "\n\n" +
-								  "  Total expenses\ttest" );
+								  "  Total expenses\t" + (lg.getExpenseSpent()+lg.getHotelBudgetSpent()) );
 	}
 	
 	
@@ -2392,8 +2412,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		else if(obj == textField1_budget){
 			try{
 				lg.setBudget(Double.parseDouble(textField1_budget.getText()));
-				textPane4_Budget.setText(String.valueOf("$"+lg.calculateHotelBudget()));
-				lg.setHotelBudgetSpent(lg.getBudget()- lg.calculateHotelBudget());
+				textPane4_Budget.setText(String.valueOf("$"+lg.calculateHotelBudget()));				
 				lg.setRemainingBudget();
 				textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
 				textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));

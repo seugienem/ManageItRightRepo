@@ -94,6 +94,9 @@ public class HotelSuggest {
 		DayType daytype = null;
 		
 		switch(day){
+		case -1: 
+			daytype = null;
+			break;	
 		case 0:
 		case 5:
 		case 6:
@@ -114,6 +117,8 @@ public class HotelSuggest {
 		//Get day of week from start date of event
 		DayType eventDayType = getDayType(startDate);
 		
+		if (eventDayType == null)
+			return new Vector<Hotel>();
 		//Read hotelList from DataManager for the first time only
 		if(hotelList == null){
 			String path = System.getProperty("user.dir");
