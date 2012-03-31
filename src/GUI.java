@@ -9,8 +9,11 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragSource;
 import java.awt.event.*;
 
+import javax.activation.ActivationDataFlavor;
+import javax.activation.DataHandler;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -1683,6 +1686,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 */
 	void createTable5(Vector<Vector<String>> data, Vector<String> cols){
 		table5 = new JTable(data, cols);
+		
 		table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table5.setPreferredScrollableViewportSize(new Dimension(600,370));
 		table5.getTableHeader().setReorderingAllowed(false);
@@ -1699,6 +1703,75 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table5.setColumnSelectionAllowed(true);
         table5.setCellSelectionEnabled(true);        
         table5.setAutoCreateRowSorter(false);
+        
+        //for drag and drop
+        table5.setDragEnabled(true);
+        table5.setDropMode(DropMode.USE_SELECTION);
+        table5.setTransferHandler(new TransferHandler(){
+        	private int oldCol;
+        	private int oldRow;
+        	private String oldData;
+        	
+            public int getSourceActions(JComponent c) {
+                  return DnDConstants.ACTION_COPY_OR_MOVE;
+              }
+   
+              public Transferable createTransferable(JComponent comp)
+              {
+                  JTable table=(JTable)comp;
+                  oldRow=table.getSelectedRow();
+                  oldCol=table.getSelectedColumn();
+   
+                  String value = (String)table.getModel().getValueAt(oldRow,oldCol);
+                  StringSelection transferable = new StringSelection(value);
+                  //table.getModel().setValueAt(null,oldRow,oldCol);
+                  return transferable;
+              }
+              
+              public boolean canImport(TransferHandler.TransferSupport info){
+                  if (!info.isDataFlavorSupported(DataFlavor.stringFlavor)){
+                      return false;
+                  }
+   
+                  return true;
+              }
+   
+              public boolean importData(TransferSupport support) {
+   
+                  if (!support.isDrop()) {
+                      return false;
+                  }
+   
+                  if (!canImport(support)) {
+                      return false;
+                  }
+   
+                  JTable table=(JTable)support.getComponent();
+                  DefaultTableModel tableModel=(DefaultTableModel)table.getModel();
+                  
+                  JTable.DropLocation dl = (JTable.DropLocation)support.getDropLocation();
+   
+                  int row = dl.getRow();
+                  int col=dl.getColumn();
+                  oldData = (String)tableModel.getValueAt(row, col);
+                  
+                  String data;
+                  try {
+                      data = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                  } catch (UnsupportedFlavorException e) {
+                      return false;
+                  } catch (IOException e) {
+                      return false;
+                  }
+   
+                  tableModel.setValueAt(data, row, col);
+                  tableModel.setValueAt(oldData, oldRow, oldCol);
+   
+                  lg.updateArrangementIndex(oldRow, oldCol, row, col);
+                  return true;
+              }
+   
+          });
       
       //Calls the method to adjust column width to fit the longest string in the column
   		calcColumnWidths(table5);
@@ -1773,7 +1846,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
          }); 
 */  
         }
-	
 	/*
 	 * Method for creation and initlialisation of table6 (Expenses) in Step 6
 	 */

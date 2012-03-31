@@ -775,6 +775,28 @@ public class Logic {
 		event.setSeatsPerTable(seatsPerTable);
 	}
 	
+	void updateArrangementIndex(int oldRow, int oldCol, int newRow, int newCol){
+		Vector<Integer> seatsPerTable = event.getSeatsPerTable();
+		Vector<Integer> arrangementIndex = event.getSeatingArrangementIndex();
+		
+		int indexOfOld = 0;
+		for(int i = 0; i < oldCol; i++){
+			indexOfOld += seatsPerTable.get(i);
+		}
+		indexOfOld += oldRow;
+		
+		int indexOfNew = 0;
+		for(int i = 0; i < newCol; i++){
+			indexOfNew += seatsPerTable.get(i);
+		}
+		indexOfNew += newRow;
+		
+		//swap
+		int temp = arrangementIndex.get(indexOfOld);
+		arrangementIndex.set(indexOfOld, arrangementIndex.get(indexOfNew));
+		arrangementIndex.set(indexOfNew, temp);
+	}
+	
 	Vector<Vector<String>> getArrangement(){
 		Vector<Vector<String>> seatingList = new Vector<Vector<String>>();
 		
