@@ -404,7 +404,7 @@ public class TableAssigner {
 					subtract += 35;
 					break;
 				case 2:
-					subtract += 15;
+					subtract += 20;
 					break;
 				case 3:
 					break;
@@ -422,8 +422,8 @@ public class TableAssigner {
 				}
 			}
 			
-			if(frequencies.size() == 1)
-				fitness += 5;
+			if(frequencies.size() <= 2)
+				fitness += 10;
 			
 			chromosomeIndex += seats;
 		}
