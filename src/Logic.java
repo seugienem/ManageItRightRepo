@@ -698,16 +698,25 @@ public class Logic {
 					hotelDetails = hotelDetails + "Lunch ";
 				else
 					hotelDetails = hotelDetails + "Dinner ";
-									
-				if(menuItem.getMenuType() == MenuType.HIGH)
-					hotelDetails = hotelDetails + "highest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
-				else
-					hotelDetails = hotelDetails + "lowest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
-							
+
+				if(menuItem.getMenuType() == MenuType.HIGH){
+					if ( ( ( (menuItem.getPricePerTable()*100) %100) %10) == 0){
+						hotelDetails = hotelDetails + "highest price: $" + menuItem.getPricePerTable() + "0" + " per table of 10.\n";
+					}
+					else
+						hotelDetails = hotelDetails + "highest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
+				}
+				else{
+					if ( ( ( (menuItem.getPricePerTable()*100) %100) %10) == 0){
+						hotelDetails = hotelDetails + "lowest price: $" + menuItem.getPricePerTable() + "0" + " per table of 10.\n";
+					}
+					else
+						hotelDetails = hotelDetails + "lowest price: $" + menuItem.getPricePerTable() + " per table of 10.\n";
+				}
 			}
-				
-				return hotelDetails;
-			}
+
+			return hotelDetails;
+		}
 		return hotelDetails;
 	}
 	
