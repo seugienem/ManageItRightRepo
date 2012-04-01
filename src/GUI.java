@@ -1995,12 +1995,22 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn6_DeleteExpense.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {       		
-        		int[] rowIndices = table6.getSelectedRows();        			
+        		int[] rowIndices = table6.getSelectedRows();     			
       			
-    			for (int i = 0; i < rowIndices.length; i++) {       			
+      			for (int i = 0; i < rowIndices.length; i++) {       			    				
+    				double delete_cost = Double.parseDouble(lg.getExpenseList().get(rowIndices[0]).get(3));     				
+    				lg.setExpenseSpent(lg.getExpenseSpent() - delete_cost);
+    				double totalBudget = lg.getBudget();   			
+    				double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
+            		double remainingBudget = totalBudget - totalExpenses;
+            		
+            		textPane6_Spent.setText(String.valueOf("$"+ totalExpenses));		
+            		textPane6_Remaining.setText(String.valueOf("$"+remainingBudget));
+            		
     				modelExpense.removeRow(rowIndices[0]);
     				lg.removeExpense(rowIndices[0]);
     			}
+    			
     			if(chckbx6_ExpensesFinalised.isSelected())
     				chckbx6_ExpensesFinalised.setSelected(false);
     				chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
@@ -2082,6 +2092,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				Double correspondingTotalCost = value * correspondingQuantity;
         				String totalCostStr = correspondingTotalCost.toString();
         				
+        				double totalBudget = lg.getBudget();
+                		double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
+        				if ((totalExpenses + correspondingTotalCost) > totalBudget) {
+        					JOptionPane.showMessageDialog(new JFrame(), "Adding this expense will exceed the Event budget"
+            						, "Exceed Budget Error", JOptionPane.WARNING_MESSAGE );
+            				dateChooser1_StartDate.setDate(dateChooser1_EndDate.getDate());
+        				}
+                		
                 		lg.setExpenseInfo(row, columnName, data);
         				lg.setExpenseInfo(row, "Total Cost", totalCostStr);
         				model.setValueAt(totalCostStr, row, 3);
@@ -2099,11 +2117,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
             				model.setValueAt("0", row, column);
         				}
         				try{
-        					Double correspondingCost = Double.parseDouble(lg.getExpenseList().get(row).get(1));
-        					
+        					Double correspondingCost = Double.parseDouble(lg.getExpenseList().get(row).get(1));       					
             				Double correspondingTotalCost = value * correspondingCost;
             				String totalCostStr = correspondingTotalCost.toString();
-
+            				
+            				double totalBudget = lg.getBudget();
+                    		double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
+            				if ((totalExpenses + correspondingTotalCost) > totalBudget) {
+            					JOptionPane.showMessageDialog(new JFrame(), "Adding this expense will exceed the Event budget"
+                						, "Exceed Budget Error", JOptionPane.WARNING_MESSAGE );
+                				dateChooser1_StartDate.setDate(dateChooser1_EndDate.getDate());
+            				}
+            				
                     		lg.setExpenseInfo(row, columnName, data);
             				lg.setExpenseInfo(row, "Total Cost", totalCostStr);
             				model.setValueAt(totalCostStr, row, 3);
@@ -2124,15 +2149,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				model.setValueAt(currValue, row, 3);
         			break;
         		}
+  
+        		updateStep6();
         		
-        		double totalBudget = lg.getBudget();
+/*        		double totalBudget = lg.getBudget();
         		double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
         		double remainingBudget = totalBudget - totalExpenses;
         		
         		textPane6_TotalBudget.setText(String.valueOf("$"+totalBudget));
         		textPane6_Spent.setText(String.valueOf("$"+ totalExpenses));		
         		textPane6_Remaining.setText(String.valueOf("$"+remainingBudget));
-        	
+*/        	
         		chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
 
         		//if chckBx is checked, it shld be unchecked

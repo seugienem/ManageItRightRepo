@@ -970,11 +970,11 @@ public class Logic {
 	double getExpenseSpent() {
 		return event.getExpenseSpent();
 	}
-	/*
+	
 	void setExpenseSpent(double expenseSpent) {
 		event.setExpenseSpent(expenseSpent);
 	}
-	*/
+	
 	/*
 	double getRemainingBudget() {
 		return event.getRemainingBudget();
