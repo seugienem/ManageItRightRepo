@@ -158,6 +158,53 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         fileChooser = new JFileChooser(".");
         exportImportButtonsListener = new ExportImportButtonsListener();
+        
+        // when closing the program, prompt user to save if there are unsaved changes.
+        addWindowListener(new WindowAdapter() {
+		    public void windowClosing(WindowEvent winEvt) {
+		    	if(!lg.getSavedStatus()){
+        			int choice = JOptionPane.showConfirmDialog(new JFrame(), "There are unsaved changes. Do you want to save the current event?");
+        			switch(choice){
+        			case 0: // yes: save event & close program.
+        				if(currEventFileDirectory == null){
+		    				fileChooser = new JFileChooser(".");
+		    				fileChooser.setFileFilter(new mirFilter());
+		    				
+		    				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
+		    				
+		    				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
+		    					File file = fileChooser.getSelectedFile();
+		        				if(file == null)
+		        					return;
+		        				lg.saveEvent(file);
+		    				}
+        				}
+        				else
+        					lg.saveEvent(currEventFileDirectory);
+        				
+        				if(lg.getSavedStatus()){
+        					setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        					dispose();
+        				}
+        				break;
+        				
+        			case 1: // no: close program.
+        				setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        				dispose();
+        				break;
+        				
+        			case 2: // cancel: do not close program.
+        				break;
+        			}
+        		}
+		    	
+		    	else {
+		    		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    				dispose();
+		    	}
+		    }
+		});
+        
         /*
          * Drawing of individual tabs
          */

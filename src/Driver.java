@@ -1,7 +1,7 @@
 import java.awt.Dimension;
 import java.io.IOException;
-
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 class Driver {
 	public static void main(String[] args) {
@@ -14,7 +14,7 @@ class Driver {
         		GUI tp;
 				try {
 					tp = new GUI(lg);
-					tp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					tp.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		            tp.setSize(800, 600);
 	                tp.setMinimumSize(new Dimension(800, 600));
 	                //tp.setMaximumSize(new Dimension(800, 600));
