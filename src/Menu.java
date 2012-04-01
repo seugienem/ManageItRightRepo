@@ -5,7 +5,7 @@ public class Menu implements Serializable{
 	private DayType dayType;
 	private MealType mealType;
 	private MenuType menuType;
-	private double pricePerTable; //NEW
+	private double pricePerTable; 
 	
 	//Menu constructor
 	public Menu (DayType dayType, MealType mealType, MenuType menuType, double pricePerTable){
