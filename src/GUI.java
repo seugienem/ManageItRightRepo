@@ -941,7 +941,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				}
 				textPane4_HotelDetails.setText(lg.getHotelInformation(list.getSelectedIndex()));
 				lg.setSelectedHotelIdx(list4.getSelectedIndex()); 
-				lg.setHotelBudgetSpent(lg.getSelectedHotelPrice(lg.getSelectedHotelIdx()));				
+				//lg.setHotelBudgetSpent(lg.getSelectedHotelPrice(lg.getSelectedHotelIdx()));				
 				updateStep6();
 			}
         });
@@ -1862,7 +1862,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			return true;
         	}
 		};
-*/		
+*/
 		table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);        
 		table6.getTableHeader().setReorderingAllowed(false);
         scrollPane6 = new JScrollPane(table6);
@@ -1995,54 +1995,74 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			return;
         		String data = (String)model.getValueAt(row, column);
         		
-        		// 1 refers to the Cost column
-        		if(column == 1){
+        		switch(column){
+        		case 0:			//refers to column Item name
+        			lg.setExpenseInfo(row, columnName, data);
+        			break;
+        		case 1:			//refers to column Unit Price
         			try{
         				Double value = Double.parseDouble(data);
-        				if (value <= 0.0){
+        				if (value < 0.0){
         					data = "0.0";
-            				model.setValueAt("0", row, column);
+            				model.setValueAt("0	", row, column);
         				}
+        				
+        				//by right this parseInt should have no bad things happening 
+        				Integer correspondingQuantity = Integer.parseInt(lg.getExpenseList().get(row).get(2));
+        				Double correspondingTotalCost = value * correspondingQuantity;
+        				String totalCostStr = correspondingTotalCost.toString();
+        				
+                		lg.setExpenseInfo(row, columnName, data);
+        				lg.setExpenseInfo(row, "Total Cost", totalCostStr);
+        				model.setValueAt(totalCostStr, row, 3);
         			} catch(NumberFormatException ex){
         				data = "0.0";
         				model.setValueAt("0", row, column);
         				return;
         			}
-        		}
-        		// 2 refers to the Quantity column
-        		if(column == 2){
+        			break;
+        		case 2:		//refers to column Quantity
         			try{
         				Integer value = Integer.parseInt(data);
-        				if (value <= 0){
+        				if (value < 0){
         					data = "0";
             				model.setValueAt("0", row, column);
+        				}
+        				try{
+        					Double correspondingCost = Double.parseDouble(lg.getExpenseList().get(row).get(1));
+        					
+            				Double correspondingTotalCost = value * correspondingCost;
+            				String totalCostStr = correspondingTotalCost.toString();
+
+                    		lg.setExpenseInfo(row, columnName, data);
+            				lg.setExpenseInfo(row, "Total Cost", totalCostStr);
+            				model.setValueAt(totalCostStr, row, 3);
+        				} catch(NumberFormatException ex){
+        					ex.printStackTrace();
         				}
         			} catch(NumberFormatException ex){
         				data = "0";
         				model.setValueAt("0", row, column);
         				return;
         			}
+        			break;
+        		case 3:		//refers to column Total Cost
+    				String currValue = lg.getExpenseList().get(row).get(3);
+        			
+        			if(currValue.equals(data));
+        			else
+        				model.setValueAt(currValue, row, 3);
+        			break;
         		}
         		
-/*        		if ( column == 3)  {
-        			try{        				
-        				Vector<Vector<String>> expenseVector = lg.getExpenseList();
-            			String total_cost = expenseVector.get(row).get(3);
-            			model.setValueAt(total_cost, row, column);
-            			return;
-        			} catch(NumberFormatException ex){
-        				Vector<Vector<String>> expenseVector = lg.getExpenseList();
-            			String total_cost = expenseVector.get(row).get(3);
-            			model.setValueAt(total_cost, row, column);
-        				return;
-        			}
-        		}*/
-        		lg.setExpenseInfo(row, columnName, data);
+        		double totalBudget = lg.getBudget();
+        		double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
+        		double remainingBudget = totalBudget - totalExpenses;
         		
-        		Vector<Vector<String>> expenseVector = lg.getExpenseList();
-    			String total_cost = expenseVector.get(row).get(3);
-    			model.setValueAt(total_cost, row, column);
-    			
+        		textPane6_TotalBudget.setText(String.valueOf("$"+totalBudget));
+        		textPane6_Spent.setText(String.valueOf("$"+ totalExpenses));		
+        		textPane6_Remaining.setText(String.valueOf("$"+remainingBudget));
+        	
         		chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
 
         		//if chckBx is checked, it shld be unchecked
@@ -2050,7 +2070,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			chckbx6_ExpensesFinalised.setSelected(false);
         			lg.setExpenseFinalised(false);
         		}
-        		updateStep6();
         	}      	
         });
 	}
@@ -2213,14 +2232,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep6(){
-		textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
-		lg.setRemainingBudget();
-		textPane6_Remaining.setText(String.valueOf("$"+lg.getRemainingBudget()));
-		textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent()+lg.getExpenseSpent())));		
+		double totalBudget = lg.getBudget();
+		double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
+		double remainingBudget = totalBudget - totalExpenses;
+		
+		textPane6_TotalBudget.setText(String.valueOf("$"+totalBudget));
+		textPane6_Spent.setText(String.valueOf("$"+ totalExpenses));		
+		textPane6_Remaining.setText(String.valueOf("$"+remainingBudget));
+
 		if (lg.getGuestList().size()!= 0) {
 			lg.setCostPerHead();
 			textPane6_CostPerHead.setText(String.valueOf("$"+lg.getCostPerHead()));
 		}
+		
+		//TODO plus create table6
 	}
 	
 	void updateStep7(){
@@ -2497,10 +2522,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			try{
 				lg.setBudget(Double.parseDouble(textField1_budget.getText()));
 				textPane4_Budget.setText(String.valueOf("$"+lg.calculateHotelBudget()));				
-				lg.setRemainingBudget();
-				textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
-				textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));
-				textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent() + lg.getExpenseSpent())));
+				//lg.setRemainingBudget();
+				//textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
+				//textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));
+				//textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent() + lg.getExpenseSpent())));
+				updateStep6();
 			} catch(NumberFormatException ex){
 				textField1_budget.setText("0");
 				textPane4_Budget.setText("0");

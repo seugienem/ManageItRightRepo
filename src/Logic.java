@@ -747,6 +747,12 @@ public class Logic {
 		saved = false;
 		//System.out.println("Set index: " + idx);
 		event.setSelectedHotelIdx(idx);
+		
+		//set curr hotel price
+		if(idx == -1)
+			event.setHotelBudgetSpent(0.0);
+		else
+			event.setHotelBudgetSpent(getSelectedHotelPrice(idx));
 	}
 	
 	boolean[] getcheckBox() {
@@ -909,7 +915,13 @@ public class Logic {
 			break;
 		}
 		
-		event.setExpenseSpent(event.getExpenseSpent()+event.getExpense().get(index).getTotalCost());
+		Vector<Expense> expenses = event.getExpense();
+		double totalExpenses = 0.0;
+		
+		for(int i = 0; i < expenses.size(); i++){
+			totalExpenses += expenses.get(i).getTotalCost();
+		}
+		event.setExpenseSpent(totalExpenses);
 	}
 	
 	boolean completedExpenseFields(){
@@ -950,24 +962,30 @@ public class Logic {
 		return event.getHotelBudgetSpent();
 	}
 	
+	/*
 	void setHotelBudgetSpent(double hotelBudget) {		
 		event.setHotelBudgetSpent(hotelBudget);
 	}
-	
+	*/
 	double getExpenseSpent() {
 		return event.getExpenseSpent();
 	}
-	
+	/*
 	void setExpenseSpent(double expenseSpent) {
 		event.setExpenseSpent(expenseSpent);
 	}
+	*/
+	/*
 	double getRemainingBudget() {
 		return event.getRemainingBudget();
 	}
+	*/
 	
+	/*
 	void setRemainingBudget() {
 		event.setRemainingBudget(event.getEventBudget()-event.getHotelBudgetSpent()-event.getExpenseSpent());
 	}
+	*/
 
 	double getCostPerHead() {
 		return event.getCostPerHead();
