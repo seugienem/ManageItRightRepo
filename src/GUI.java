@@ -135,6 +135,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
+		
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		int X = (screen.width / 2) - 400; // Center horizontally.
+		int Y = (screen.height / 2) - 300; // Center vertically.
+		setBounds(X, Y, 800, 600);
     	
         setTitle("Manage It Right! v0.2");
         jtp = new JTabbedPane();
