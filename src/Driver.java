@@ -17,7 +17,7 @@ class Driver {
 					tp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		            tp.setSize(800, 600);
 	                tp.setMinimumSize(new Dimension(800, 600));
-	                tp.setMaximumSize(new Dimension(800, 600));
+	                //tp.setMaximumSize(new Dimension(800, 600));
 	                tp.setVisible(true);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
