@@ -185,12 +185,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				if(lg.getSavedStatus()){
         					setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         					dispose();
+        					System.exit(0);
         				}
         				break;
         				
         			case 1: // no: close program.
         				setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         				dispose();
+        				System.exit(0);
         				break;
         				
         			case 2: // cancel: do not close program.
@@ -201,6 +203,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		    	else {
 		    		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     				dispose();
+    				System.exit(0);
 		    	}
 		    }
 		});
