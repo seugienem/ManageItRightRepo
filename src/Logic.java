@@ -647,7 +647,7 @@ public class Logic {
 		return event.getBudgetRatio();
 	}
 	
-	void hotelSuggest(int stars, int ratio) throws IOException{
+	void hotelSuggest(int stars, int ratio) throws IOException, Exception{
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
 		hotelSuggester.setBudgetRatio(event.getBudgetRatio());
@@ -660,6 +660,8 @@ public class Logic {
 			event.setSelectedHotelIdx(-1);
 		} catch(IOException ioEx){
 			throw ioEx;
+		} catch(Exception ex){
+			throw ex;
 		}
 	}
 	

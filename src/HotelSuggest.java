@@ -113,12 +113,14 @@ public class HotelSuggest {
 		return daytype;
 	}
 
-	public Vector<Hotel> suggest(DataManager dataM) throws IOException{		
+	public Vector<Hotel> suggest(DataManager dataM) throws IOException, Exception{		
 		//Get day of week from start date of event
 		DayType eventDayType = getDayType(startDate);
+		String exceptionErrorMessage = "Please ensure you have:\n";
 		
 		if (eventDayType == null)
-			return new Vector<Hotel>();
+			exceptionErrorMessage = exceptionErrorMessage + "-Start Date\n";
+		
 		//Read hotelList from DataManager for the first time only
 		if(hotelList == null){
 			String path = System.getProperty("user.dir");
@@ -132,9 +134,8 @@ public class HotelSuggest {
 		
 		//Calculate hotel budget
 		double hotelBudget = (eventBudget * budgetRatio/100.0);
-		if(hotelBudget == 0){
-			return new Vector<Hotel>();
-		}
+		if(hotelBudget == 0)
+			exceptionErrorMessage = exceptionErrorMessage + "-Hotel budget\n";
 		
 		//Calculate number of tables required 
 		int numberOfTables;
@@ -143,8 +144,14 @@ public class HotelSuggest {
 		else 
 			numberOfTables = numberOfGuests/10;
 		
-		if(numberOfTables == 0){
-			return new Vector<Hotel>();
+		if(numberOfTables == 0)
+			exceptionErrorMessage = exceptionErrorMessage + "-Guests\n";
+		
+		if(eventMealType == null)
+			exceptionErrorMessage = exceptionErrorMessage + "-Meal Type\n";
+		
+		if(!exceptionErrorMessage.equals("Please ensure you have:\n")){
+			throw new Exception(exceptionErrorMessage);
 		}
 		
 		//Generate suggested hotels
@@ -179,5 +186,4 @@ public class HotelSuggest {
 		
 		return suggestedHotels;
 	}
-	
 }

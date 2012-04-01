@@ -877,7 +877,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		int budgetRatio = slider4.getValue();
         		try{
 	        		if(checkbox3Star == true){
-	        			lg.hotelSuggest(3, budgetRatio);	        				        		
+        				lg.hotelSuggest(3, budgetRatio);
 	        		}
 	        		else {
 	        			checkbox3Star = false;
@@ -903,6 +903,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        		
         		} catch(IOException io){
         			JOptionPane.showMessageDialog(new JFrame(), "Hotel data file could not be found. Please ensure 'hotelData' is found in the Data directory in your program folder.");
+        		} catch(Exception ex){
+        			JOptionPane.showMessageDialog(new JFrame(), ex.getMessage());
         		}
         		//display
         		list4.removeAll();
