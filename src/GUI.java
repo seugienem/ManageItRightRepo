@@ -2345,13 +2345,26 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		//TODO plus create table6
 	}
 	
+	@SuppressWarnings("deprecation")
 	void updateStep7(){
+		String startdate = null;
+		String enddate = null;
+		
+		if ( lg.getEventStartDate() !=null && lg.getEventEndDate() !=null ) {
+		Date startDate = lg.getEventStartDate();
+		startdate = Integer.toString(startDate.getDate()) + "/" +  Integer.toString(startDate.getMonth()+1) 
+				+ "/" + Integer.toString(startDate.getYear()+1900);
+		Date endDate = lg.getEventEndDate();
+		enddate = Integer.toString(endDate.getDate()) + "/" + Integer.toString(endDate.getMonth()+1)
+				+ "/" + Integer.toString(endDate.getYear()+1900);
+		}
+		
 		textPane7_Summary.setText("\n" +
 								  "  Name\t\t" + lg.getEventName() + "\n\n" + 
 								  "  Description\t" + lg.getEventDes() + "\n\n" +
 								  "  Where\t\t" + lg.getHotelName(lg.getSelectedHotelIdx()) + "\n\n" +
-								  "  From\t\t" + lg.getEventStartDate() + "\n\n" +
-								  "  To\t\t" + lg.getEventEndDate() + "\n\n\n" +
+								  "  From\t\t" + startdate + "\n\n" +
+								  "  To\t\t" + enddate + "\n\n\n" +
 								  
 								  "  No. of Guests\t" + Integer.toString(lg.getGuestList().size()) + "\n\n" +
 								  "  Total expenses\t" + (lg.getExpenseSpent()+lg.getHotelBudgetSpent()) );

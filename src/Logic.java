@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.DataFormatException;
 
@@ -233,17 +235,18 @@ public class Logic {
 	}
 	
 	@SuppressWarnings("deprecation")
-	Date getEventStartDate(){
+	Date getEventStartDate() {
 		saved = false;
 		MyCalendar startCal = event.getStartDateAndTime();
 		if(startCal.getDate() == 0 && startCal.getMonth() == 0 && startCal.getYear() == 0){
 			return null;
 		}
 		Date startDate = new Date();
-		
-		startDate.setYear(startCal.getYear());
+	    
+	    startDate.setYear(startCal.getYear());
 		startDate.setMonth(startCal.getMonth());
 		startDate.setDate(startCal.getDate());
+		
 		
 		return startDate;
 	}
