@@ -186,22 +186,27 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
         			switch(choice){
         			case 0:
-        				fileChooser = new JFileChooser(".");
-        				fileChooser.setFileFilter(new mirFilter());
-        				
-        				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
-        				
-        				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
-        					File file = fileChooser.getSelectedFile();
-            				if(file == null)
-            					return;
-            				lg.saveEvent(file);
+        				if(currEventFileDirectory == null){
+		    				fileChooser = new JFileChooser(".");
+		    				fileChooser.setFileFilter(new mirFilter());
+		    				
+		    				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
+		    				
+		    				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
+		    					File file = fileChooser.getSelectedFile();
+		        				if(file == null)
+		        					return;
+		        				lg.saveEvent(file);
+		    				}
         				}
+        				else
+        					lg.saveEvent(currEventFileDirectory);
         				lg.createNewEvent();
         				updateAll();
         				jtp.setSelectedIndex(1);
         				break;
         			case 1:
+        				currEventFileDirectory = null;
         				lg.createNewEvent();
         				updateAll();
         				jtp.setSelectedIndex(1);
@@ -308,22 +313,27 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			int choice = JOptionPane.showConfirmDialog(new JFrame(), "Do you want to save the current event?");
         			switch(choice){
         			case 0:
-        				fileChooser = new JFileChooser(".");
-        				fileChooser.setFileFilter(new mirFilter());
-        				
-        				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
-        				
-        				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
-        					File file = fileChooser.getSelectedFile();
-            				if(file == null)
-            					return;
-            				lg.saveEvent(file);
+        				if(currEventFileDirectory == null){
+		    				fileChooser = new JFileChooser(".");
+		    				fileChooser.setFileFilter(new mirFilter());
+		    				
+		    				int fileChooserChoice = fileChooser.showSaveDialog(new JFrame());
+		    				
+		    				if(fileChooserChoice == JFileChooser.APPROVE_OPTION){
+		    					File file = fileChooser.getSelectedFile();
+		        				if(file == null)
+		        					return;
+		        				lg.saveEvent(file);
+		    				}
         				}
+        				else
+        					lg.saveEvent(currEventFileDirectory);
         				lg.createNewEvent();
         				updateAll();
         				jtp.setSelectedIndex(1);
         				break;
         			case 1:
+        				currEventFileDirectory = null;
         				lg.createNewEvent();
         				updateAll();
         				jtp.setSelectedIndex(1);
