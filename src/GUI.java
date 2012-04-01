@@ -55,13 +55,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JPanel panel1;
 	private JTextField textField1_EventName;
 	private JTextField textField1_budget;
-	private JComboBox<String> comboBox1;
+	private JComboBox<String> comboBox1_EventType;
 	private JDateChooser dateChooser1_StartDate;
 	private JSpinner spinner1_StartTimeH;
 	private JSpinner spinner1_StartTimeM;
 	private JDateChooser dateChooser1_EndDate;
 	private JSpinner spinner1_EndTimeH;
 	private JSpinner spinner1_EndTimeM;
+	private JComboBox<String> comboBox1_MealDates;
 	private JTextArea textArea1_EventDescription;
 	private JRadioButton rdbtn1_Lunch;
 	private JRadioButton rdbtn1_Dinner;
@@ -487,21 +488,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         lbl1_EventType.setBounds(10, 59, 100, 14);
         panel1.add(lbl1_EventType);
                   
-        comboBox1 = new JComboBox<String>();
-        comboBox1.setBounds(120, 56, 195, 20);
-        panel1.add(comboBox1);
-        comboBox1.addItem("Select Event Type...");
-        comboBox1.addItem("Anniversary");
-        comboBox1.addItem("Award Ceremony");
-        comboBox1.addItem("Birthday Party");
-        comboBox1.addItem("Dinner and Dance");
-        comboBox1.addItem("Festive Party");
-        comboBox1.addItem("Seminar");
-        comboBox1.addItem("Social Event");
-        comboBox1.addItem("Talk / Speech");
-        comboBox1.addItem("Wedding");
-        comboBox1.addItem("Workshop");
-        comboBox1.addActionListener(new ComboBox1Listener());
+        comboBox1_EventType = new JComboBox<String>();
+        comboBox1_EventType.setBounds(120, 56, 195, 20);
+        panel1.add(comboBox1_EventType);
+        comboBox1_EventType.addItem("Select Event Type...");
+        comboBox1_EventType.addItem("Anniversary");
+        comboBox1_EventType.addItem("Award Ceremony");
+        comboBox1_EventType.addItem("Birthday Party");
+        comboBox1_EventType.addItem("Dinner and Dance");
+        comboBox1_EventType.addItem("Festive Party");
+        comboBox1_EventType.addItem("Seminar");
+        comboBox1_EventType.addItem("Social Event");
+        comboBox1_EventType.addItem("Talk / Speech");
+        comboBox1_EventType.addItem("Wedding");
+        comboBox1_EventType.addItem("Workshop");
+        comboBox1_EventType.addActionListener(new ComboBox1_EventType_Listener());
         
         JLabel lbl1_EventName = new JLabel("Event Name:");
         lbl1_EventName.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -549,7 +550,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
             			}
         			}
        			
-        		}	
+        		}
+        		
+        		if (!lg.getDateList().isEmpty()) {
+        			comboBox1_MealDates.removeAllItems();
+                	Iterator<String> itr = lg.getDateList().iterator();
+                	while(itr.hasNext()) {
+                		comboBox1_MealDates.addItem(itr.next());
+                	}
+                }
+        		
+        		enableMealRaidoButtons();
         	}
         });
  
@@ -613,6 +624,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				}
         			}
         		}
+        		
+        		if (!lg.getDateList().isEmpty()) {
+        			comboBox1_MealDates.removeAllItems();
+                	Iterator<String> itr = lg.getDateList().iterator();
+                	while(itr.hasNext()) {
+                		comboBox1_MealDates.addItem(itr.next());
+                	}
+                }
+        		
+        		enableMealRaidoButtons();
         	}
         });
         dateChooser1_EndDate.setBounds(120, 182, 117, 20);
@@ -681,34 +702,161 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn1_Next.setBounds(560, 490, 80, 30);
         panel1.add(btn1_Next);
         
-        JLabel lblMeal = new JLabel("Meal:");
-        lblMeal.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        lblMeal.setBounds(10, 224, 46, 14);
-        panel1.add(lblMeal);
+        JLabel lbl1_MealDate = new JLabel("Meal Date:");
+        lbl1_MealDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl1_MealDate.setBounds(10, 224, 70, 14);
+        panel1.add(lbl1_MealDate);
+        
+        comboBox1_MealDates = new JComboBox<String>();
+        comboBox1_MealDates.setBounds(120, 222, 117, 20);
+        panel1.add(comboBox1_MealDates);
+        comboBox1_MealDates.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+            	enableMealRaidoButtons();
+            	lg.setMealDateSelected(comboBox1_MealDates.getSelectedIndex());
+            	System.out.println(lg.getMealDateSelected()); // for testing
+            }
+        });
+        
+        JLabel lbl1_MealType = new JLabel("Meal Type:");
+        lbl1_MealType.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lbl1_MealType.setBounds(264, 224, 68, 14);
+        panel1.add(lbl1_MealType);
         
         rdbtn1_Lunch = new JRadioButton("Lunch");
         rdbtn1_Lunch.setEnabled(false);
-        lg.setmealRadioButtons(0, false);
+        lg.setMealRadioButtons(0, false);
         rdbtn1_Lunch.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		lg.setMealType(0);
         	}
         });
         buttonGroup1.add(rdbtn1_Lunch);
-        rdbtn1_Lunch.setBounds(120, 221, 109, 23);
+        rdbtn1_Lunch.setBounds(342, 221, 55, 23);
         panel1.add(rdbtn1_Lunch);
         
         rdbtn1_Dinner = new JRadioButton("Dinner");
         rdbtn1_Dinner.setEnabled(false);
-        lg.setmealRadioButtons(1, false);
+        lg.setMealRadioButtons(1, false);
         rdbtn1_Dinner.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		lg.setMealType(1);
         	}
         });
         buttonGroup1.add(rdbtn1_Dinner);
-        rdbtn1_Dinner.setBounds(264, 221, 109, 23);
+        rdbtn1_Dinner.setBounds(417, 221, 60, 23);
         panel1.add(rdbtn1_Dinner);
+	}
+	
+	public void enableMealRaidoButtons() {
+		// 0 event days
+		if(lg.getDateList().isEmpty()) {
+			buttonGroup1.clearSelection();
+			lg.setMealType(-1);
+			rdbtn1_Lunch.setEnabled(false);
+			lg.setMealRadioButtons(0, false);
+			rdbtn1_Dinner.setEnabled(false);
+			lg.setMealRadioButtons(1, false);
+		}
+		// 1 day
+		else if(lg.getDateList().size() == 1) {
+			// checks if the event time frame falls within Lunch or Dinner timings.
+			// Lunch: 1100 - 1459 hrs
+			// Dinner:  1900 - 2259 hrs
+			if((lg.getStartTimeH() <= 14) && (11 <= lg.getEndTimeH())) {
+				rdbtn1_Lunch.setEnabled(true);
+				lg.setMealRadioButtons(0, true);
+			}
+			else {
+				rdbtn1_Lunch.setEnabled(false);
+				lg.setMealRadioButtons(0, false);
+				if (lg.getMealType() == 0) {
+					buttonGroup1.clearSelection();
+					lg.setMealType(-1);
+				}
+			}
+
+			if((lg.getStartTimeH() <= 22) && (19 <= lg.getEndTimeH())) {
+				rdbtn1_Dinner.setEnabled(true);
+				lg.setMealRadioButtons(1, true);
+			}
+			else {
+				rdbtn1_Dinner.setEnabled(false);
+				lg.setMealRadioButtons(1, false);
+				if (lg.getMealType() == 1) {
+					buttonGroup1.clearSelection();
+					lg.setMealType(-1);
+				}
+			} // end of checking meal times
+		}
+		// more than 1 day
+		else {
+			// first day selected
+			if(comboBox1_MealDates.getSelectedIndex() == 0) {
+				if(lg.getStartTimeH() <= 14) {
+					rdbtn1_Lunch.setEnabled(true);
+					lg.setMealRadioButtons(0, true);
+				}
+				else {
+					rdbtn1_Lunch.setEnabled(false);
+					lg.setMealRadioButtons(0, false);
+					if (lg.getMealType() == 0) {
+						buttonGroup1.clearSelection();
+						lg.setMealType(-1);
+					}
+				}
+
+				if(lg.getStartTimeH() <= 22) {
+					rdbtn1_Dinner.setEnabled(true);
+					lg.setMealRadioButtons(1, true);
+				}
+				else {
+					rdbtn1_Dinner.setEnabled(false);
+					lg.setMealRadioButtons(1, false);
+					if (lg.getMealType() == 1) {
+						buttonGroup1.clearSelection();
+						lg.setMealType(-1);
+					}
+				}
+			}
+			// last day selected
+			else if(comboBox1_MealDates.getSelectedIndex() == lg.getDateList().size() - 1){
+				if(11 <= lg.getEndTimeH()) {
+					rdbtn1_Lunch.setEnabled(true);
+					lg.setMealRadioButtons(0, true);
+				}
+				else {
+					rdbtn1_Lunch.setEnabled(false);
+					lg.setMealRadioButtons(0, false);
+					if (lg.getMealType() == 0) {
+						buttonGroup1.clearSelection();
+						lg.setMealType(-1);
+					}
+				}
+
+				if(19 <= lg.getEndTimeH()) {
+					rdbtn1_Dinner.setEnabled(true);
+					lg.setMealRadioButtons(1, true);
+				}
+				else {
+					rdbtn1_Dinner.setEnabled(false);
+					lg.setMealRadioButtons(1, false);
+					if (lg.getMealType() == 1) {
+						buttonGroup1.clearSelection();
+						lg.setMealType(-1);
+					}
+				}
+			}
+			// in between 1st and last day selected.
+			else {
+				buttonGroup1.clearSelection();
+				lg.setMealType(-1);
+				rdbtn1_Lunch.setEnabled(true);
+				lg.setMealRadioButtons(0, true);
+				rdbtn1_Dinner.setEnabled(true);
+				lg.setMealRadioButtons(1, true);
+			}
+		}
 	}
 	
 	/*
@@ -1562,7 +1710,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table3.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table3.setAutoCreateRowSorter(true);
         
-        table3.getColumnModel().getColumn(0).setPreferredWidth(80);
+        table3.getColumnModel().getColumn(0).setPreferredWidth(90);
         table3.getColumnModel().getColumn(1).setPreferredWidth(80);
         table3.getColumnModel().getColumn(2).setPreferredWidth(80);
         table3.getColumnModel().getColumn(3).setPreferredWidth(240);
@@ -2256,7 +2404,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep1(){
-		comboBox1.setSelectedIndex(lg.getEventType() + 1);
+		comboBox1_EventType.setSelectedIndex(lg.getEventType() + 1);
 		textField1_EventName.setText(lg.getEventName());
 		spinner1_StartTimeH.setValue(lg.getStartTimeH());
 		spinner1_StartTimeM.setValue(lg.getStartTimeM());
@@ -2274,8 +2422,17 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			rdbtn1_Lunch.setSelected(false);
 			rdbtn1_Dinner.setSelected(true);
 		}
-		rdbtn1_Lunch.setEnabled(lg.getmealRadioButtons(0));
-		rdbtn1_Dinner.setEnabled(lg.getmealRadioButtons(1));
+		
+		if (!lg.getDateList().isEmpty()) {
+			comboBox1_MealDates.removeAllItems();
+        	Iterator<String> itr = lg.getDateList().iterator();
+        	while(itr.hasNext()) {
+        		comboBox1_MealDates.addItem(itr.next());
+        	}
+        	comboBox1_MealDates.setSelectedIndex(lg.getMealDateSelected());
+        }
+		rdbtn1_Lunch.setEnabled(lg.getMealRadioButtons(0));
+		rdbtn1_Dinner.setEnabled(lg.getMealRadioButtons(1));
 		
 	}
 	
@@ -2376,7 +2533,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	 * Listeners Starts Here
 	 * 
 	 *******************************/
-	class ComboBox1Listener implements ActionListener{
+	class ComboBox1_EventType_Listener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
 			@SuppressWarnings("rawtypes")
@@ -2410,31 +2567,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			// checks if the event time frame falls within Lunch or Dinner timings.
 			// Lunch: 1100 - 1459 hrs
 			// Dinner:  1900 - 2259 hrs
-			if((lg.getStartTimeH() <= 14) && (11 <= lg.getEndTimeH())) {
-				rdbtn1_Lunch.setEnabled(true);
-				lg.setmealRadioButtons(0, true);
-			}
-			else {
-				rdbtn1_Lunch.setEnabled(false);
-				lg.setmealRadioButtons(0, false);
-				if (lg.getMealType() == 0) {
-					buttonGroup1.clearSelection();
-					lg.setMealType(-1);
-				}
-			}
-			
-			if((lg.getStartTimeH() <= 22) && (19 <= lg.getEndTimeH())) {
-				rdbtn1_Dinner.setEnabled(true);
-				lg.setmealRadioButtons(1, true);
-			}
-			else {
-				rdbtn1_Dinner.setEnabled(false);
-				lg.setmealRadioButtons(1, false);
-				if (lg.getMealType() == 1) {
-					buttonGroup1.clearSelection();
-					lg.setMealType(-1);
-				}
-			}
+			enableMealRaidoButtons();
 		}
 	}
 	

@@ -377,6 +377,14 @@ public class Logic {
 		return event.getEndDateAndTime().getMin();
 	}
 	
+	public void setMealDateSelected(int idx) {
+		event.setMealDateSelected(idx);
+	}
+	
+	public int getMealDateSelected() {
+		return event.getMealDateSelected();
+	}
+	
 	public void setMealType(int i) {
 		if (i == 0) event.setMealType(MealType.LUNCH);
 		else if (i == 1) event.setMealType(MealType.DINNER);
@@ -389,12 +397,12 @@ public class Logic {
 		return event.getMealType().ordinal();
 	}
 	
-	public void setmealRadioButtons(int index, boolean value) {
-		event.setmealRadioButtons(index, value);
+	public void setMealRadioButtons(int index, boolean value) {
+		event.setMealRadioButtons(index, value);
 	}
 	
-	public boolean getmealRadioButtons(int index) {
-		return event.getmealRadioButtons (index);
+	public boolean getMealRadioButtons(int index) {
+		return event.getMealRadioButtons (index);
 	}
 
 	void setEventDes(String des){
