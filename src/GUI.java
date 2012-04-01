@@ -2643,6 +2643,25 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					break;
 				}
 			}
+			else if(obj == btn6_Export){
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new csvFilter());
+				int choice = fileChooser.showSaveDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
+						return;
+					lg.exportExpense(file);
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
+				}
+			}
 			else if(obj == mntmLoadEvent || obj == btn0_Load){
 				//checks if current event needs to be saved, if so go on to save file
 				if(!lg.getSavedStatus()){
