@@ -2388,7 +2388,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lg.setmealRadioButtons(1, true);
 			}
 			else {
-				rdbtn1_Dinner.setSelected(false);
+				rdbtn1_Dinner.setEnabled(false);
 				lg.setmealRadioButtons(1, false);
 				if (lg.getMealType() == 1) {
 					buttonGroup1.clearSelection();
