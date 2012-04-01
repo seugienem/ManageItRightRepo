@@ -27,7 +27,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	private Logic lg;
 	
+	private ExportImportButtonsListener exportImportButtonsListener;
 	private JFileChooser fileChooser; 
+	private File currEventFileDirectory;
 	private JTabbedPane jtp;
 	
 	//Menu Bar objects
@@ -35,7 +37,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JMenuBar menuBar;
 	private JMenuItem mntmCreateNewEvent;
 	private JMenuItem mntmLoadEvent;
-	private JMenuItem mntmSaveEvent;
+	private JMenuItem mntmSave;
+	private JMenuItem mntmSaveAs;
 	
 	//GUI0 objects
 	private JLabel lbl0_Step1;
@@ -149,6 +152,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
      	}
         
         fileChooser = new JFileChooser(".");
+        exportImportButtonsListener = new ExportImportButtonsListener();
         /*
          * Drawing of individual tabs
          */
@@ -206,17 +210,22 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1);
+        		else jtp.setSelectedIndex(1); 	//TODO if there already is an existing event, we need to clear all the fields
         	}
         });
         
+        
         mntmLoadEvent = new JMenuItem("Load Event");
         mnFile.add(mntmLoadEvent);
-        mntmLoadEvent.addActionListener(new ExportImportButtonsListener());
+        mntmLoadEvent.addActionListener(exportImportButtonsListener);
         
-        mntmSaveEvent = new JMenuItem("Save Event");
-        mnFile.add(mntmSaveEvent);
-        mntmSaveEvent.addActionListener(new ExportImportButtonsListener());
+        mntmSave = new JMenuItem("Save");
+        mnFile.add(mntmSave);
+        mntmSave.addActionListener(exportImportButtonsListener);
+        
+        mntmSaveAs = new JMenuItem("Save As...");
+        mnFile.add(mntmSaveAs);
+        mntmSaveAs.addActionListener(exportImportButtonsListener);
         
         /*
         JSeparator separator = new JSeparator();
@@ -323,14 +332,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1);
+        		else jtp.setSelectedIndex(1);		//TODO if there already is an existing event, we need to clear all the fields
 		 	}
 		 });
 		 
 		 btn0_Load = new JButton("Load");
 		 btn0_Load.setBounds(560, 490, 80, 30);
 		 btn0_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
-		 btn0_Load.addActionListener(new ExportImportButtonsListener());
+		 btn0_Load.addActionListener(exportImportButtonsListener);
 		 
 		 panel0.setLayout(null);
 		 panel0.add(lbl0_Overview);
@@ -709,13 +718,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        btn2_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Export.setBounds(460, 490, 80, 30);
 	        panel2.add(btn2_Export);
-	        btn2_Export.addActionListener(new ExportImportButtonsListener());
+	        btn2_Export.addActionListener(exportImportButtonsListener);
 	        
 	        btn2_Load = new JButton("Load");
 	        btn2_Load.setFont(new Font("Tahoma", Font.BOLD, 12));
 	        btn2_Load.setBounds(11, 490, 80, 30);
 	        panel2.add(btn2_Load);
-	        btn2_Load.addActionListener(new ExportImportButtonsListener());
+	        btn2_Load.addActionListener(exportImportButtonsListener);
 	        
 	        btn2_Next = new JButton("Next");
 	        btn2_Next.addMouseListener(this);
@@ -780,7 +789,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn3_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn3_Export.setBounds(460, 490, 80, 30);
         panel3.add(btn3_Export);
-        btn3_Export.addActionListener(new ExportImportButtonsListener());
+        btn3_Export.addActionListener(exportImportButtonsListener);
         
         
         btn3_Next = new JButton("Next");
@@ -1157,10 +1166,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				panel5.remove(scrollPane5);
 				createTable5(arrangement, tableCols);
 				
-				Vector<Integer> seatsPerTable = tableAssigner.getSeatsPerTable();
-				
-				//TODO
-				
 			} catch(CancellationException ex){
 				
 			} catch (InterruptedException ex){
@@ -1272,7 +1277,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn6_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn6_Export.setBounds(410, 490, 80, 30);
         panel6.add(btn6_Export);
-        btn6_Export.addActionListener(new ExportImportButtonsListener());
+        btn6_Export.addActionListener(exportImportButtonsListener);
 		
 		btn6_ViewSummary = new JButton("View Summary");
 		btn6_ViewSummary.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -2404,6 +2409,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				//checks if current event needs to be saved, if so go on to save file
 				if(!lg.getSavedStatus()){
 					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
+					
 					if(ans == 0){
 						fileChooser = new JFileChooser(".");
 						fileChooser.setFileFilter(new mirFilter());
@@ -2436,9 +2442,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				switch(choice){
 				case JFileChooser.APPROVE_OPTION:
 					File file = fileChooser.getSelectedFile();
+					
 					if(file == null)
 						return;
 					try{
+						currEventFileDirectory = file;
 						lg.loadEvent(file);
 					} catch (Exception ex){
 						JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
@@ -2454,7 +2462,36 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				updateAll();
 				lg.setSavedStatus(true);
 			}
-			else if (obj == mntmSaveEvent){
+			else if(obj == mntmSave){
+				//first check if there's existing save directory
+				//if not use save as
+				//else just save
+				
+				if(currEventFileDirectory == null){
+					fileChooser = new JFileChooser(".");
+					fileChooser.setFileFilter(new mirFilter());
+					int choice = fileChooser.showSaveDialog(frame);
+					
+					switch(choice){
+					case JFileChooser.APPROVE_OPTION:
+						File file = fileChooser.getSelectedFile();
+						if(file == null)
+							return;
+						
+						currEventFileDirectory = file;
+						lg.saveEvent(file);
+						break;
+					case JFileChooser.CANCEL_OPTION:
+						break;
+					case JFileChooser.ERROR_OPTION:
+						System.out.println("fileChooser error");
+						break;
+					}
+				}
+				else
+					lg.saveEvent(currEventFileDirectory);
+			}
+			else if (obj == mntmSaveAs){
 				fileChooser = new JFileChooser(".");
 				fileChooser.setFileFilter(new mirFilter());
 				int choice = fileChooser.showSaveDialog(frame);
@@ -2464,6 +2501,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					File file = fileChooser.getSelectedFile();
 					if(file == null)
 						return;
+					
+					currEventFileDirectory = file;
 					lg.saveEvent(file);
 					break;
 				case JFileChooser.CANCEL_OPTION:
