@@ -875,7 +875,6 @@ public class Logic {
 			}
 			index += currTableSize;
 		}
-		
 		return seatingList;
 	}
 	

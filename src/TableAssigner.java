@@ -119,8 +119,9 @@ public class TableAssigner {
 			this.fitnessSumOfCurrPopulation = 0;
 			this.fitnessSumOfNewPopulation = 0;
 			this.singlePointCross = guests.size()/2;
-
+			
 			findOptimalSeatsPerTable();
+			
 
 			generateInitialPopulation();
 
@@ -133,7 +134,8 @@ public class TableAssigner {
 			}
 				
 			bestChromosome = currPopulation.get(eliteIndex);
-			System.out.println(bestChromosome.getFitnessValue());
+			//System.out.println(bestChromosome.getFitnessValue());
+			//System.out.println(bestChromosome.getChromosome().size());
 			
 
 		}
@@ -200,17 +202,19 @@ public class TableAssigner {
 			int difference = minTableSize - seatsPerTable.lastElement();
 			
 			int numberOfTables = seatsPerTable.size();
-			if(difference < numberOfTables - 1){	//if there aren't enough tables to bring over
-				int perTable = totalGuests / numberOfTables;
+			if(difference > numberOfTables - 1){	//if there aren't enough tables to bring over
+				totalGuests = guests.size();
+				float perTable = (float)totalGuests / (float)numberOfTables;
 				int remaining = totalGuests % numberOfTables;
 				
 				seatsPerTable = new Vector<Integer>();
 				for(int i = 0; i < numberOfTables; i++){
-					seatsPerTable.add(perTable);
+					seatsPerTable.add((int)perTable);
 				}
 				seatsPerTable.set(0, seatsPerTable.get(0) + remaining);
+				
+				return;
 			}
-			return;
 		}
 		
 		//optimize - if last table is less than minTableSize, bring guests over from other tables
@@ -225,6 +229,8 @@ public class TableAssigner {
 					break;
 			}
 		}
+		
+		
 	}
 	
 	private void generateInitialPopulation(){
