@@ -119,9 +119,9 @@ public class TableAssigner {
 			this.fitnessSumOfCurrPopulation = 0;
 			this.fitnessSumOfNewPopulation = 0;
 			this.singlePointCross = guests.size()/2;
-					
+
 			findOptimalSeatsPerTable();
-					
+
 			generateInitialPopulation();
 
 			for(int k = 0; k < numberOfGenerations; k++){
@@ -193,6 +193,24 @@ public class TableAssigner {
 				seatsPerTable.add(totalGuests);
 				i += totalGuests;
 			}
+		}
+		
+		//check if possible to optimize
+		if(seatsPerTable.lastElement() < minTableSize){
+			int difference = minTableSize - seatsPerTable.lastElement();
+			
+			int numberOfTables = seatsPerTable.size();
+			if(difference < numberOfTables - 1){	//if there aren't enough tables to bring over
+				int perTable = totalGuests / numberOfTables;
+				int remaining = totalGuests % numberOfTables;
+				
+				seatsPerTable = new Vector<Integer>();
+				for(int i = 0; i < numberOfTables; i++){
+					seatsPerTable.add(perTable);
+				}
+				seatsPerTable.set(0, seatsPerTable.get(0) + remaining);
+			}
+			return;
 		}
 		
 		//optimize - if last table is less than minTableSize, bring guests over from other tables
