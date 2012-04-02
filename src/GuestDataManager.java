@@ -50,8 +50,8 @@ public class GuestDataManager {
 				}
 				
 				guestList.lastElement().setGroup(guestData[2]);
-				guestList.lastElement().setContactNumber(guestData[3]);
-				guestList.lastElement().setEmailAddress(guestData[4]);
+				guestList.lastElement().setEmailAddress(guestData[3]);
+				guestList.lastElement().setContactNumber(guestData[4]);
 				guestList.lastElement().setDescription(guestData[5]);
 			}
 			
