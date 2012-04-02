@@ -1,4 +1,5 @@
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -2433,7 +2434,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 
 		if (lg.getGuestList().size()!= 0) {
 			lg.setCostPerHead();
-			textPane6_CostPerHead.setText(String.valueOf("$"+lg.getCostPerHead()));
+			DecimalFormat df = new DecimalFormat("0.00");
+			df.setGroupingUsed(false);
+			double costPerHead = lg.getCostPerHead();
+			String costPerHeadStr = df.format(costPerHead);
+			textPane6_CostPerHead.setText(String.valueOf("$"+ costPerHeadStr));
 		}
 		
 		//TODO plus create table6
