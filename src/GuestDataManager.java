@@ -38,10 +38,17 @@ public class GuestDataManager {
 			String line;
 			while((line = reader.readLine()) != null){
 				String [] guestData = line.split(",", numberOfTokens);
+				if(guestData.length != numberOfTokens)
+					throw new DataFormatException("numberOfTokens is " + guestData.length + " instead of " + numberOfTokens);
 				
 				guestList.add(new Guest());
 				guestList.lastElement().setName(guestData[0]);
-				guestList.lastElement().setGender(Enum.valueOf(Gender.class, guestData[1]));
+				try{
+					guestList.lastElement().setGender(Enum.valueOf(Gender.class, guestData[1]));
+				} catch(IllegalArgumentException ex){
+					throw new DataFormatException("Error getting enum value of gender.");
+				}
+				
 				guestList.lastElement().setGroup(guestData[2]);
 				guestList.lastElement().setContactNumber(guestData[3]);
 				guestList.lastElement().setEmailAddress(guestData[4]);
