@@ -482,7 +482,13 @@ public class Logic {
 	}
 	
 	void addGuest(){
+		saved = false;
 		event.getGuestList().add(new Guest());
+	}
+	
+	void addGuest(int index) {
+		saved = false;
+		event.getGuestList().add(index, new Guest());
 	}
 	
 	void removeGuest(int index){
@@ -596,6 +602,11 @@ public class Logic {
 	void addProgramme(){
 		saved = false;
 		event.getProgrammeSchedule().add(new Programme());
+	}
+	
+	void addProgramme(int index) {
+		saved = false;
+		event.getProgrammeSchedule().add(index, new Programme());
 	}
 	
 	void removeProgramme(int index){
@@ -978,6 +989,11 @@ public class Logic {
 	void addExpense(){
 		saved = false;
 		event.getExpense().add(new Expense());
+	}
+	
+	void addExpense(int index) {
+		saved =false;
+		event.getExpense().add(index, new Expense());
 	}
 	
 	void removeExpense(int index){	

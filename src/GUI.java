@@ -1569,11 +1569,22 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn2_AddGuest.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		lg.addGuest();
-        		modelGuest.addRow(new Vector<String>(6));
-        		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);       		
-        		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
-        		chckbx2_GuestListFinalised.setEnabled(false);
+        		if (modelGuest.getRowCount() == 0 || table2.getSelectedRowCount() == 0) {
+        			lg.addGuest();
+            		modelGuest.addRow(new Vector<String>(6));
+            		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);       		
+            		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
+            		chckbx2_GuestListFinalised.setEnabled(false);
+        		}
+        		else {
+        			int rowIndex = table2.getSelectedRow();
+        			lg.addGuest(rowIndex+1);
+	        		modelGuest.insertRow(rowIndex+1, new Vector<String>(6));
+	        		modelGuest.setValueAt("Select", rowIndex+1, 1);
+	        		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
+	        		chckbx2_GuestListFinalised.setEnabled(false); 
+        		}
+        		
         	}
         });
         
@@ -1618,7 +1629,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			table2.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell"); 
         			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		} 
-        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT) {
         			lg.addGuest();
             		modelGuest.addRow(new Vector<String>(6));
             		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);
@@ -1712,9 +1723,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table3.setAutoCreateRowSorter(true);
         
         table3.getColumnModel().getColumn(0).setPreferredWidth(90);
-        table3.getColumnModel().getColumn(1).setPreferredWidth(80);
-        table3.getColumnModel().getColumn(2).setPreferredWidth(80);
-        table3.getColumnModel().getColumn(3).setPreferredWidth(240);
+        table3.getColumnModel().getColumn(1).setPreferredWidth(75);
+        table3.getColumnModel().getColumn(2).setPreferredWidth(75);
+        table3.getColumnModel().getColumn(3).setPreferredWidth(239);
         table3.getColumnModel().getColumn(4).setPreferredWidth(120);
         
         TableColumn dateCol = table3.getColumnModel().getColumn(0);
@@ -1751,9 +1762,18 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn3_AddEntry.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		lg.addProgramme();
-        		modelProgramme.addRow(new Vector<String>(5));      		
-        		chckbx3_ProgrammeScheduleFinalised.setEnabled(false);       	
+        		if (modelProgramme.getRowCount() == 0 || table3.getSelectedRowCount() == 0) {
+        			lg.addProgramme();
+            		modelProgramme.addRow(new Vector<String>(5));      		
+            		chckbx3_ProgrammeScheduleFinalised.setEnabled(false); 
+        		}
+        		else {
+        			int rowIndex = table3.getSelectedRow();
+        			lg.addProgramme(rowIndex+1);	        			        	
+	        		modelProgramme.insertRow(rowIndex+1, new Vector<String>(5));		
+	        		chckbx3_ProgrammeScheduleFinalised.setEnabled(false); 
+        		}
+        		      	
         	}
         });
         
@@ -1791,7 +1811,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			table3.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(lg.completedProgrammeFields());
         		} 
-        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT) {
         			modelProgramme.addRow(new Vector<Object>(5));  
         			lg.addProgramme();
         			chckbx3_ProgrammeScheduleFinalised.setEnabled(false);
@@ -2059,14 +2079,32 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn6_AddExpense.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		lg.addExpense();
-        		Vector<String> newRow= new Vector<String>();
-        		newRow.add("");
-        		newRow.add("0");
-        		newRow.add("0");
-        		newRow.add("0");
-        		modelExpense.addRow(newRow);      		
-        		chckbx6_ExpensesFinalised.setEnabled(false);      	
+        		
+        		if (modelExpense.getRowCount() == 0 || table6.getSelectedRowCount() == 0) {
+	        		lg.addExpense();
+	        		Vector<String> newRow= new Vector<String>();
+	        		newRow.add("");
+	        		newRow.add("0");
+	        		newRow.add("0");
+	        		newRow.add("0");
+	        		modelExpense.addRow(newRow);      		
+	        		chckbx6_ExpensesFinalised.setEnabled(false);      	
+        		}
+        		else {
+        			int rowIndex = table6.getSelectedRow();
+        			lg.addExpense(rowIndex+1);
+	        		Vector<String> newRow= new Vector<String>();
+	        		newRow.add("");
+	        		newRow.add("0");
+	        		newRow.add("0");
+	        		newRow.add("0");
+	        		modelExpense.insertRow(rowIndex+1, newRow);		
+	        		chckbx6_ExpensesFinalised.setEnabled(false);  	
+        		}
+        			
+        		
+        	
+        		
         	}
         });
         
@@ -2086,13 +2124,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
       			for (int i = 0; i < rowIndices.length; i++) {       			    				
     				double delete_cost = Double.parseDouble(lg.getExpenseList().get(rowIndices[0]).get(3));     				
     				lg.setExpenseSpent(lg.getExpenseSpent() - delete_cost);
-    				double totalBudget = lg.getBudget();   			
-    				double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
-            		double remainingBudget = totalBudget - totalExpenses;
-            		
-            		textPane6_Spent.setText(String.valueOf("$"+ totalExpenses));		
-            		textPane6_Remaining.setText(String.valueOf("$"+remainingBudget));
-            		
+    				updateStep6();    				
     				modelExpense.removeRow(rowIndices[0]);
     				lg.removeExpense(rowIndices[0]);
     			}
@@ -2114,7 +2146,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			table6.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "selectNextColumnCell");
         			chckbx6_ExpensesFinalised.setEnabled(lg.completedExpenseFields());
         		} 
-        		if (e.getKeyCode()== KeyEvent.VK_INSERT || e.getKeyCode()== KeyEvent.VK_ENTER ) {
+        		if (e.getKeyCode()== KeyEvent.VK_INSERT) {
         			lg.addExpense();
             		Vector<String> newRow= new Vector<String>();
             		newRow.add("");
