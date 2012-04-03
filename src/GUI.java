@@ -314,7 +314,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					updateStep0();
 					break;
 				case 1:
-					//updateStep1();
+					updateStep1();
 					break;
 				case 2:
 					updateStep2();
@@ -322,8 +322,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				case 3:
 					break;
 				case 4:
-					//updateStep4();
-					textPane4_Guests.setText(Integer.toString(lg.getGuestList().size()));
+					updateStep4();				
 					break;
 				case 5:
 					updateStep5();
@@ -1570,8 +1569,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         		if (modelGuest.getRowCount() == 0 || table2.getSelectedRowCount() == 0) {
-        			lg.addGuest();
-            		modelGuest.addRow(new Vector<String>(6));
+        			lg.addGuest();      			
+            		modelGuest.addRow(new Vector<String>(6));        		
             		modelGuest.setValueAt("Select", modelGuest.getRowCount()-1, 1);       		
             		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
             		chckbx2_GuestListFinalised.setEnabled(false);
@@ -1617,7 +1616,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
     				chckbx2_GuestListFinalised.setSelected(false);
     			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		
-        		
+        		calcColumnWidths(table2);
         		
         	}
         });
@@ -1690,11 +1689,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		if(chckbx2_GuestListFinalised.isSelected()){
         			chckbx2_GuestListFinalised.setSelected(false);
         			lg.setGuestListFinalised(false);
-        		}
-        			
-        		
+        		} 
+        		//calcColumnWidths(table2);
         	}
-        });
+        });                 
 	}
 	
 	
@@ -2409,6 +2407,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void updateStep2(){	
 		panel2.remove(scrollPane2);
 		createTable2(lg.getGuestNameList(), guestCols);
+		//calcColumnWidths(table2);
 		if(lg.completedGuestFields())
 			chckbx2_GuestListFinalised.setEnabled(true);
 		if(lg.getGuestListFinalised() == true)
@@ -2577,7 +2576,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					break;
 				}
 				
-				updateStep2();
+				panel2.remove(scrollPane2);
+				createTable2(lg.getGuestNameList(), guestCols);
+				calcColumnWidths(table2);
+				if(lg.completedGuestFields())
+					chckbx2_GuestListFinalised.setEnabled(true);
+				if(lg.getGuestListFinalised() == true)
+					chckbx2_GuestListFinalised.setSelected(true);
 			}
 			else if(obj == btn2_Export){
 				fileChooser = new JFileChooser(".");
@@ -2792,10 +2797,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			try{
 				lg.setBudget(Double.parseDouble(textField1_budget.getText()));
 				textPane4_Budget.setText(String.valueOf("$"+lg.calculateHotelBudget()));				
-				//lg.setRemainingBudget();
-				//textPane6_TotalBudget.setText(String.valueOf("$"+lg.getBudget()));
-				//textPane6_Remaining.setText(String.valueOf("$"+ lg.getRemainingBudget()));
-				//textPane6_Spent.setText(String.valueOf("$"+ (lg.getHotelBudgetSpent() + lg.getExpenseSpent())));
 				updateStep6();
 			} catch(NumberFormatException ex){
 				textField1_budget.setText("0");
