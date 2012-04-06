@@ -7,17 +7,17 @@ public class HotelSuggest {
 	private int stars;
 	private double eventBudget;
 	private int budgetRatio;
-	private MyCalendar startDate;
+	private MyCalendar mealDate;
 	private MealType eventMealType;
 	private int numberOfGuests; //assume tables of 10pax each
 	
 	//HotelSuggest constructor
-	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, MyCalendar startDate, MealType eventMealType, int numberOfGuests){
+	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, MyCalendar mealDate, MealType eventMealType, int numberOfGuests){
 		this.hotelList = hotelList;
 		this.stars = stars;
 		this.eventBudget = eventBudget;
 		this.budgetRatio = budgetRatio;
-		this.startDate = startDate;
+		this.mealDate = mealDate;
 		this.eventMealType = eventMealType;
 		this.numberOfGuests = numberOfGuests;
 	}
@@ -26,7 +26,7 @@ public class HotelSuggest {
 		stars = 0;
 		eventBudget = 0;
 		budgetRatio = 0;
-		startDate = new MyCalendar();
+		mealDate = new MyCalendar();
 		eventMealType = MealType.DINNER;	
 		numberOfGuests = 0;
 	}
@@ -64,12 +64,12 @@ public class HotelSuggest {
 		this.budgetRatio = budgetRatio;
 	}
 
-	public MyCalendar getStartDate() {
-		return startDate;
+	public MyCalendar getMealDate() {
+		return mealDate;
 	}
 
-	public void setStartDate(MyCalendar myCalendar) {
-		this.startDate = myCalendar;
+	public void setMealDate(MyCalendar myCalendar) {
+		this.mealDate = myCalendar;
 	}
 
 	public MealType getEventMealType() {
@@ -115,7 +115,7 @@ public class HotelSuggest {
 
 	public Vector<Hotel> suggest(DataManager dataM) throws IOException, Exception{		
 		//Get day of week from start date of event
-		DayType eventDayType = getDayType(startDate);
+		DayType eventDayType = getDayType(mealDate);
 		String exceptionErrorMessage = "Please ensure you have:\n";
 		
 		if (eventDayType == null)

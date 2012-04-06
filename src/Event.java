@@ -26,12 +26,14 @@ public class Event implements Serializable{
 	private Vector<Integer> seatsPerTable; 	//TODO
 	private Vector<Integer> seatingArrangementIndex;
 	private Vector<String> dateList;
+	private Vector<MyCalendar> dateListStoredAsMyCalendarObject;
 	private Vector<Expense> expenseList;
 	private boolean expenseFinalised;
 	private double hotelBudgetSpent;
 	private double expenseSpent;
 	private double remainingBudget;
 	private double costPerHead;
+
 	
 	
 	public Event(){
@@ -55,6 +57,7 @@ public class Event implements Serializable{
 		hotelCheckBox = new boolean[3];	
 		seatsPerTable = new Vector<Integer>();
 		dateList = new Vector<String>();
+		dateListStoredAsMyCalendarObject = new Vector<MyCalendar>();
 		expenseList = new Vector<Expense>();
 		hotelBudgetSpent = 0.0;
 		expenseSpent = 0.0;
@@ -137,8 +140,16 @@ public class Event implements Serializable{
 		this.dateList = dateList;
 	}
 	
+	public void setDateListStoredAsMyCalendarObject(Vector<MyCalendar> dateListStoredAsMyCalendarObject) {
+		this.dateListStoredAsMyCalendarObject = dateListStoredAsMyCalendarObject;
+	}
+	
 	public Vector<String> getDateList(){
 		return this.dateList;
+	}
+	
+	public Vector<MyCalendar> getDateListStoredAsMyCalendarObject() {
+		return this.dateListStoredAsMyCalendarObject;
 	}
 	
 	public void setMealDateSelected(int idx) {

@@ -238,6 +238,7 @@ public class Logic {
 		startCal.setDate(date.getDate());
 		startCal.setMonth(date.getMonth());
 		startCal.setYear(date.getYear());
+		
 		event.setStartDateAndTime(startCal);
 	}
 	
@@ -316,20 +317,28 @@ public class Logic {
 	void setDateList(Date startDate, Date endDate){
 		
 		Vector<String> dateList = new Vector<String>();
+		Vector<MyCalendar> dateListStoredAsMyCalendarObject = new Vector<MyCalendar>();
 		
 		long interval = 24*1000 * 60 * 60; //1 hour in milliseconds
 		long endTime = endDate.getTime();	//end
 		long startTime = startDate.getTime();
 		
 		while(startTime <= endTime){
+			MyCalendar newCal = new MyCalendar();
 			Date newDate = new Date(startTime);
+			newCal.setDayOfTheWeek(newDate.getDay());
+			newCal.setDate(newDate.getDate());
+			newCal.setMonth(newDate.getMonth());
+			newCal.setYear(newDate.getYear());
 			String test = newDate.toGMTString();
 			test = test.substring(0, 11);;
-			
+						
 			dateList.add(test);
+			dateListStoredAsMyCalendarObject.add(newCal);
 			startTime += interval;
 		}           
         event.setDateList(dateList);
+        event.setDateListStoredAsMyCalendarObject(dateListStoredAsMyCalendarObject);
 	}
 	
 	Vector<String> getDateList(){
@@ -390,6 +399,57 @@ public class Logic {
 	
 	public int getMealDateSelected() {
 		return event.getMealDateSelected();
+	}
+	
+	private MyCalendar getMealDate() {
+		int selectedMealDateIndex = event.getMealDateSelected();
+		MyCalendar startDate = event.getStartDateAndTime();
+		MyCalendar mealCal = new MyCalendar();
+		String mealDate = event.getDateList().get(selectedMealDateIndex);
+		mealCal.setDate(Integer.parseInt(mealDate.substring(0, 1)));
+		
+		switch(mealDate.substring(3, 5)) {
+			case "Jan":
+				mealCal.setMonth(0);
+				break;
+			case "Feb":
+				mealCal.setMonth(1);
+				break;
+			case "Mar":
+				mealCal.setMonth(2);
+				break;
+			case "Apr":
+				mealCal.setMonth(3);
+				break;
+			case "May":
+				mealCal.setMonth(4);
+				break;
+			case "Jun": 
+				mealCal.setMonth(5);
+				break;
+			case "Jul": 
+				mealCal.setMonth(6);
+				break;
+			case "Aug": 
+				mealCal.setMonth(7);
+				break;
+			case "Sep": 
+				mealCal.setMonth(8);
+				break;
+			case "Oct": 
+				mealCal.setMonth(9);
+				break;
+			case "Nov": 
+				mealCal.setMonth(10);
+				break;
+			case "Dec": 
+				mealCal.setMonth(11);
+				break;
+				
+		}
+		
+		
+		return mealCal;
 	}
 	
 	public void setMealType(int i) {
@@ -680,7 +740,7 @@ public class Logic {
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
 		hotelSuggester.setBudgetRatio(event.getBudgetRatio());
-		hotelSuggester.setStartDate(event.getStartDateAndTime());
+		hotelSuggester.setMealDate(event.getDateListStoredAsMyCalendarObject().get(event.getMealDateSelected()));
 		hotelSuggester.setEventMealType(event.getMealType());
 		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
 		try{
