@@ -331,7 +331,7 @@ public class Logic {
 			newCal.setYear(newDate.getYear());
 			
 			String test = newDate.toLocaleString();
-			test = test.substring(0, 11);;		//get rid of time
+			test = test.substring(0, 12);;		//get rid of time
 						
 			dateList.add(test);
 			dateListStoredAsMyCalendarObject.add(newCal);
