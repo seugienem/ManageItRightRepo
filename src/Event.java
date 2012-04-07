@@ -23,7 +23,7 @@ public class Event implements Serializable{
 	private boolean guestListFinalised;
 	private boolean programmeScheduleFinalised;
 	private boolean[] hotelCheckBox;
-	private Vector<Integer> seatsPerTable; 	//TODO
+	private Vector<Integer> seatsPerTable; 
 	private Vector<Integer> seatingArrangementIndex;
 	private Vector<String> dateList;
 	private Vector<MyCalendar> dateListStoredAsMyCalendarObject;
@@ -55,6 +55,9 @@ public class Event implements Serializable{
 		guestListFinalised = false;
 		programmeScheduleFinalised = false;
 		hotelCheckBox = new boolean[3];	
+		for(int i = 0; i < 3; i++){
+			hotelCheckBox[i] = true;
+		}
 		seatsPerTable = new Vector<Integer>();
 		dateList = new Vector<String>();
 		dateListStoredAsMyCalendarObject = new Vector<MyCalendar>();

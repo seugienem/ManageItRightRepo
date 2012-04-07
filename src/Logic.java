@@ -329,7 +329,8 @@ public class Logic {
 			newCal.setDate(newDate.getDate());
 			newCal.setMonth(newDate.getMonth());
 			newCal.setYear(newDate.getYear());
-			String test = newDate.toGMTString();
+			
+			String test = newDate.toLocaleString();
 			test = test.substring(0, 11);;		//get rid of time
 						
 			dateList.add(test);
@@ -442,6 +443,7 @@ public class Logic {
 	void clearHotelSuggestions(){
 		event.setSuggestedHotels(new Vector<Hotel>());
 	}
+	
 
 	
 	/**************************************************************************
@@ -662,6 +664,19 @@ public class Logic {
 	void setProgrammeScheduleFinalised(boolean value){
 		saved = false;
 		event.setProgrammeScheduleFinalised(value);
+	}
+
+	void checkProgrammeDates(){
+		//go through each entry in programme and check if programm still falls in the list
+		Vector<Programme> programme = event.getProgrammeSchedule();
+		Vector<String> possibleDates = event.getDateList();
+		
+		for(int i = 0; i < programme.size(); i++){
+			String date = programme.get(i).getProgrammeDate();
+			if(!possibleDates.contains(date)){
+				programme.get(i).setProgrammeDate("");
+			}
+		}
 	}
 	
 	

@@ -546,7 +546,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			}
         			else {
         				if (lg.getEventEndDate() != null) {
-            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());           					
+            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());
+            					lg.checkProgrammeDates();
             					updateStep3();
             			}
         			}
@@ -619,7 +620,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			
         			else {
         				if (lg.getEventStartDate() != null) {       			
-        					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());         				
+        					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());
+        					lg.checkProgrammeDates();
         					updateStep3();
         				}
         			}
