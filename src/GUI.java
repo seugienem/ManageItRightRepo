@@ -1541,12 +1541,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table2.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table2.setAutoCreateRowSorter(true);
         
+        //calcColumnWidths(table2);
         table2.getColumnModel().getColumn(0).setPreferredWidth(200);
         //table2.getColumnModel().getColumn(2).setPreferredWidth(30);
         table2.getColumnModel().getColumn(2).setPreferredWidth(110);
         table2.getColumnModel().getColumn(3).setPreferredWidth(200);
         table2.getColumnModel().getColumn(4).setPreferredWidth(110);
         table2.getColumnModel().getColumn(5).setPreferredWidth(250);
+       
         
         TableColumn genderCol = table2.getColumnModel().getColumn(1);
         
@@ -1864,6 +1866,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		String data = (String)model.getValueAt(row, column);
         		
         		//if column == 1 or 2 means event start time and end time
+        		//this part makes sure time is valid
         		if(column == 1 || column == 2){
         			Integer time;
         			Integer compareTime;	//time to be compared to
@@ -1874,30 +1877,44 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         					data = "0";
         					model.setValueAt("0", row, column);
         				}
+        				else{
+        					String formattedData = String.format("%04d", time);
+        					if(!formattedData.equals(data))
+        						model.setValueAt(formattedData, row, column);
+        				}
         			} catch(NumberFormatException ex){
         				data = "0";
         				model.setValueAt("0", row, column);
         				return;
         			}     			   			
         			
-        			
+        			//this part makes sure start time is before end time (if it already exists)
         			switch (column){
         			case 1:	//if startTime was modified, compare it with endTime for error
         				if(model.getValueAt(row,2) != null){
-        					compareTime = Integer.parseInt((String)model.getValueAt(row, 2));
-        					if (time > compareTime){
-        						data = "0";
-        						model.setValueAt(Integer.toString(compareTime), row, column);
+        					try{
+        						compareTime = Integer.parseInt((String)model.getValueAt(row, 2));
+        						if (time > compareTime){
+            						data = "0";
+            						model.setValueAt(Integer.toString(compareTime-1), row, column);
+            					}
+        					} catch(NumberFormatException ex){
+        						//don't do anything
         					}
         				}
         				break;
 
+            		//this part makes sure end time is before end time (if it already exists)
         			case 2:	//if endTime was modified, compare it with startTime for error
         				if(model.getValueAt(row,1) != null){
-        					compareTime = Integer.parseInt((String)model.getValueAt(row, 1));
-        					if (time < compareTime){
-        						data = "0";
-        						model.setValueAt(Integer.toString(compareTime), row, column);
+        					try{
+	        					compareTime = Integer.parseInt((String)model.getValueAt(row, 1));
+	        					if (time < compareTime){
+	        						data = "0";
+	        						model.setValueAt(Integer.toString(compareTime+1), row, column);
+	        					}
+        					} catch(NumberFormatException ex){
+        						//don't do anything
         					}
         				}
 
