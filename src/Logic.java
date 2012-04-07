@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.DataFormatException;
 
@@ -404,6 +403,7 @@ public class Logic {
 	public void setMealType(int i) {
 		if (i == 0) event.setMealType(MealType.LUNCH);
 		else if (i == 1) event.setMealType(MealType.DINNER);
+		else event.setMealType(null);
 		
 	}
 	
@@ -654,9 +654,6 @@ public class Logic {
 		return true;
 	}
 	
-	void checkProgrammeDates(){
-		
-	}
 	
 	boolean getProgrammeScheduleFinalised(){
 		return event.getProgrammeScheduleFinalised();

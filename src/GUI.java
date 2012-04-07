@@ -352,12 +352,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl0_Overview.setBounds(10, 11, 76, 30);
 		lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
 		
-		ImageIcon myPicture = new ImageIcon(this.getClass().getResource("MIR_logo.jpg"));
-		JLabel lbl0_Logo = new JLabel(myPicture);
-        lbl0_Logo.setBounds(351, 52, 300, 115);
-        panel0.add(lbl0_Logo);
+		if (this.getClass().getResource("MIR_logo.jpg") != null) {
+			ImageIcon myPicture = new ImageIcon(this.getClass().getResource("MIR_logo.jpg"));
+			JLabel lbl0_Logo = new JLabel(myPicture);
+	        lbl0_Logo.setBounds(351, 52, 300, 115);
+	        panel0.add(lbl0_Logo);
+		}
 		
-		
+				
 		 btn0_New = new JButton("New");        
 		
 		 btn0_New.setBounds(460, 490, 80, 30);
@@ -544,8 +546,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			}
         			else {
         				if (lg.getEventEndDate() != null) {
-            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());
-            					lg.checkProgrammeDates();
+            					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());           					
             					updateStep3();
             			}
         			}
@@ -618,8 +619,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			
         			else {
         				if (lg.getEventStartDate() != null) {       			
-        					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());  
-        					lg.checkProgrammeDates();
+        					lg.setDateList(lg.getEventStartDate(), lg.getEventEndDate());         				
         					updateStep3();
         				}
         			}
@@ -713,7 +713,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         comboBox1_MealDates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
             	enableMealRaidoButtons();
-            	lg.setMealDateSelected(comboBox1_MealDates.getSelectedIndex());
+            	lg.setMealDateSelected(comboBox1_MealDates.getSelectedIndex());           
             	System.out.println(lg.getMealDateSelected()); // for testing
             }
         });
@@ -757,6 +757,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			lg.setMealRadioButtons(0, false);
 			rdbtn1_Dinner.setEnabled(false);
 			lg.setMealRadioButtons(1, false);
+			
 		}
 		// 1 day
 		else if(lg.getDateList().size() == 1) {
@@ -773,6 +774,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				if (lg.getMealType() == 0) {
 					buttonGroup1.clearSelection();
 					lg.setMealType(-1);
+					
 				}
 			}
 
@@ -786,6 +788,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				if (lg.getMealType() == 1) {
 					buttonGroup1.clearSelection();
 					lg.setMealType(-1);
+					
 				}
 			} // end of checking meal times
 		}
@@ -803,6 +806,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					if (lg.getMealType() == 0) {
 						buttonGroup1.clearSelection();
 						lg.setMealType(-1);
+						
 					}
 				}
 
@@ -816,6 +820,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					if (lg.getMealType() == 1) {
 						buttonGroup1.clearSelection();
 						lg.setMealType(-1);
+						
 					}
 				}
 			}
@@ -831,6 +836,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					if (lg.getMealType() == 0) {
 						buttonGroup1.clearSelection();
 						lg.setMealType(-1);
+						
 					}
 				}
 
@@ -844,6 +850,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					if (lg.getMealType() == 1) {
 						buttonGroup1.clearSelection();
 						lg.setMealType(-1);
+						
 					}
 				}
 			}
@@ -855,6 +862,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lg.setMealRadioButtons(0, true);
 				rdbtn1_Dinner.setEnabled(true);
 				lg.setMealRadioButtons(1, true);
+				
 			}
 		}
 	}
@@ -2374,14 +2382,15 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	void updateStep1(){
 		comboBox1_EventType.setSelectedIndex(lg.getEventType() + 1);
 		textField1_EventName.setText(lg.getEventName());
+		dateChooser1_StartDate.setDate(lg.getEventStartDate());
+		dateChooser1_EndDate.setDate(lg.getEventEndDate());
 		spinner1_StartTimeH.setValue(lg.getStartTimeH());
 		spinner1_StartTimeM.setValue(lg.getStartTimeM());
 		spinner1_EndTimeH.setValue(lg.getEndTimeH());
 		spinner1_EndTimeM.setValue(lg.getEndTimeM());
 		textArea1_EventDescription.setText(lg.getEventDes());
 		textField1_budget.setText(String.valueOf(lg.getBudget()));
-		dateChooser1_StartDate.setDate(lg.getEventStartDate());
-		dateChooser1_EndDate.setDate(lg.getEventEndDate());
+
 		if(lg.getMealType()==0) {
 			rdbtn1_Lunch.setSelected(true);
 			rdbtn1_Dinner.setSelected(false);
@@ -2398,7 +2407,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		comboBox1_MealDates.addItem(itr.next());
         	}
         	comboBox1_MealDates.setSelectedIndex(lg.getMealDateSelected());
+        	
         }
+        
 		rdbtn1_Lunch.setEnabled(lg.getMealRadioButtons(0));
 		rdbtn1_Dinner.setEnabled(lg.getMealRadioButtons(1));
 		
