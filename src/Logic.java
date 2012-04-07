@@ -647,7 +647,7 @@ public class Logic {
 		if(event.getProgrammeSchedule().size() == 0)
 			return false;
 		for(Programme programmeCheck : event.getProgrammeSchedule()){
-			if(programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
+			if(programmeCheck.getProgrammeDate() == "" || programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
 					|| programmeCheck.getTitle().equals("") || programmeCheck.getInCharge().equals(""))
 				return false;
 		}
