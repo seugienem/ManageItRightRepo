@@ -1007,31 +1007,39 @@ public class Logic {
 	
 	void removeExpense(int index){	
 		event.getExpense().remove(index);
+		
+		Vector<Expense> expenses = event.getExpense();
+		double totalExpenses = 0.0;
+		
+		for(int i = 0; i < expenses.size(); i++){
+			totalExpenses += expenses.get(i).getTotalCost();
+		}
+		event.setExpenseSpent(totalExpenses);
 	}
 			
 	double getHotelBudgetSpent() {
 		return event.getHotelBudgetSpent();
 	}
 	
+	double getExpenseSpent() {
+		return event.getExpenseSpent();
+	}
 	/*
 	void setHotelBudgetSpent(double hotelBudget) {		
 		event.setHotelBudgetSpent(hotelBudget);
 	}
 	*/
-	double getExpenseSpent() {
-		return event.getExpenseSpent();
-	}
-	
+	/*
 	void setExpenseSpent(double expenseSpent) {
 		event.setExpenseSpent(expenseSpent);
 	}
+	*/
 	
 	/*
 	double getRemainingBudget() {
 		return event.getRemainingBudget();
 	}
 	*/
-	
 	/*
 	void setRemainingBudget() {
 		event.setRemainingBudget(event.getEventBudget()-event.getHotelBudgetSpent()-event.getExpenseSpent());

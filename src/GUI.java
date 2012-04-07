@@ -1541,7 +1541,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         table2.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table2.setAutoCreateRowSorter(true);
         
-        //calcColumnWidths(table2);
         table2.getColumnModel().getColumn(0).setPreferredWidth(200);
         //table2.getColumnModel().getColumn(2).setPreferredWidth(30);
         table2.getColumnModel().getColumn(2).setPreferredWidth(110);
@@ -1607,19 +1606,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
         		chckbx2_GuestListFinalised.setEnabled(false);
 */
-        		int[] rowIndices = table2.getSelectedRows();        			
+        		int[] rowIndices = table2.getSelectedRows();        
       			
-    			for (int i = 0; i < rowIndices.length; i++) {       			
-    				modelGuest.removeRow(rowIndices[0]);
-    				lg.removeGuest(rowIndices[0]);
+    			for (int i = rowIndices.length-1; i >= 0; i--) {       			
+    				modelGuest.removeRow(rowIndices[i]);
+    				lg.removeGuest(rowIndices[i]);
     			}
     			textPane4_Guests.setText(String.valueOf(lg.getGuestList().size()));
     			if(chckbx2_GuestListFinalised.isSelected())
     				chckbx2_GuestListFinalised.setSelected(false);
     			chckbx2_GuestListFinalised.setEnabled(lg.completedGuestFields());
         		
-        		calcColumnWidths(table2);
-        		
+    			/*
+    			if(modelGuest.getRowCount() != 0)
+    				calcColumnWidths(table2);
+    				*/
         	}
         });
         
@@ -1790,9 +1791,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	public void mouseClicked(MouseEvent e) {       		
         		int[] rowIndices = table3.getSelectedRows();        			
       			
-    			for (int i = 0; i < rowIndices.length; i++) {       			
-    				modelProgramme.removeRow(rowIndices[0]);
-    				lg.removeProgramme(rowIndices[0]);
+    			for (int i = rowIndices.length-1; i >= 0; i--) {     			
+    				modelProgramme.removeRow(rowIndices[i]);
+    				lg.removeProgramme(rowIndices[i]);
     			}
     			if(chckbx3_ProgrammeScheduleFinalised.isSelected())
     				chckbx3_ProgrammeScheduleFinalised.setSelected(false);
@@ -2040,9 +2041,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		    }			
   		});
   		}
-	/*
-	 * Method for creation and initlialisation of table6 (Expenses) in Step 6
-	 */
+	
+	
+	/*********************************************************************************
+	 * 
+	 * Method for creation and initlialisation of table5 (Expenses) in Step 6
+	 * 
+	 *********************************************************************************/
 	void createTable6(Vector<Vector<String>> data, Vector<String> cols){
 		table6 = new JTable(data,cols);
 /*		table6 = new JTable(data, cols) {
@@ -2116,9 +2121,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	        		modelExpense.insertRow(rowIndex+1, newRow);		
 	        		chckbx6_ExpensesFinalised.setEnabled(false);  	
         		}
-        			
-        		
-        	
         		
         	}
         });
@@ -2136,12 +2138,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	public void mouseClicked(MouseEvent e) {       		
         		int[] rowIndices = table6.getSelectedRows();     			
       			
-      			for (int i = 0; i < rowIndices.length; i++) {       			    				
-    				double delete_cost = Double.parseDouble(lg.getExpenseList().get(rowIndices[0]).get(3));     				
-    				lg.setExpenseSpent(lg.getExpenseSpent() - delete_cost);
-    				updateStep6();    				
-    				modelExpense.removeRow(rowIndices[0]);
-    				lg.removeExpense(rowIndices[0]);
+      			for (int i = rowIndices.length-1; i >= 0; i--) {       			    				
+    				//double delete_cost = Double.parseDouble(lg.getExpenseList().get(rowIndices[0]).get(3));     				
+    				//lg.setExpenseSpent(lg.getExpenseSpent() - delete_cost);	
+    				modelExpense.removeRow(rowIndices[i]);
+    				lg.removeExpense(rowIndices[i]);
+    				updateStep6();
     			}
     			
     			if(chckbx6_ExpensesFinalised.isSelected())
@@ -2582,6 +2584,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 						return;
 					try{
 						lg.importGuest(file);
+						
+						panel2.remove(scrollPane2);
+						createTable2(lg.getGuestNameList(), guestCols);
+						calcColumnWidths(table2);
+						if(lg.completedGuestFields())
+							chckbx2_GuestListFinalised.setEnabled(true);
+						if(lg.getGuestListFinalised() == true)
+							chckbx2_GuestListFinalised.setSelected(true);
 					} catch(DataFormatException ex){
 						JOptionPane.showMessageDialog(new JFrame(), "Error importing CSV file. Make sure file is properly formatted");
 					}
@@ -2591,15 +2601,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				case JFileChooser.ERROR_OPTION:
 					System.out.println("fileChooser error");
 					break;
-				}
-				
-				panel2.remove(scrollPane2);
-				createTable2(lg.getGuestNameList(), guestCols);
-				calcColumnWidths(table2);
-				if(lg.completedGuestFields())
-					chckbx2_GuestListFinalised.setEnabled(true);
-				if(lg.getGuestListFinalised() == true)
-					chckbx2_GuestListFinalised.setSelected(true);
+				}	
 			}
 			else if(obj == btn2_Export){
 				fileChooser = new JFileChooser(".");
