@@ -21,9 +21,9 @@ public class Guest implements Comparable<Guest>, Serializable{
 		this.gender = Gender.UNKNOWN;
 	}
 	
-	public Guest(String name, Gender gender, String emailAddress, String group, String contactNumber){
+	public Guest(String name, Gender gender, String group, String emailAddress, String contactNumber, String description){
 		this.name = name; this.gender = gender; this.emailAddress = emailAddress;
-		this.group = group; this.contactNumber = contactNumber;
+		this.group = group; this.contactNumber = contactNumber; this.description = description;
 	}
 	
 	public int compareTo(Guest o){
