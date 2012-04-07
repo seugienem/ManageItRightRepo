@@ -17,6 +17,15 @@ public class Programme implements Serializable{
 		inCharge = "";
 	}
 	
+	public Programme(String programmeDate, int startTime, int endTime, String title, String inCharge) {
+		this.programmeDate = programmeDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.title = title;
+		this.inCharge = inCharge;
+	}
+
+
 	public void setProgrammeDate(String date) {
 		this.programmeDate = date;
 	}

@@ -318,7 +318,7 @@ public class Logic {
 		Vector<String> dateList = new Vector<String>();
 		Vector<MyCalendar> dateListStoredAsMyCalendarObject = new Vector<MyCalendar>();
 		
-		long interval = 24*1000 * 60 * 60; //1 hour in milliseconds
+		long interval = 24* 60 * 60 * 1000; //1 day in milliseconds
 		long endTime = endDate.getTime();	//end
 		long startTime = startDate.getTime();
 		
@@ -330,7 +330,7 @@ public class Logic {
 			newCal.setMonth(newDate.getMonth());
 			newCal.setYear(newDate.getYear());
 			String test = newDate.toGMTString();
-			test = test.substring(0, 11);;
+			test = test.substring(0, 11);;		//get rid of time
 						
 			dateList.add(test);
 			dateListStoredAsMyCalendarObject.add(newCal);
@@ -647,7 +647,7 @@ public class Logic {
 		if(event.getProgrammeSchedule().size() == 0)
 			return false;
 		for(Programme programmeCheck : event.getProgrammeSchedule()){
-			if(programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
+			if(programmeCheck.getProgrammeDate() == "" || programmeCheck.getStartTime() == -1 || programmeCheck.getEndTime() == -1
 					|| programmeCheck.getTitle().equals("") || programmeCheck.getInCharge().equals(""))
 				return false;
 		}
@@ -1004,31 +1004,39 @@ public class Logic {
 	
 	void removeExpense(int index){	
 		event.getExpense().remove(index);
+		
+		Vector<Expense> expenses = event.getExpense();
+		double totalExpenses = 0.0;
+		
+		for(int i = 0; i < expenses.size(); i++){
+			totalExpenses += expenses.get(i).getTotalCost();
+		}
+		event.setExpenseSpent(totalExpenses);
 	}
 			
 	double getHotelBudgetSpent() {
 		return event.getHotelBudgetSpent();
 	}
 	
+	double getExpenseSpent() {
+		return event.getExpenseSpent();
+	}
 	/*
 	void setHotelBudgetSpent(double hotelBudget) {		
 		event.setHotelBudgetSpent(hotelBudget);
 	}
 	*/
-	double getExpenseSpent() {
-		return event.getExpenseSpent();
-	}
-	
+	/*
 	void setExpenseSpent(double expenseSpent) {
 		event.setExpenseSpent(expenseSpent);
 	}
+	*/
 	
 	/*
 	double getRemainingBudget() {
 		return event.getRemainingBudget();
 	}
 	*/
-	
 	/*
 	void setRemainingBudget() {
 		event.setRemainingBudget(event.getEventBudget()-event.getHotelBudgetSpent()-event.getExpenseSpent());
