@@ -237,6 +237,94 @@ public class LogicTest {
 		assertEquals("Result", false, tester.checkDate());
 	}
 	
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testSetDateList(){
+		//precondition, start date is before end date
+		Event event = new Event();
+		Logic tester = new Logic(event, new DataManager());
+		
+		tester.setDateList(new Date(112, 10, 2), new Date(112, 10, 2));
+		assertEquals("Results", 1, event.getDateList().size());
+		assertEquals("Results", 1, event.getDateListStoredAsMyCalendarObject().size());
+		assertEquals("Results", "1 Nov 2012 ", event.getDateList().get(0));	//Java Date stores 2012 as 2012 - 1900 etc.
+		assertEquals("Results", 112, event.getDateListStoredAsMyCalendarObject().get(0).getYear());
+		assertEquals("Results", 10, event.getDateListStoredAsMyCalendarObject().get(0).getMonth());
+		assertEquals("Results", 2, event.getDateListStoredAsMyCalendarObject().get(0).getDate());	
+	}
 	
+	@Test
+	public void testGetGuestNameList(){
+		
+	}
 	
+	@Test
+	public void testSetGuestInfo(){
+		
+	}
+	
+	@Test
+	public void testCompletedGuestFields(){
+		
+	}
+	
+	@Test
+	public void testGetProgrammeSchedule(){
+		
+	}
+	
+	@Test
+	public void testSetProgrammeInfo(){
+		
+	}
+	
+	@Test
+	public void testCompletedProgrammeFields(){
+		
+	}
+	
+	@Test
+	public void testHotelSuggest(){
+		
+	}
+	
+	@Test
+	public void testGuestSuggestedHOtelsNames(){
+		
+	}
+	
+	@Test
+	public void testGetHotelInformation(){
+		
+	}
+	
+	@Test
+	public void testGetSelectedHotelPrice(){
+		
+	}
+	
+	@Test
+	public void testUpdateArrangementIndex(){
+		
+	}
+	
+	@Test
+	public void testGetArrangement(){
+		
+	}
+	
+	@Test
+	public void testGetExpenseList(){
+		
+	}
+	
+	@Test
+	public void testSetExpenseInfo(){
+		
+	}
+	
+	@Test
+	public void testCompletedExpenseFields(){
+		
+	}
 }

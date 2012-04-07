@@ -319,7 +319,7 @@ public class Logic {
 		Vector<String> dateList = new Vector<String>();
 		Vector<MyCalendar> dateListStoredAsMyCalendarObject = new Vector<MyCalendar>();
 		
-		long interval = 24*1000 * 60 * 60; //1 hour in milliseconds
+		long interval = 24* 60 * 60 * 1000; //1 day in milliseconds
 		long endTime = endDate.getTime();	//end
 		long startTime = startDate.getTime();
 		
@@ -331,7 +331,7 @@ public class Logic {
 			newCal.setMonth(newDate.getMonth());
 			newCal.setYear(newDate.getYear());
 			String test = newDate.toGMTString();
-			test = test.substring(0, 11);;
+			test = test.substring(0, 11);;		//get rid of time
 						
 			dateList.add(test);
 			dateListStoredAsMyCalendarObject.add(newCal);
