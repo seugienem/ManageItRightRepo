@@ -1,3 +1,17 @@
+/*
+ * TableAssigner.java - Runs the table assigner algorithm
+ * Authors: Team MIR
+ * 
+ * 
+ * Description: TableAssigner provides the facilities to run the table assigner
+ * algorithm. It takes in a guest list in Vector<Guest> form, and the table size.
+ * It then returns Vector<Integer> of the indexes corresponding to the Vector<Guest>
+ * Only generateArrangement and various get set methods are made public.
+ * 
+ * Table Assigner also fires event progress events, which are integers from 0-100
+ * that signifies the progress in the algorithm.
+ */
+
 import java.util.*;
 
 public class TableAssigner {
@@ -23,15 +37,7 @@ public class TableAssigner {
 	
 	protected javax.swing.event.EventListenerList listenerList = new javax.swing.event.EventListenerList();
 	
-	public TableAssigner(){
-		/*
-		this.currPopulation = new Vector<Chromosome>();
-		this.newPopulation = new Vector<Chromosome>();
-		this.seatsPerTable = new Vector<Integer>();
-		this.fitnessSumOfCurrPopulation = 0;
-		this.fitnessSumOfNewPopulation = 0;
-		*/
-		
+	public TableAssigner(){		
 		this.minTableSize = 9;
 		this.populationSize = 60;
 		this.numberOfGenerations = 1000;
@@ -76,6 +82,7 @@ public class TableAssigner {
 		return currPopulation.get(eliteIndex).getFitnessValue();
 	}
 	
+	//Event listener methods here
 	public void addEventListener(ProgressListener listener){
 		listenerList.add(ProgressListener.class, listener);
 	}
@@ -94,7 +101,7 @@ public class TableAssigner {
 		}
 	}
 	
-	//overall method called
+	//Main method of this class. 
 	public Vector<Integer> generateArrangement(Vector<Guest> guestList, int tableSize){
 		Chromosome bestChromosome = null;
 		this.guests = guestList;
@@ -132,51 +139,29 @@ public class TableAssigner {
 				
 				evolve();
 			}
-				
 			bestChromosome = currPopulation.get(eliteIndex);
-			//System.out.println(bestChromosome.getFitnessValue());
-			//System.out.println(bestChromosome.getChromosome().size());
-			
-
 		}
 		
-		
+		//Completed algorithm, fire 100
 		fireEvent(new ProgressEvent(this, 100));
 		
-		/*
-		Vector<Vector<String>> seatingList = new Vector<Vector<String>>();		
-		//this returns Tables in columns 
-		for(int i = 0; i < tableSize; i++){
-			seatingList.add(new Vector<String>());
-		}
-		int index = 0;
-		for(int i = 0; i < seatsPerTable.size(); i++){
-			int currTableSize = seatsPerTable.get(i);
-			
-			for(int j = 0; j < currTableSize; j++){
-				int currGuestIndex = bestChromosome.getChromosome().get(index+j);
-				seatingList.get(j).add(guests.get(currGuestIndex).getName());
-			}
-			index += currTableSize;
-		}
-		*/
-		/*
-		 *this return Table in rows instead of columns
-		int index = 0;
-		for(int i = 0; i < seatsPerTable.size(); i++){
-			int currTableSize = seatsPerTable.get(i);
-			Vector<String> currTable = new Vector<String>();
-			
-			for(int j = 0; j < currTableSize; j++){
-				currTable.add(guests.get(bestChromosome.getChromosome().get(index+j)).getName());
-			}
-			seatingList.add(currTable);
-			index += currTableSize;
-		}
-		*/	
 		return bestChromosome.getChromosome();
 	}
 	
+	//Method that tries to find the optimal (each table is greater than minTableSize) 
+	//seats per table especially if number of guests is not in multiple of 10.
+	//
+	//1) Greedily selects. Eg. 55 guests will simply have 6 tables, 1 with 5 guests.
+	//2) In some cases, it is not possible to find a solution that 
+	/*
+	 * Method that tries to find the optimal (each table is greater than minTableSize) 
+	 * seats per table especially if number of guests is not in multiple of 10.
+	 * 
+	 * 1) Greedily selects. Eg. 55 guests will simply have 6 tables, 1 with 5 guests.
+	 * 2) In some cases, it is not possible to find the optimal solution. So 
+	 *    we check if it's possible to optimize.
+	 * 3) Do the optimization. 
+	 */
 	private void findOptimalSeatsPerTable(){
 		int totalGuests = guests.size();
 		if(totalGuests < tableSize){
@@ -233,6 +218,7 @@ public class TableAssigner {
 		
 	}
 	
+	//Method generates the first initial batch of population.
 	private void generateInitialPopulation(){
 		//first chromosome should use default vector passed in
 		Vector<Integer> firstChromosome = new Vector<Integer>();
@@ -260,16 +246,17 @@ public class TableAssigner {
 		}
 	}
 	
-	private void evolve(){
-		//given a population
-		//find elite chromosome and bring over
-		//generate next generation by
-		//	select() 2 chromosome
-		//	cross() the 2 chromosome
-		//	mutate() the resulting chromosome
-		//	add to population
-		//repeat until population number is full
-		
+	/*
+	 * Evolve involves
+	 * 1) Given current population
+	 * 2) Try to generate the next population
+	 * 3) This is done by:
+	 * 		a) select() 2 chromosomes
+	 * 		b) cross() the 2 selected chromosomes
+	 * 		c) mutate the resulting chromosome
+	 * 4) add this resulting chromosome to the new population
+	 */
+	private void evolve(){		
 		fitnessSumOfNewPopulation = 0;
 		newPopulation = new Vector<Chromosome>();
 		newPopulation.add(currPopulation.get(eliteIndex));
@@ -295,11 +282,18 @@ public class TableAssigner {
 			newPopulation.add(newChromosome);
 		}
 		
-		
 		currPopulation = newPopulation;
 		fitnessSumOfCurrPopulation = fitnessSumOfNewPopulation;
 	}
 	
+	/*
+	 * Crossing involves selecting a point on the chromosome. In this case,
+	 * it's random.
+	 * After which, copy all elements from the first parent1 until this 
+	 * point. 
+	 * Copy the reamaining elements from parent2, provided they are not
+	 * already in this new chromosome.
+	 */
 	private Chromosome cross(Chromosome parent1, Chromosome parent2){
 		//copy from chrom1 elements before singlePointCross
 		//scan chrom2, if element not in, copy over
@@ -326,6 +320,7 @@ public class TableAssigner {
 		return childChromosome;
 	}
 	
+	//Simply finds 2 places and swap.
 	private void mutate(Chromosome chrom){
 		int first = rnd.nextInt(chrom.getChromosome().size());
 		int second = rnd.nextInt(chrom.getChromosome().size());
@@ -336,14 +331,15 @@ public class TableAssigner {
 		chrom.getChromosome().set(second, temp);
 	}
 	
+	/*
+	 * select() uses algorithm called roulette wheel selection
+	 * 1) calculate sum of all chromosome fitness in population (done when generating population)
+	 * 2) select random number from 0 to the sum
+	 * 3) go through population and sum until it exceeds rnd. pick that chromosome
+	 * 
+	 * Therefore if chromosome is fitter, it has higher chance of being selected.
+	 */
 	private Chromosome select(){
-		/*
-		 * select() uses algorithm called roulette wheel selection
-		 * 1) calculate sum of all chromosome fitness in population (done when generating population)
-		 * 2) select random number from 0 to the sum
-		 * 3) go through population and sum until it exceeds rnd. pick that chromosome
-		 */
-		
 		int selectNumber = rnd.nextInt(fitnessSumOfCurrPopulation);
 		int sum = 0;
 		for(int i = 0; i < currPopulation.size(); i++){
@@ -352,55 +348,12 @@ public class TableAssigner {
 				return currPopulation.get(i);
 			}
 		}
-		
-		System.out.println(fitnessSumOfCurrPopulation);
-		System.out.println(selectNumber + " " + sum);
 		return new Chromosome(new Vector<Integer>());
 	}
 	
-	//OLD FITNESS FUNCTION
-	/*
-	private int fitnessFunction(Chromosome chrom){
-		int fitness = 100;
-		Vector<Integer> chromosomeSolution = chrom.getChromosome();
-		int chromosomeIndex = 0;
-		int subtract = 0;
-
-		
-		for(Integer seats : seatsPerTable){				//for each table
-			for(int j = 0; j < seats-1; j++){				//for each person at the table
-				boolean lonePerson = true;
-				String guestAGroup = guests.get(chromosomeSolution.get(chromosomeIndex + j)).getGroup();
-				
-				for(int k = j+1; k < seats; k++){			//for every other person at the table
-					
-					String guestBGroup = guests.get(chromosomeSolution.get(chromosomeIndex + k)).getGroup();
-					if(guestAGroup.equals(guestBGroup)){
-						lonePerson = false;
-						fitness++;
-					}
-				}
-				
-				if(lonePerson){
-					subtract += 20;
-				}
-			}
-			chromosomeIndex += seats;
-		}
-		
-		if(subtract < fitness)
-			fitness -= subtract;
-		else
-			fitness = 1;
-		return fitness;
-	}
-	*/
-	
-	//new fitness function
 	//idea: count frequency of each group type in a table
 	//if there exist a group with only 1 representative, subtract points
 	//use weights to favour certain number. eg. 2 is not as desirable as 5 or 6
-	
 	private int fitnessFunction(Chromosome chrom){
 		int fitness = 100;
 		Vector<Integer> chromosomeSolution = chrom.getChromosome();
@@ -408,6 +361,7 @@ public class TableAssigner {
 		int subtract = 0;
 		HashMap<String, Integer> groupFrequency;
 		
+		//count frequency
 		for(Integer seats : seatsPerTable){
 			groupFrequency = new HashMap<String, Integer>();
 			
@@ -420,7 +374,7 @@ public class TableAssigner {
 					groupFrequency.put(group, count+1);
 			}
 			
-			//calculate table's fitness
+			//give fitness(or points) for this particular table base on the frequency generated above.
 			Collection<Integer> frequencies = groupFrequency.values();
 			for(Integer currFrequency : frequencies){
 				switch(currFrequency){
