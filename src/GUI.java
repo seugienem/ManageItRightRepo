@@ -33,6 +33,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private File currEventFileDirectory;
 	private JTabbedPane jtp;
 	
+	private ImageIcon logo;
+	
 	//Menu Bar objects
 	private JMenu mnFile;
 	private JMenuBar menuBar;
@@ -138,7 +140,6 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI7 objects
 	private JTextPane textPane7_Summary;
-	private JScrollPane scrollPane;
 
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
@@ -148,16 +149,16 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		int Y = (screen.height / 2) - 300; // Center vertically.
 		setBounds(X, Y, 800, 600);
     	
-		if (this.getClass().getResource("checkbox.png") != null) {
-			ImageIcon myIcon = new ImageIcon(this.getClass().getResource("checkbox.png"));
-			setIconImage(myIcon.getImage());
-		}		
-		
-		setTitle("Manage It Right! v0.2");
+        setTitle("Manage It Right! v0.2");
         jtp = new JTabbedPane();
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
         getContentPane().add(jtp, BorderLayout.CENTER);
+        
+        try {
+        	logo = new ImageIcon("Data/MIRlogo.png");
+            setIconImage(logo.getImage());
+        } catch (Exception e) {} // does not load logo if logo image is not found.
               
         try {
      		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -279,7 +280,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1); 	//TODO if there already is an existing event, we need to clear all the fields
+        		else{ 
+        			currEventFileDirectory = null;
+        			lg.createNewEvent();
+        			updateAll();
+        			jtp.setSelectedIndex(1);
+        		}
         	}
         });
         
@@ -359,12 +365,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl0_Overview.setBounds(10, 11, 76, 30);
 		lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
 		
-		if (this.getClass().getResource("MIR_logo.jpg") != null) {
-			ImageIcon myPicture = new ImageIcon(this.getClass().getResource("MIR_logo.jpg"));
-			JLabel lbl0_Logo = new JLabel(myPicture);
-	        lbl0_Logo.setBounds(351, 52, 300, 115);
+		try{
+			JLabel lbl0_Logo = new JLabel(logo);
+	        lbl0_Logo.setBounds(350, 66, 128, 128);
 	        panel0.add(lbl0_Logo);
-		}
+		} catch (Exception e) {}
 		
 				
 		 btn0_New = new JButton("New");        
@@ -407,7 +412,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1);		//TODO if there already is an existing event, we need to clear all the fields
+		 		else{
+	    			currEventFileDirectory = null;
+	    			lg.createNewEvent();
+	    			updateAll();
+	    			jtp.setSelectedIndex(1);
+		 		}
 		 	}
 		 });
 		 
@@ -420,10 +430,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		 panel0.add(lbl0_Overview);
         
         textPane0_EventName = new JTextPane();
+        textPane0_EventName.setOpaque(false);
         textPane0_EventName.setEditable(false);
         textPane0_EventName.setFont(new Font("Tahoma", Font.PLAIN, 16));
         textPane0_EventName.setBounds(136, 11, 504, 30);
         panel0.add(textPane0_EventName);
+        
+        JTextArea textArea0_Welcome = new JTextArea();
+        textArea0_Welcome.setOpaque(false);
+        textArea0_Welcome.setEditable(false);
+        textArea0_Welcome.setAutoscrolls(false);
+        textArea0_Welcome.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        textArea0_Welcome.setText("Welcome to\nManage It Right! v0.2\n\nStart by creating a new\nevent or loading a\npreviously saved event.\n\nFollow the steps listed\non the tabs by the left.");
+        textArea0_Welcome.setBounds(500, 66, 140, 139);
+        panel0.add(textArea0_Welcome);
         
         lbl0_Step1 = new JLabel();
         lbl0_Step1.setText("  Event Details are empty.");
@@ -475,26 +495,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel0.add(lbl0_Step6);
         
         panel0.add(btn0_New);
-        panel0.add(btn0_Load);   
-        
-        scrollPane = new JScrollPane();
-        scrollPane.setBounds(409, 300, 231, 130);
-        panel0.add(scrollPane);
-        
-        JList<String> list0 = new JList<String>();
-        scrollPane.setViewportView(list0);
-        list0.addListSelectionListener(new ListSelectionListener() {
-        	public void valueChanged(ListSelectionEvent arg0) {
-        		
-        	}
-        });
-        list0.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        list0.setVisibleRowCount(5);
-        list0.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        
-        
-        
+        panel0.add(btn0_Load);
 	}
 	
 	/*
@@ -2538,7 +2539,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			textPane6_CostPerHead.setText(String.valueOf("$"+ costPerHeadStr));
 		}
 		
-		//TODO plus create table6
+		panel6.remove(scrollPane6);
+		createTable6(lg.getExpenseList(), expensesCols);
 	}
 	
 	@SuppressWarnings("deprecation")
