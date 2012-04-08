@@ -331,8 +331,9 @@ public class Logic {
 			newCal.setYear(newDate.getYear());
 			
 			String test = newDate.toLocaleString();
-			test = test.substring(0, 12);;		//get rid of time
-						
+			test = test.substring(0, 12);		//get rid of time
+			
+			test = test.trim(); //trim trailing whitespace
 			dateList.add(test);
 			dateListStoredAsMyCalendarObject.add(newCal);
 			startTime += interval;
@@ -697,7 +698,7 @@ public class Logic {
 		return event.getBudgetRatio();
 	}
 	
-	void hotelSuggest(int stars, int ratio) throws IOException, Exception{
+	void hotelSuggest(int stars) throws IOException, Exception{
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
 		hotelSuggester.setBudgetRatio(event.getBudgetRatio());

@@ -1113,23 +1113,23 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         		boolean checkbox4Star = chckbx4_4Star.isSelected();
         		boolean checkbox5Star = chckbx4_5Star.isSelected();
         		boolean[] checkbox = new boolean[3];
-        		int budgetRatio = slider4.getValue();
+        		//int budgetRatio = slider4.getValue();
         		try{
 	        		if(checkbox3Star == true){
-        				lg.hotelSuggest(3, budgetRatio);
+        				lg.hotelSuggest(3);
 	        		}
 	        		else {
 	        			checkbox3Star = false;
 	        		}
 	        		if(checkbox4Star == true){
-	        			lg.hotelSuggest(4, budgetRatio);
+	        			lg.hotelSuggest(4);
 	        		}
 	        		else {
 	        			checkbox4Star = false;
 	        		}
 	        		
 	        		if(checkbox5Star == true){
-	        			lg.hotelSuggest(5, budgetRatio);
+	        			lg.hotelSuggest(5);
 	        		}
 	        		else {
 	        			checkbox5Star = false;

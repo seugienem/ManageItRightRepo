@@ -21,7 +21,17 @@ public class MyCalendar implements Serializable{
 		this.hour = 0;
 		this.min = 0;
 	}
-	
+			
+	public MyCalendar(int dayOfTheWeek, int date, int month, int year,
+			int hour, int min) {
+		this.dayOfTheWeek = dayOfTheWeek;
+		this.date = date;
+		this.month = month;
+		this.year = year;
+		this.hour = hour;
+		this.min = min;
+	}
+
 	public void setDayOfTheWeek(int day) {
 		this.dayOfTheWeek = day;
 	}
