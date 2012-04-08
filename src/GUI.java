@@ -511,7 +511,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         list0_EventsList = new JList<String>();   
         scrollPane0_EventsList.setViewportView(list0_EventsList);
-        list0_EventsList.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        if (lg.getSavedEvents().length != 0) {
+        	list0_EventsList.setListData(lg.getSavedEvents()); 
+        }
+        list0_EventsList.setFont(new Font("Tahoma", Font.BOLD, 14));
         list0_EventsList.setVisibleRowCount(5);
         list0_EventsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
@@ -560,6 +563,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				File file = new File(selectedSavedEvent);				
 				try{					
 					lg.loadEvent(file);
+					JOptionPane.showMessageDialog(new JFrame(), "File loaded!", "", JOptionPane.PLAIN_MESSAGE );
+					
 				} catch (Exception ex){
 					JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
 				}
@@ -568,10 +573,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lg.setSavedStatus(true);
              	}
              });
-        if (lg.getSavedEvents() != null) {
-        	list0_EventsList.setListData(lg.getSavedEvents()); 
-        }
-
+        
 	}
 	
 	/*
@@ -2534,6 +2536,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				break;
 		}
 		
+		if (lg.getSavedEvents().length != 0) {
+        	list0_EventsList.setListData(lg.getSavedEvents()); 
+        }
 	
 		
 	}
@@ -2921,6 +2926,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 						
 						currEventFileDirectory = file;
 						lg.saveEvent(file);
+						updateStep0();
 						break;
 					case JFileChooser.CANCEL_OPTION:
 						break;
@@ -2931,6 +2937,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				}
 				else
 					lg.saveEvent(currEventFileDirectory);
+					updateStep0();
 			}
 			else if (obj == mntmSaveAs){
 				fileChooser = new JFileChooser(".");
@@ -2945,6 +2952,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					
 					currEventFileDirectory = file;
 					lg.saveEvent(file);
+					updateStep0();
 					break;
 				case JFileChooser.CANCEL_OPTION:
 					break;
