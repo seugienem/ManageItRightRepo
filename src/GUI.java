@@ -280,7 +280,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1); 	//TODO if there already is an existing event, we need to clear all the fields
+        		else{ 
+        			currEventFileDirectory = null;
+        			lg.createNewEvent();
+        			updateAll();
+        			jtp.setSelectedIndex(1);
+        		}
         	}
         });
         
@@ -407,7 +412,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1);		//TODO if there already is an existing event, we need to clear all the fields
+		 		else{
+	    			currEventFileDirectory = null;
+	    			lg.createNewEvent();
+	    			updateAll();
+	    			jtp.setSelectedIndex(1);
+		 		}
 		 	}
 		 });
 		 
@@ -2529,7 +2539,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			textPane6_CostPerHead.setText(String.valueOf("$"+ costPerHeadStr));
 		}
 		
-		//TODO plus create table6
+		panel6.remove(scrollPane6);
+		createTable6(lg.getExpenseList(), expensesCols);
 	}
 	
 	@SuppressWarnings("deprecation")
