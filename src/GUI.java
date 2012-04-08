@@ -514,7 +514,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         if (lg.getSavedEvents().length != 0) {
         	list0_EventsList.setListData(lg.getSavedEvents()); 
         }
-        list0_EventsList.setFont(new Font("Tahoma", Font.BOLD, 14));
+        list0_EventsList.setFont(new Font("Tahoma", Font.PLAIN, 14));
         list0_EventsList.setVisibleRowCount(5);
         list0_EventsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
