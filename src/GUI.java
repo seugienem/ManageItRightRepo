@@ -53,7 +53,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
 	private JButton btn0_New;
-	private JList<String> list0;
+	private JList<String> list0_EventsList;
 	
 	//GUI1 objects
 	private JPanel panel1;
@@ -141,6 +141,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI7 objects
 	private JTextPane textPane7_Summary;
+	private JPanel panel0_EventsListTitle;
 
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
@@ -498,27 +499,30 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel0.add(btn0_New);
         panel0.add(btn0_Load);
         
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(408, 277, 232, 152);
-        panel0.add(scrollPane);
+        panel0_EventsListTitle = new JPanel();
+        panel0_EventsListTitle.setBorder(new TitledBorder(null, "Saved Events", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        panel0_EventsListTitle.setBounds(350, 216, 290, 214);
+        panel0.add(panel0_EventsListTitle);
+        panel0_EventsListTitle.setLayout(null);
         
-        list0 = new JList<String>();   
-        scrollPane.setViewportView(list0);
-        list0.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        list0.setVisibleRowCount(5);
-        list0.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        if (lg.getSavedEvents() != null) {
-        	list0.setListData(lg.getSavedEvents()); 
-        }
-   
+        JScrollPane scrollPane0_EventsList = new JScrollPane();
+        scrollPane0_EventsList.setBounds(6, 16, 277, 190);
+        panel0_EventsListTitle.add(scrollPane0_EventsList);
         
-        list0.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		Object obj = e.getSource();
+        list0_EventsList = new JList<String>();   
+        scrollPane0_EventsList.setViewportView(list0_EventsList);
+        list0_EventsList.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        list0_EventsList.setVisibleRowCount(5);
+        list0_EventsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+             
+             list0_EventsList.addMouseListener(new MouseAdapter() {
+             	@Override
+             	public void mouseClicked(MouseEvent e) {
+             		Object obj = e.getSource();
 				@SuppressWarnings("unchecked")
 				JList<String> list = (JList<String>)obj;
-				Object selectedObj = list0.getSelectedValue();
+				Object selectedObj = list0_EventsList.getSelectedValue();
 				if(selectedObj == null)
 					return;
 				if(((String)selectedObj).equals("No saved events are found")){
@@ -552,18 +556,21 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					else if(ans == 2)
 						return;
 				}
-				String selectedSavedEvent = list0.getSelectedValue();
+				String selectedSavedEvent = list0_EventsList.getSelectedValue();
 				File file = new File(selectedSavedEvent);				
 				try{					
 					lg.loadEvent(file);
 				} catch (Exception ex){
 					JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
 				}
-      		
+           		
 				updateAll();
 				lg.setSavedStatus(true);
-        	}
-        });
+             	}
+             });
+        if (lg.getSavedEvents() != null) {
+        	list0_EventsList.setListData(lg.getSavedEvents()); 
+        }
 
 	}
 	
