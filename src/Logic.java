@@ -826,17 +826,14 @@ public class Logic {
 			Hotel item = event.getSuggestedHotels().get(index);
 			Vector<Menu> menu = item.getMenuList();
 				
-			for(Menu menuItem : menu){									
-				if(menuItem.getMenuType() == MenuType.HIGH)
+			for(Menu menuItem : menu){
+				if(menuItem.getPricePerTable() > PricePerTable)
 					PricePerTable = menuItem.getPricePerTable();
-				else
-					PricePerTable = menuItem.getPricePerTable();
-								
 			}
-				
-				return PricePerTable * ((getGuestList().size()/10) + 1);
-			}
-		return PricePerTable * ((getGuestList().size()/10) + 1);
+			return PricePerTable * event.getSeatsPerTable().size();
+		}
+		else		//selected index = -1, no hotel selected.
+			return 0;
 	}
 	
 	int getSelectedHotelIdx() {
