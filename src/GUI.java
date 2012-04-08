@@ -524,8 +524,34 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				if(((String)selectedObj).equals("No saved events are found")){
 					list.clearSelection();
 					return;
-				}				
+				}	
 				
+				if(!lg.getSavedStatus()){
+					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
+					
+					if(ans == 0){
+						fileChooser = new JFileChooser(".");
+						fileChooser.setFileFilter(new mirFilter());
+						int choice = fileChooser.showSaveDialog(new JFrame());
+						
+						switch(choice){
+						case JFileChooser.APPROVE_OPTION:
+							File file = fileChooser.getSelectedFile();
+							if(file == null)
+								return;
+							lg.saveEvent(file);
+							break;
+						case JFileChooser.CANCEL_OPTION:
+							break;
+						case JFileChooser.ERROR_OPTION:
+							System.out.println("fileChooser error");
+							break;
+						}
+						
+					}
+					else if(ans == 2)
+						return;
+				}
 				String selectedSavedEvent = list0.getSelectedValue();
 				File file = new File(selectedSavedEvent);				
 				try{					
