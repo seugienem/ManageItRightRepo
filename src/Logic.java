@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -87,7 +88,28 @@ public class Logic {
 		this.event = new Event();
 	}
 	
+	String[] getSavedEvents() {
+		File dir = new File(".");
+		FilenameFilter filter = new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.endsWith(".MIR");
+		    }
+		};
+		
+		String[] children = dir.list(filter);
+		if (children.length == 0) {	
+			String[] noEvent = new String[1];
+			noEvent[0] = "No saved events are found";
+			return noEvent;
+		}
+		
+		return children;
+
+	}
 	
+	String getSelectedSavedEvent(String[] savedEvents, int index) {
+		return savedEvents[index];
+	}
 	
 	/**************************************************************************
 	 * 
@@ -178,6 +200,7 @@ public class Logic {
 		else
 			return 1; // not finalised
 	}
+	
 	
 	
 	/*********************************************************************************
