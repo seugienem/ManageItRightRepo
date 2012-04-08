@@ -53,6 +53,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
 	private JButton btn0_New;
+	private JList<String> list0;
 	
 	//GUI1 objects
 	private JPanel panel1;
@@ -496,6 +497,48 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         panel0.add(btn0_New);
         panel0.add(btn0_Load);
+        
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(408, 277, 232, 152);
+        panel0.add(scrollPane);
+        
+        list0 = new JList<String>();   
+        scrollPane.setViewportView(list0);
+        list0.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        list0.setVisibleRowCount(5);
+        list0.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if (lg.getSavedEvents() != null) {
+        	list0.setListData(lg.getSavedEvents()); 
+        }
+   
+        
+        list0.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		Object obj = e.getSource();
+				@SuppressWarnings("unchecked")
+				JList<String> list = (JList<String>)obj;
+				Object selectedObj = list0.getSelectedValue();
+				if(selectedObj == null)
+					return;
+				if(((String)selectedObj).equals("No saved events are found")){
+					list.clearSelection();
+					return;
+				}				
+				
+				String selectedSavedEvent = list0.getSelectedValue();
+				File file = new File(selectedSavedEvent);				
+				try{					
+					lg.loadEvent(file);
+				} catch (Exception ex){
+					JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
+				}
+      		
+				updateAll();
+				lg.setSavedStatus(true);
+        	}
+        });
+
 	}
 	
 	/*
@@ -2431,6 +2474,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step4.setBackground(new Color(152, 251, 152));
 				break;
 		}
+		
+	
+		
 	}
 	
 	void updateStep1(){

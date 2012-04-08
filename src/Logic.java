@@ -90,31 +90,26 @@ public class Logic {
 	
 	String[] getSavedEvents() {
 		File dir = new File(".");
-		
-		String[] children = dir.list();
-		if (children == null) {
-			// Either dir does not exist or is not a directory
-		}
-		else {
-			for (int i=0; i<children.length; i++) {
-		        // Get filename of file or directory
-		        String filename = children[i];
-		    } 
-		}
-		
 		FilenameFilter filter = new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
 		        return name.endsWith(".MIR");
 		    }
 		};
 		
-		children = dir.list(filter);
-		
-		
+		String[] children = dir.list(filter);
+		if (children.length == 0) {	
+			String[] noEvent = new String[1];
+			noEvent[0] = "No saved events are found";
+			return noEvent;
+		}
 		
 		return children;
+
 	}
 	
+	String getSelectedSavedEvent(String[] savedEvents, int index) {
+		return savedEvents[index];
+	}
 	
 	/**************************************************************************
 	 * 
