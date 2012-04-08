@@ -2410,10 +2410,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 		
 	void updateStep0() {
-		
+		textPane0_EventName.setText(lg.getEventName());
 		switch(lg.step1Status()) {
 			case 0:
-				textPane0_EventName.setText(lg.getEventName());
 				lbl0_Step1.setText("  Event Details are empty.");
 				lbl0_Step1.setBackground(Color.PINK);
 				break;
@@ -2464,6 +2463,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step3.setBackground(new Color(152, 251, 152));
 				break;
 		}
+		
 		switch(lg.step4Status()){
 			case 0:
 				lbl0_Step4.setText("  Location not selected.");
@@ -2472,6 +2472,32 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			case 1:
 				lbl0_Step4.setText("  Location has been selected.");
 				lbl0_Step4.setBackground(new Color(152, 251, 152));
+				break;
+		}
+		
+		switch(lg.step5Status()){
+			case 0:
+				lbl0_Step5.setText("  Guests are not assigned to tables.");
+				lbl0_Step5.setBackground(Color.PINK);
+				break;
+			case 1:
+				lbl0_Step5.setText("  Guests are assigned to tables.");
+				lbl0_Step5.setBackground(new Color(152, 251, 152));
+				break;
+		}
+		
+		switch(lg.step6Status()){
+			case 0:
+				lbl0_Step6.setText("  Expenses List is empty.");
+				lbl0_Step6.setBackground(Color.PINK);
+				break;
+			case 1:
+				lbl0_Step6.setText("  Expenses List is not finalised.");
+				lbl0_Step6.setBackground(Color.PINK);
+				break;
+			case 2:
+				lbl0_Step6.setText("  Expenses List is finalised.");
+				lbl0_Step6.setBackground(new Color(152, 251, 152));
 				break;
 		}
 		

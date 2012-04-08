@@ -185,6 +185,22 @@ public class Logic {
 		else return 0;
 	}
 	
+	int step5Status() {
+		if(event.getSeatsPerTable().isEmpty())
+			return 0;
+		else
+			return 1;
+	}
+	
+	int step6Status() {
+		if(event.getExpense().isEmpty())
+			return 0; // empty list
+		if(event.getExpenseFinalised())
+			return 2; // finalised
+		else
+			return 1; // not finalised
+	}
+	
 	
 	
 	/*********************************************************************************
