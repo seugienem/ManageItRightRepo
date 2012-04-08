@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -87,6 +88,32 @@ public class Logic {
 		this.event = new Event();
 	}
 	
+	String[] getSavedEvents() {
+		File dir = new File(".");
+		
+		String[] children = dir.list();
+		if (children == null) {
+			// Either dir does not exist or is not a directory
+		}
+		else {
+			for (int i=0; i<children.length; i++) {
+		        // Get filename of file or directory
+		        String filename = children[i];
+		    } 
+		}
+		
+		FilenameFilter filter = new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.endsWith(".MIR");
+		    }
+		};
+		
+		children = dir.list(filter);
+		
+		
+		
+		return children;
+	}
 	
 	
 	/**************************************************************************
@@ -162,6 +189,7 @@ public class Logic {
 		if(event.getSelectedHotelIdx() > -1) return 1;
 		else return 0;
 	}
+	
 	
 	
 	/*********************************************************************************

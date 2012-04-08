@@ -138,6 +138,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI7 objects
 	private JTextPane textPane7_Summary;
+	private JScrollPane scrollPane;
 
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
@@ -147,7 +148,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		int Y = (screen.height / 2) - 300; // Center vertically.
 		setBounds(X, Y, 800, 600);
     	
-        setTitle("Manage It Right! v0.2");
+		if (this.getClass().getResource("checkbox.png") != null) {
+			ImageIcon myIcon = new ImageIcon(this.getClass().getResource("checkbox.png"));
+			setIconImage(myIcon.getImage());
+		}		
+		
+		setTitle("Manage It Right! v0.2");
         jtp = new JTabbedPane();
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
@@ -470,6 +476,25 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         
         panel0.add(btn0_New);
         panel0.add(btn0_Load);   
+        
+        scrollPane = new JScrollPane();
+        scrollPane.setBounds(409, 300, 231, 130);
+        panel0.add(scrollPane);
+        
+        JList<String> list0 = new JList<String>();
+        scrollPane.setViewportView(list0);
+        list0.addListSelectionListener(new ListSelectionListener() {
+        	public void valueChanged(ListSelectionEvent arg0) {
+        		
+        	}
+        });
+        list0.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        list0.setVisibleRowCount(5);
+        list0.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        
+        
+        
 	}
 	
 	/*
@@ -2976,6 +3001,4 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	    }
 
 	}
-
-	
 }
