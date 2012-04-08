@@ -67,6 +67,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JTextArea textArea1_EventDescription;
 	private JRadioButton rdbtn1_Lunch;
 	private JRadioButton rdbtn1_Dinner;
+	private ComboBox1MealDateActionListener comboBoxActionListener = new ComboBox1MealDateActionListener();
 	
 	//GUI2 objects
 	private JPanel panel2;
@@ -554,6 +555,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
        			
         		}
         		
+        		comboBox1_MealDates.removeActionListener(comboBoxActionListener);
         		if (!lg.getDateList().isEmpty()) {
         			comboBox1_MealDates.removeAllItems();
                 	Iterator<String> itr = lg.getDateList().iterator();
@@ -561,6 +563,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
                 		comboBox1_MealDates.addItem(itr.next());
                 	}
                 }
+        		comboBox1_MealDates.addActionListener(comboBoxActionListener);
         		
         		enableMealRaidoButtons();
         	}
@@ -627,6 +630,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         			}
         		}
         		
+        		comboBox1_MealDates.removeActionListener(comboBoxActionListener);
         		if (!lg.getDateList().isEmpty()) {
         			comboBox1_MealDates.removeAllItems();
                 	Iterator<String> itr = lg.getDateList().iterator();
@@ -634,6 +638,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
                 		comboBox1_MealDates.addItem(itr.next());
                 	}
                 }
+        		comboBox1_MealDates.addActionListener(comboBoxActionListener);
         		
         		enableMealRaidoButtons();
         	}
@@ -712,13 +717,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         comboBox1_MealDates = new JComboBox<String>();
         comboBox1_MealDates.setBounds(120, 222, 117, 20);
         panel1.add(comboBox1_MealDates);
-        comboBox1_MealDates.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-            	enableMealRaidoButtons();
-            	lg.setMealDateSelected(comboBox1_MealDates.getSelectedIndex());           
-            	System.out.println(lg.getMealDateSelected()); // for testing
-            }
-        });
+        comboBox1_MealDates.addActionListener(comboBoxActionListener);
         
         JLabel lbl1_MealType = new JLabel("Meal Type:");
         lbl1_MealType.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -867,6 +866,14 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				
 			}
 		}
+	}
+	
+	class ComboBox1MealDateActionListener implements ActionListener{
+		public void actionPerformed(ActionEvent actionEvent) {  
+	    	enableMealRaidoButtons();
+	    	lg.setMealDateSelected(comboBox1_MealDates.getSelectedIndex());           
+	    	System.out.println("Selected meal index " + lg.getMealDateSelected()); // for testing
+	    }
 	}
 	
 	/*
@@ -2421,6 +2428,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			rdbtn1_Dinner.setSelected(true);
 		}
 		
+		comboBox1_MealDates.removeActionListener(comboBoxActionListener);
 		if (!lg.getDateList().isEmpty()) {
 			comboBox1_MealDates.removeAllItems();
         	Iterator<String> itr = lg.getDateList().iterator();
@@ -2430,6 +2438,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         	comboBox1_MealDates.setSelectedIndex(lg.getMealDateSelected());
         	
         }
+		comboBox1_MealDates.addActionListener(comboBoxActionListener);
         
 		rdbtn1_Lunch.setEnabled(lg.getMealRadioButtons(0));
 		rdbtn1_Dinner.setEnabled(lg.getMealRadioButtons(1));
