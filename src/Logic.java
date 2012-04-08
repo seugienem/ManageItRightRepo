@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -88,7 +89,6 @@ public class Logic {
 	}
 	
 	
-	
 	/**************************************************************************
 	 * 
 	 * Overview Tab Here
@@ -161,6 +161,41 @@ public class Logic {
 		
 		if(event.getSelectedHotelIdx() > -1) return 1;
 		else return 0;
+	}
+	
+	int step5Status() {
+		if(event.getSeatsPerTable().isEmpty())
+			return 0;
+		else
+			return 1;
+	}
+	
+	int step6Status() {
+		if(event.getExpense().isEmpty())
+			return 0; // empty list
+		if(event.getExpenseFinalised())
+			return 2; // finalised
+		else
+			return 1; // not finalised
+	}
+	
+	String[] getSavedEvents() {
+		File dir = new File(".");
+		FilenameFilter filter = new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.endsWith(".MIR");
+		    }
+		};
+		
+		String[] children = dir.list(filter);
+		if (children.length == 0) {	
+			String[] noEvent = new String[1];
+			noEvent[0] = "No saved events are found";
+			return noEvent;
+		}
+		
+		return children;
+
 	}
 	
 	

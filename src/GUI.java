@@ -33,6 +33,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private File currEventFileDirectory;
 	private JTabbedPane jtp;
 	
+	private ImageIcon logo;
+	
 	//Menu Bar objects
 	private JMenu mnFile;
 	private JMenuBar menuBar;
@@ -51,6 +53,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private JTextPane textPane0_EventName;
 	private JButton btn0_Load;
 	private JButton btn0_New;
+	private JList<String> list0_EventsList;
 	
 	//GUI1 objects
 	private JPanel panel1;
@@ -138,6 +141,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	//GUI7 objects
 	private JTextPane textPane7_Summary;
+	private JPanel panel0_EventsListTitle;
 
 	public GUI(final Logic lg) throws IOException {
 		this.lg = lg;
@@ -152,6 +156,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         jtp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jtp.setTabPlacement(JTabbedPane.LEFT);
         getContentPane().add(jtp, BorderLayout.CENTER);
+        
+        try {
+        	logo = new ImageIcon("Data/MIRlogo.png");
+            setIconImage(logo.getImage());
+        } catch (Exception e) {} // does not load logo if logo image is not found.
               
         try {
      		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -273,7 +282,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1); 	//TODO if there already is an existing event, we need to clear all the fields
+        		else{ 
+        			currEventFileDirectory = null;
+        			lg.createNewEvent();
+        			updateAll();
+        			jtp.setSelectedIndex(1);
+        		}
         	}
         });
         
@@ -353,12 +367,11 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		lbl0_Overview.setBounds(10, 11, 76, 30);
 		lbl0_Overview.setFont(new Font("Tahoma", Font.BOLD, 16));
 		
-		if (this.getClass().getResource("MIR_logo.jpg") != null) {
-			ImageIcon myPicture = new ImageIcon(this.getClass().getResource("MIR_logo.jpg"));
-			JLabel lbl0_Logo = new JLabel(myPicture);
-	        lbl0_Logo.setBounds(351, 52, 300, 115);
+		try{
+			JLabel lbl0_Logo = new JLabel(logo);
+	        lbl0_Logo.setBounds(350, 66, 128, 128);
 	        panel0.add(lbl0_Logo);
-		}
+		} catch (Exception e) {}
 		
 				
 		 btn0_New = new JButton("New");        
@@ -401,7 +414,12 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         				break;
         			}
         		}
-        		else jtp.setSelectedIndex(1);		//TODO if there already is an existing event, we need to clear all the fields
+		 		else{
+	    			currEventFileDirectory = null;
+	    			lg.createNewEvent();
+	    			updateAll();
+	    			jtp.setSelectedIndex(1);
+		 		}
 		 	}
 		 });
 		 
@@ -414,10 +432,20 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 		 panel0.add(lbl0_Overview);
         
         textPane0_EventName = new JTextPane();
+        textPane0_EventName.setOpaque(false);
         textPane0_EventName.setEditable(false);
         textPane0_EventName.setFont(new Font("Tahoma", Font.PLAIN, 16));
         textPane0_EventName.setBounds(136, 11, 504, 30);
         panel0.add(textPane0_EventName);
+        
+        JTextArea textArea0_Welcome = new JTextArea();
+        textArea0_Welcome.setOpaque(false);
+        textArea0_Welcome.setEditable(false);
+        textArea0_Welcome.setAutoscrolls(false);
+        textArea0_Welcome.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        textArea0_Welcome.setText("Welcome to\nManage It Right! v0.2\n\nStart by creating a new\nevent or loading a\npreviously saved event.\n\nFollow the steps listed\non the tabs by the left.");
+        textArea0_Welcome.setBounds(500, 66, 140, 139);
+        panel0.add(textArea0_Welcome);
         
         lbl0_Step1 = new JLabel();
         lbl0_Step1.setText("  Event Details are empty.");
@@ -469,7 +497,83 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         panel0.add(lbl0_Step6);
         
         panel0.add(btn0_New);
-        panel0.add(btn0_Load);   
+        panel0.add(btn0_Load);
+        
+        panel0_EventsListTitle = new JPanel();
+        panel0_EventsListTitle.setBorder(new TitledBorder(null, "Saved Events", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        panel0_EventsListTitle.setBounds(350, 216, 290, 214);
+        panel0.add(panel0_EventsListTitle);
+        panel0_EventsListTitle.setLayout(null);
+        
+        JScrollPane scrollPane0_EventsList = new JScrollPane();
+        scrollPane0_EventsList.setBounds(6, 16, 277, 190);
+        panel0_EventsListTitle.add(scrollPane0_EventsList);
+        
+        list0_EventsList = new JList<String>();   
+        scrollPane0_EventsList.setViewportView(list0_EventsList);
+        if (lg.getSavedEvents().length != 0) {
+        	list0_EventsList.setListData(lg.getSavedEvents()); 
+        }
+        list0_EventsList.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        list0_EventsList.setVisibleRowCount(5);
+        list0_EventsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+             
+             list0_EventsList.addMouseListener(new MouseAdapter() {
+             	@Override
+             	public void mouseClicked(MouseEvent e) {
+             		Object obj = e.getSource();
+				@SuppressWarnings("unchecked")
+				JList<String> list = (JList<String>)obj;
+				Object selectedObj = list0_EventsList.getSelectedValue();
+				if(selectedObj == null)
+					return;
+				if(((String)selectedObj).equals("No saved events are found")){
+					list.clearSelection();
+					return;
+				}	
+				
+				if(!lg.getSavedStatus()){
+					int ans = JOptionPane.showConfirmDialog(null, "Do you want to save your current event?");
+					
+					if(ans == 0){
+						fileChooser = new JFileChooser(".");
+						fileChooser.setFileFilter(new mirFilter());
+						int choice = fileChooser.showSaveDialog(new JFrame());
+						
+						switch(choice){
+						case JFileChooser.APPROVE_OPTION:
+							File file = fileChooser.getSelectedFile();
+							if(file == null)
+								return;
+							lg.saveEvent(file);
+							break;
+						case JFileChooser.CANCEL_OPTION:
+							break;
+						case JFileChooser.ERROR_OPTION:
+							System.out.println("fileChooser error");
+							break;
+						}
+						
+					}
+					else if(ans == 2)
+						return;
+				}
+				String selectedSavedEvent = list0_EventsList.getSelectedValue();
+				File file = new File(selectedSavedEvent);				
+				try{					
+					lg.loadEvent(file);
+					JOptionPane.showMessageDialog(new JFrame(), "File loaded!", "", JOptionPane.PLAIN_MESSAGE );
+					
+				} catch (Exception ex){
+					JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
+				}
+           		
+				updateAll();
+				lg.setSavedStatus(true);
+             	}
+             });
+        
 	}
 	
 	/*
@@ -2341,10 +2445,9 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 		
 	void updateStep0() {
-		
+		textPane0_EventName.setText(lg.getEventName());
 		switch(lg.step1Status()) {
 			case 0:
-				textPane0_EventName.setText(lg.getEventName());
 				lbl0_Step1.setText("  Event Details are empty.");
 				lbl0_Step1.setBackground(Color.PINK);
 				break;
@@ -2395,6 +2498,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step3.setBackground(new Color(152, 251, 152));
 				break;
 		}
+		
 		switch(lg.step4Status()){
 			case 0:
 				lbl0_Step4.setText("  Location not selected.");
@@ -2405,6 +2509,38 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				lbl0_Step4.setBackground(new Color(152, 251, 152));
 				break;
 		}
+		
+		switch(lg.step5Status()){
+			case 0:
+				lbl0_Step5.setText("  Guests are not assigned to tables.");
+				lbl0_Step5.setBackground(Color.PINK);
+				break;
+			case 1:
+				lbl0_Step5.setText("  Guests are assigned to tables.");
+				lbl0_Step5.setBackground(new Color(152, 251, 152));
+				break;
+		}
+		
+		switch(lg.step6Status()){
+			case 0:
+				lbl0_Step6.setText("  Expenses List is empty.");
+				lbl0_Step6.setBackground(Color.PINK);
+				break;
+			case 1:
+				lbl0_Step6.setText("  Expenses List is not finalised.");
+				lbl0_Step6.setBackground(Color.PINK);
+				break;
+			case 2:
+				lbl0_Step6.setText("  Expenses List is finalised.");
+				lbl0_Step6.setBackground(new Color(152, 251, 152));
+				break;
+		}
+		
+		if (lg.getSavedEvents().length != 0) {
+        	list0_EventsList.setListData(lg.getSavedEvents()); 
+        }
+	
+		
 	}
 	
 	void updateStep1(){
@@ -2513,21 +2649,54 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			textPane6_CostPerHead.setText(String.valueOf("$"+ costPerHeadStr));
 		}
 		
-		//TODO plus create table6
+		panel6.remove(scrollPane6);
+		createTable6(lg.getExpenseList(), expensesCols);
 	}
 	
 	@SuppressWarnings("deprecation")
 	void updateStep7(){
-		String startdate = null;
-		String enddate = null;
+		String startdate = "";
+		String enddate = "";
 		
-		if ( lg.getEventStartDate() !=null && lg.getEventEndDate() !=null ) {
-		Date startDate = lg.getEventStartDate();
-		startdate = Integer.toString(startDate.getDate()) + "/" +  Integer.toString(startDate.getMonth()+1) 
-				+ "/" + Integer.toString(startDate.getYear()+1900);
-		Date endDate = lg.getEventEndDate();
-		enddate = Integer.toString(endDate.getDate()) + "/" + Integer.toString(endDate.getMonth()+1)
-				+ "/" + Integer.toString(endDate.getYear()+1900);
+		if (lg.getEventStartDate() !=null) {
+			Date startDate = lg.getEventStartDate();
+			startdate = Integer.toString(startDate.getDate()) + "/" +  Integer.toString(startDate.getMonth()+1) 
+					+ "/" + Integer.toString(startDate.getYear()+1900);
+			
+			String time = "";
+			int timeH = lg.getStartTimeH();
+			int timeM = lg.getStartTimeM();
+			if (timeH < 10)
+				time = time + "0" + timeH;
+			else
+				time = time + timeH;
+			if (timeM < 10)
+				time = time + "0" + timeM;
+			else
+				time = time + timeM;
+				
+			
+			startdate = startdate + "\t   " + time + " hrs";
+		}
+		
+		if (lg.getEventEndDate() !=null) {
+			Date endDate = lg.getEventEndDate();
+			enddate = Integer.toString(endDate.getDate()) + "/" + Integer.toString(endDate.getMonth()+1)
+					+ "/" + Integer.toString(endDate.getYear()+1900);
+			
+			String time = "";
+			int timeH = lg.getEndTimeH();
+			int timeM = lg.getEndTimeM();
+			if (timeH < 10)
+				time = time + "0" + timeH;
+			else
+				time = time + timeH;
+			if (timeM < 10)
+				time = time + "0" + timeM;
+			else
+				time = time + timeM;
+			
+			enddate = enddate + "\t   " + time + " hrs";
 		}
 		
 		textPane7_Summary.setText("\n" +
@@ -2538,7 +2707,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 								  "  To\t\t" + enddate + "\n\n\n" +
 								  
 								  "  No. of Guests\t" + Integer.toString(lg.getGuestList().size()) + "\n\n" +
-								  "  Total expenses\t" + (lg.getExpenseSpent()+lg.getHotelBudgetSpent()) );
+								  "  Total expenses\t$" + (lg.getExpenseSpent()+lg.getHotelBudgetSpent()) );
 	}
 	
 	
@@ -2757,6 +2926,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 						
 						currEventFileDirectory = file;
 						lg.saveEvent(file);
+						updateStep0();
 						break;
 					case JFileChooser.CANCEL_OPTION:
 						break;
@@ -2767,6 +2937,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				}
 				else
 					lg.saveEvent(currEventFileDirectory);
+					updateStep0();
 			}
 			else if (obj == mntmSaveAs){
 				fileChooser = new JFileChooser(".");
@@ -2781,6 +2952,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					
 					currEventFileDirectory = file;
 					lg.saveEvent(file);
+					updateStep0();
 					break;
 				case JFileChooser.CANCEL_OPTION:
 					break;
@@ -2976,6 +3148,4 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	    }
 
 	}
-
-	
 }
