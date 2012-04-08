@@ -1,19 +1,28 @@
+/*
+ * Logic.java - Provides functions for GUI to interact with the other objects
+ * Authors: Team MIR
+ * 
+ * 
+ * Description: This class acts as a layer separating GUI from the various objects 
+ * (Event etc.) It provides functions for GUI to get or set the various attributes,
+ * and also aids in translating some objects into a type that the GUI methods can 
+ * accept.
+ */
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
 import java.util.zip.DataFormatException;
 
 public class Logic {
-
 	private Event event;
 
 	private DataManager dm;
 	private boolean saved;
 	private HotelSuggest hotelSuggester;
 
-	public Logic(Event event, DataManager dm){ //logic instance has a Event and DataManager parameter
+	public Logic(Event event, DataManager dm){
 		this.event = event;
 		this.dm = dm;
 		saved = true;
@@ -94,17 +103,15 @@ public class Logic {
 	 * Overview Tab Here
 	 * 
 	 **************************************************************************/
-	//Get Event Name
 	String getEventName(){
 		return event.getEventName();
 	}
 
-	//Get Step 1 status
 	int step1Status(){
 		if (event.getEventType() != null &&
 				!event.getEventName().isEmpty() &&
-				!(event.getStartDateAndTime().getYear() == 0) && //!(event.getStartDateAndTime().getHour() == 0) &&
-				!(event.getEndDateAndTime().getYear() == 0) && //!(event.getEndDateAndTime().getHour() == 0) &&
+				!(event.getStartDateAndTime().getYear() == 0) && 
+				!(event.getEndDateAndTime().getYear() == 0) && 
 				event.getMealType() != null &&
 				!event.getEventDescription().isEmpty() &&
 				event.getEventBudget() != 0.0)
@@ -112,8 +119,8 @@ public class Logic {
 
 		else if (event.getEventType() == null &&
 				event.getEventName().isEmpty() &&
-				event.getStartDateAndTime().getYear() == 0 && //event.getStartDateAndTime().getHour() == 0 &&
-				event.getEndDateAndTime().getYear() == 0 && //event.getEndDateAndTime().getHour() == 0 &&
+				event.getStartDateAndTime().getYear() == 0 &&
+				event.getEndDateAndTime().getYear() == 0 && 
 				event.getMealType() == null &&
 				event.getEventDescription().isEmpty() &&
 				event.getEventBudget() == 0.0)
@@ -122,7 +129,6 @@ public class Logic {
 		else return 1;	//if Step 1 fields are partially filled		
 	}
 
-	//Get Step 2 status
 	int step2Status(){
 		if (event.getGuestList().isEmpty())
 			return 0;	//if no guest list is found
@@ -136,7 +142,6 @@ public class Logic {
 			return 2;	//not finalised, but details are in
 	}
 
-	//Get Step 3 status
 	int step3Status(){
 		if (event.getProgrammeSchedule().isEmpty())
 			return 0; //if no programme schedule is found
@@ -150,15 +155,7 @@ public class Logic {
 			return 2;
 	}
 
-	//Get Step 4 status
-	int step4Status(){
-		/* OLD CODE
-		if (event.getSuggestedHotels().size() == 0) //if no suitable hotel(s) exist for the user criteria
-			return 0;
-		else 
-			return 1; //assume that user has selected a suggested hotel
-		*/
-		
+	int step4Status(){		
 		if(event.getSelectedHotelIdx() > -1) return 1;
 		else return 0;
 	}
@@ -179,6 +176,8 @@ public class Logic {
 			return 1; // not finalised
 	}
 	
+	//Method searches for any MIR files in the program directory and returns them
+	//in a string array.
 	String[] getSavedEvents() {
 		File dir = new File(".");
 		FilenameFilter filter = new FilenameFilter() {
@@ -195,7 +194,6 @@ public class Logic {
 		}
 		
 		return children;
-
 	}
 	
 	
@@ -250,12 +248,9 @@ public class Logic {
 	int getEventType(){
 		if(event.getEventType() == null)
 			return -1;
-		else
-		{
-			//System.out.println("Ordinal: " + event.getEventType().ordinal());
+		else{
 			return event.getEventType().ordinal();
 		}
-			
 	}
 	
 	void setEventName(String name){
@@ -287,7 +282,6 @@ public class Logic {
 	    startDate.setYear(startCal.getYear());
 		startDate.setMonth(startCal.getMonth());
 		startDate.setDate(startCal.getDate());
-		
 		
 		return startDate;
 	}
@@ -366,11 +360,11 @@ public class Logic {
 			newCal.setMonth(newDate.getMonth());
 			newCal.setYear(newDate.getYear());
 			
-			String test = newDate.toLocaleString();
-			test = test.substring(0, 12);		//get rid of time
+			String dateStr = newDate.toLocaleString();
+			dateStr = dateStr.substring(0, 12);		//get rid of time
 			
-			test = test.trim(); //trim trailing whitespace
-			dateList.add(test);
+			dateStr = dateStr.trim(); //trim trailing whitespace
+			dateList.add(dateStr);
 			dateListStoredAsMyCalendarObject.add(newCal);
 			startTime += interval;
 		}           
@@ -403,7 +397,8 @@ public class Logic {
 	}
 	
 	int getStartTimeM(){
-		return event.getStartDateAndTime().getMin();// return: event start time - minutes
+		// return: event start time - minutes
+		return event.getStartDateAndTime().getMin();
 	}
 
 	void setEndTimeH(int endH){
@@ -415,7 +410,8 @@ public class Logic {
 	}
 	
 	int getEndTimeH() {
-		return event.getEndDateAndTime().getHour();// return: event start time - minutes
+		// return: event start time - minutes
+		return event.getEndDateAndTime().getHour();
 	}
 	
 	void setEndTimeM(int endM){
@@ -441,9 +437,12 @@ public class Logic {
 	
 	public void setMealType(int i) {
 		saved = false;
-		if (i == 0) event.setMealType(MealType.LUNCH);
-		else if (i == 1) event.setMealType(MealType.DINNER);
-		else event.setMealType(null);
+		if (i == 0) 
+			event.setMealType(MealType.LUNCH);
+		else if(i == 1) 
+			event.setMealType(MealType.DINNER);
+		else 
+			event.setMealType(null);
 		
 	}
 	
@@ -491,6 +490,8 @@ public class Logic {
 	 * Step 2 Functions here
 	 * 
 	 **************************************************************************/
+	//Method gets the Guest List in Vector<Guest> form and translates to 
+	//Vector<Vector<String>> form.
 	Vector<Vector<String>> getGuestNameList(){
 		Vector<Guest> guestList = event.getGuestList();
 		Vector<Vector<String>> guestVector = new Vector<Vector<String>>();
@@ -523,12 +524,10 @@ public class Logic {
 			guestDetail.add(currGuest.getEmailAddress());
 			guestDetail.add(currGuest.getContactNumber());
 			guestDetail.add(currGuest.getDescription());
-			
 
 			//Add guestDetail:vector to guestVector:vector of vector
 			guestVector.add(guestDetail);
 		}
-
 		return guestVector;
 	}
 	
@@ -547,6 +546,8 @@ public class Logic {
 		event.getGuestList().remove(index);
 	}
 	
+	//Method searches the corresponding index and field in the 
+	//guestList and sets it with the new data.
 	void setGuestInfo(int index, String field, String data){
 		saved = false;
 		switch(field){
@@ -554,7 +555,6 @@ public class Logic {
 				event.getGuestList().get(index).setName(data);
 				break;
 			case "Gender":
-				//convert to upper case
 				data = data.toUpperCase();
 				try{
 					event.getGuestList().get(index).setGender(Enum.valueOf(Gender.class, data));
@@ -577,6 +577,7 @@ public class Logic {
 		}
 	}
 	
+	//Method checks if all the guest fields are completed.
 	boolean completedGuestFields(){
 		if(event.getGuestList().size() == 0)
 			return false;
@@ -609,6 +610,8 @@ public class Logic {
 	 * Step 3 Functions here
 	 * 
 	 **************************************************************************/
+	//Method gets the Programme Schedule in Vector<Programme> form and translates to 
+	//Vector<Vector<String>> form.
 	Vector<Vector<String>> getProgrammeSchedule(){
 		Vector<Programme> programmeList = event.getProgrammeSchedule();
 		Vector<Vector<String>> programmeVector = new Vector<Vector<String>>();
@@ -647,7 +650,6 @@ public class Logic {
 			//Add programme detail to programme vector
 			programmeVector.add(programmeDetail);
 		}
-		
 		return programmeVector;
 	}
 	
@@ -666,6 +668,8 @@ public class Logic {
 		event.getProgrammeSchedule().remove(index);
 	}
 	
+	//Method searches the corresponding index and field in the 
+	//programmeSchedule and sets it with the new data.
 	void setProgrammeInfo(int index, String field, String data){
 		saved = false;
 		switch(field){
@@ -687,6 +691,7 @@ public class Logic {
 		}
 	}
 	
+	//Method checks if all the programme fields are completed.
 	boolean completedProgrammeFields(){
 		if(event.getProgrammeSchedule().size() == 0)
 			return false;
@@ -707,9 +712,10 @@ public class Logic {
 		saved = false;
 		event.setProgrammeScheduleFinalised(value);
 	}
-
+	
+	//Method goes through each entry in programme and check if programme date 
+	//still falls between start and end date
 	void checkProgrammeDates(){
-		//go through each entry in programme and check if programm still falls in the list
 		Vector<Programme> programme = event.getProgrammeSchedule();
 		Vector<String> possibleDates = event.getDateList();
 		
@@ -740,6 +746,10 @@ public class Logic {
 		return event.getBudgetRatio();
 	}
 	
+	//Method runs the hotel suggest algorithm and sets the generated hotel list
+	//in the event. Since hotelSuggest only considers 1 type of star rating,
+	//this method merges with the existing hotel list. Therefore to 
+	//generate a new hotel list, one needs to clear the existing one first.
 	void hotelSuggest(int stars) throws IOException, Exception{
 		saved = false;
 		hotelSuggester.setStars(stars);
@@ -759,6 +769,8 @@ public class Logic {
 		}
 	}
 	
+	//Methods returns suggested hotel names in the format: [x] hotelname
+	//where x is the number of stars.
 	Vector<String> getSuggestedHotelsNames(){
 		Vector<String> names = new Vector<String>();
 		for(Hotel item : event.getSuggestedHotels()){
@@ -770,6 +782,7 @@ public class Logic {
 		return names;
 	}
 	
+	//Method returns the corresponding hotel information in a formatted string.
 	String getHotelInformation(int index){
 		String hotelDetails = "";
 		if (index > -1) {
@@ -819,7 +832,10 @@ public class Logic {
 		}
 		return hotelName;
 	}
-	 
+	
+	//Method gets the selected hotel price. This is calculated
+	//by searching through the hotel's menu, and using the highest
+	//priced menu as the price per table.
 	double getSelectedHotelPrice(int index) {
 		double PricePerTable = 0;
 		if (index > -1) {
@@ -837,13 +853,11 @@ public class Logic {
 	}
 	
 	int getSelectedHotelIdx() {
-		//System.out.println(event.getSelectedHotelIdx());
 		return event.getSelectedHotelIdx();
 	}
 	
 	void setSelectedHotelIdx(int idx) {
 		saved = false;
-		//System.out.println("Set index: " + idx);
 		event.setSelectedHotelIdx(idx);
 		
 		//set curr hotel price
@@ -867,34 +881,6 @@ public class Logic {
 	 * Step 5 Functions here
 	 * 
 	 **************************************************************************/
-	/*
-	//not actually required now. this has been handled in the gui
-	Vector<Vector<String>> generateArrangement(int setting){
-		switch(setting){
-		case -1:
-			tableAssigner.setRandom(true);
-			break;
-		case 0:
-			tableAssigner.setRandom(false);
-			tableAssigner.setPopulationSize(40);
-			tableAssigner.setNumberOfGenerations(800);
-			break;
-		case 1:
-			tableAssigner.setRandom(false);
-			tableAssigner.setPopulationSize(50);
-			tableAssigner.setNumberOfGenerations(2000);
-			break;
-		case 2:
-			tableAssigner.setRandom(false);
-			tableAssigner.setPopulationSize(60);
-			tableAssigner.setNumberOfGenerations(3500);
-			break;
-		}
-		
-		return tableAssigner.generateArrangement(event.getGuestList(), 10);
-	}
-	*/
-	
 	Vector<Integer> getSeatsPerTable(){
 		return event.getSeatsPerTable();
 	}
@@ -905,7 +891,8 @@ public class Logic {
 		event.setSeatsPerTable(seatsPerTable);
 	}
 	
-	//used for drag and drop operation in GUI
+	//Method takes in the rows and columns of 2 guests and swaps them in the 
+	//arrangement index.
 	void updateArrangementIndex(int oldRow, int oldCol, int newRow, int newCol){
 		saved = false;
 		Vector<Integer> seatsPerTable = event.getSeatsPerTable();
@@ -929,6 +916,8 @@ public class Logic {
 		arrangementIndex.set(indexOfNew, temp);
 	}
 	
+	//Method gets the seating arrangement in Vector<Vector<String>> form
+	//by getting information from arrangementIndex and seatsPerTable.
 	Vector<Vector<String>> getArrangement(){
 		Vector<Vector<String>> seatingList = new Vector<Vector<String>>();
 		
@@ -959,6 +948,8 @@ public class Logic {
 	 * Step 6 Functions here
 	 * 
 	 **************************************************************************/
+	//Methods translates the Vector<Expense> expenselist into Vector<Vector<String>>
+	//form
 	Vector<Vector<String>> getExpenseList(){
 		Vector<Expense> expenseList;
 		Vector<String> expenseDetail=null;
@@ -999,6 +990,8 @@ public class Logic {
 		return expenseVector;
 	}
 	
+	//Method searches the corresponding index and field in the 
+	//expenses and sets it with the new data.
 	void setExpenseInfo(int index, String field, String data){
 		saved = false;
 		switch(field){
@@ -1025,6 +1018,7 @@ public class Logic {
 		event.setExpenseSpent(totalExpenses);
 	}
 	
+	//Method checks that all fields in expenses are completed.
 	boolean completedExpenseFields(){
 		if(event.getExpense().size() == 0){
 			return false;
@@ -1080,27 +1074,6 @@ public class Logic {
 	double getExpenseSpent() {
 		return event.getExpenseSpent();
 	}
-	/*
-	void setHotelBudgetSpent(double hotelBudget) {		
-		event.setHotelBudgetSpent(hotelBudget);
-	}
-	*/
-	/*
-	void setExpenseSpent(double expenseSpent) {
-		event.setExpenseSpent(expenseSpent);
-	}
-	*/
-	
-	/*
-	double getRemainingBudget() {
-		return event.getRemainingBudget();
-	}
-	*/
-	/*
-	void setRemainingBudget() {
-		event.setRemainingBudget(event.getEventBudget()-event.getHotelBudgetSpent()-event.getExpenseSpent());
-	}
-	*/
 
 	double getCostPerHead() {
 		return event.getCostPerHead();
