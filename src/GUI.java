@@ -2649,6 +2649,10 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 			textPane6_CostPerHead.setText(String.valueOf("$"+ costPerHeadStr));
 		}
 		
+		if(lg.completedExpenseFields())
+			chckbx6_ExpensesFinalised.setEnabled(true);
+		chckbx6_ExpensesFinalised.setSelected(lg.getExpenseFinalised());
+		
 		panel6.remove(scrollPane6);
 		createTable6(lg.getExpenseList(), expensesCols);
 	}

@@ -59,9 +59,11 @@ public class Event implements Serializable{
 			hotelCheckBox[i] = true;
 		}
 		seatsPerTable = new Vector<Integer>();
+		seatingArrangementIndex = new Vector<Integer>();
 		dateList = new Vector<String>();
 		dateListStoredAsMyCalendarObject = new Vector<MyCalendar>();
 		expenseList = new Vector<Expense>();
+		expenseFinalised = false;
 		hotelBudgetSpent = 0.0;
 		expenseSpent = 0.0;
 		remainingBudget = 0.0;
