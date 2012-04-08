@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Vector;
 
@@ -247,7 +248,7 @@ public class LogicTest {
 		tester.setDateList(new Date(112, 10, 2), new Date(112, 10, 2));
 		assertEquals("Results", 1, event.getDateList().size());
 		assertEquals("Results", 1, event.getDateListStoredAsMyCalendarObject().size());
-		assertEquals("Results", "1 Nov 2012 ", event.getDateList().get(0));	//Java Date stores 2012 as 2012 - 1900 etc.
+		assertEquals("Results", "Nov 2, 2012", event.getDateList().get(0));	//Java Date stores 2012 as 2012 - 1900 etc.
 		assertEquals("Results", 112, event.getDateListStoredAsMyCalendarObject().get(0).getYear());
 		assertEquals("Results", 10, event.getDateListStoredAsMyCalendarObject().get(0).getMonth());
 		assertEquals("Results", 2, event.getDateListStoredAsMyCalendarObject().get(0).getDate());	
@@ -384,12 +385,71 @@ public class LogicTest {
 	}
 
 	@Test
-	public void testHotelSuggest(){
+	public void testHotelSuggest() throws Exception{
+		Event event = new Event();
+		DataManager testerDataManager = new DataManager();
+		Logic tester = new Logic(event, testerDataManager);
+		HotelSuggest testerHotelSuggester = new HotelSuggest();
+		Vector<Hotel> testerHotelList;
 		
+		//Set data for Event object
+		event.setEventBudget(60000);
+		event.getDateListStoredAsMyCalendarObject().add(new MyCalendar(0, 1, 1, 2012, 18, 30)); //Sunday, 1st Jan 2012, 1830hrs
+		event.setMealDateSelected(0);
+		event.setMealType(MealType.DINNER);
+		event.setGuestList(new Vector<Guest>()); //stub guest list
+		
+		//Set non-testing data attributes for testerHotelSuggester
+		testerHotelSuggester.setEventBudget(event.getEventBudget());
+		testerHotelSuggester.setBudgetRatio(event.getBudgetRatio()); //default ratio is set to 50 (percent)
+		testerHotelSuggester.setMealDate(event.getDateListStoredAsMyCalendarObject().get(event.getMealDateSelected()));
+		testerHotelSuggester.setEventMealType(event.getMealType());
+		testerHotelSuggester.setNumberOfGuests(event.getGuestList().size());
+		
+		//Get suggested hotels
+		try {
+			//Test for budget ratio of 50 (default) (Up to hotel star rating of 3)
+			tester.clearHotelSuggestions();
+			tester.hotelSuggest(3);
+			testerHotelList = testerHotelSuggester.suggest(testerDataManager);
+			event.mergeWithExistingHotels(testerHotelList);
+			assertEquals("Results", 1, event.getSuggestedHotels().size());
+			
+			//Test for budget ratio of 30 (Up to hotel star rating of 3)
+			tester.clearHotelSuggestions();
+			event.setBudgetRatio(30);
+			tester.hotelSuggest(3);
+			testerHotelList = testerHotelSuggester.suggest(testerDataManager);
+			event.mergeWithExistingHotels(testerHotelList);
+			assertEquals("Results", 1, event.getSuggestedHotels().size());
+			
+			//Test for hotel star rating of up to 4 stars (Budget ratio of 30)
+			tester.clearHotelSuggestions();
+			event.setBudgetRatio(30);
+			tester.hotelSuggest(3);
+			tester.hotelSuggest(4);
+			testerHotelList = testerHotelSuggester.suggest(testerDataManager);
+			event.mergeWithExistingHotels(testerHotelList);
+			assertEquals("Results", 21, event.getSuggestedHotels().size());
+			
+			//Test for hotel star rating of up to 5 stars (Budget ratio of 30)
+			tester.clearHotelSuggestions();
+			tester.hotelSuggest(3);
+			tester.hotelSuggest(4);
+			tester.hotelSuggest(5);
+			testerHotelList = testerHotelSuggester.suggest(testerDataManager);
+			event.mergeWithExistingHotels(testerHotelList);
+			assertEquals("Results", 47, event.getSuggestedHotels().size());
+			
+		} catch(IOException ioEx){
+			throw ioEx;
+		} catch(Exception ex){
+			throw ex;
+		}
 	}
 
 	@Test
-	public void testGuestSuggestedHOtelsNames(){
+	public void testGuestSuggestedHotelsNames(){
 
 	}
 
