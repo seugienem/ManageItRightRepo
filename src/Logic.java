@@ -278,7 +278,6 @@ public class Logic {
 	
 	@SuppressWarnings("deprecation")
 	Date getEventStartDate() {
-		saved = false;
 		MyCalendar startCal = event.getStartDateAndTime();
 		if(startCal.getDate() == 0 && startCal.getMonth() == 0 && startCal.getYear() == 0){
 			return null;
@@ -320,6 +319,7 @@ public class Logic {
 		return endDate;
 	}
 	
+	//Method checks if start date is before end date
 	boolean checkDate(){
 		MyCalendar startCal = event.getStartDateAndTime();
 		MyCalendar endCal = event.getEndDateAndTime();
@@ -347,6 +347,7 @@ public class Logic {
 		return true;
 	}
 	
+	//Generates and sets the list of dates between start and end date
 	@SuppressWarnings("deprecation")
 	void setDateList(Date startDate, Date endDate){
 		
@@ -430,6 +431,7 @@ public class Logic {
 	}
 	
 	public void setMealDateSelected(int idx) {
+		saved = false;
 		event.setMealDateSelected(idx);
 	}
 	
@@ -438,6 +440,7 @@ public class Logic {
 	}
 	
 	public void setMealType(int i) {
+		saved = false;
 		if (i == 0) event.setMealType(MealType.LUNCH);
 		else if (i == 1) event.setMealType(MealType.DINNER);
 		else event.setMealType(null);
@@ -451,6 +454,7 @@ public class Logic {
 	}
 	
 	public void setMealRadioButtons(int index, boolean value) {
+		saved = false;
 		event.setMealRadioButtons(index, value);
 	}
 	
@@ -539,6 +543,7 @@ public class Logic {
 	}
 	
 	void removeGuest(int index){
+		saved = false;
 		event.getGuestList().remove(index);
 	}
 	
@@ -657,6 +662,7 @@ public class Logic {
 	}
 	
 	void removeProgramme(int index){
+		saved = false;
 		event.getProgrammeSchedule().remove(index);
 	}
 	
@@ -726,6 +732,7 @@ public class Logic {
 	}
 	
 	void setBudgetRatio(int budgetRatio) {
+		saved = false;
 		event.setBudgetRatio(budgetRatio);
 	}
 	
@@ -734,6 +741,7 @@ public class Logic {
 	}
 	
 	void hotelSuggest(int stars) throws IOException, Exception{
+		saved = false;
 		hotelSuggester.setStars(stars);
 		hotelSuggester.setEventBudget(event.getEventBudget());
 		hotelSuggester.setBudgetRatio(event.getBudgetRatio());
@@ -831,8 +839,6 @@ public class Logic {
 		return PricePerTable * ((getGuestList().size()/10) + 1);
 	}
 	
-	
-	
 	int getSelectedHotelIdx() {
 		//System.out.println(event.getSelectedHotelIdx());
 		return event.getSelectedHotelIdx();
@@ -855,6 +861,7 @@ public class Logic {
 	}
 	
 	void setcheckBox(boolean[] value) {
+		saved = false;
 		event.setcheckBox(value);
 	}
 	
@@ -896,11 +903,14 @@ public class Logic {
 	}
 	
 	void setArrangement(Vector<Integer> indexes, Vector<Integer> seatsPerTable){
+		saved = false;
 		event.setSeatingArrangementIndex(indexes);
 		event.setSeatsPerTable(seatsPerTable);
 	}
 	
+	//used for drag and drop operation in GUI
 	void updateArrangementIndex(int oldRow, int oldCol, int newRow, int newCol){
+		saved = false;
 		Vector<Integer> seatsPerTable = event.getSeatsPerTable();
 		Vector<Integer> arrangementIndex = event.getSeatingArrangementIndex();
 		
@@ -1053,7 +1063,8 @@ public class Logic {
 		event.getExpense().add(index, new Expense());
 	}
 	
-	void removeExpense(int index){	
+	void removeExpense(int index){
+		saved = false;
 		event.getExpense().remove(index);
 		
 		Vector<Expense> expenses = event.getExpense();
