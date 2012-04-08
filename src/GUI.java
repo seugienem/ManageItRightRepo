@@ -2643,16 +2643,48 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	
 	@SuppressWarnings("deprecation")
 	void updateStep7(){
-		String startdate = null;
-		String enddate = null;
+		String startdate = "";
+		String enddate = "";
 		
-		if ( lg.getEventStartDate() !=null && lg.getEventEndDate() !=null ) {
-		Date startDate = lg.getEventStartDate();
-		startdate = Integer.toString(startDate.getDate()) + "/" +  Integer.toString(startDate.getMonth()+1) 
-				+ "/" + Integer.toString(startDate.getYear()+1900);
-		Date endDate = lg.getEventEndDate();
-		enddate = Integer.toString(endDate.getDate()) + "/" + Integer.toString(endDate.getMonth()+1)
-				+ "/" + Integer.toString(endDate.getYear()+1900);
+		if (lg.getEventStartDate() !=null) {
+			Date startDate = lg.getEventStartDate();
+			startdate = Integer.toString(startDate.getDate()) + "/" +  Integer.toString(startDate.getMonth()+1) 
+					+ "/" + Integer.toString(startDate.getYear()+1900);
+			
+			String time = "";
+			int timeH = lg.getStartTimeH();
+			int timeM = lg.getStartTimeM();
+			if (timeH < 10)
+				time = time + "0" + timeH;
+			else
+				time = time + timeH;
+			if (timeM < 10)
+				time = time + "0" + timeM;
+			else
+				time = time + timeM;
+				
+			
+			startdate = startdate + "\t   " + time + " hrs";
+		}
+		
+		if (lg.getEventEndDate() !=null) {
+			Date endDate = lg.getEventEndDate();
+			enddate = Integer.toString(endDate.getDate()) + "/" + Integer.toString(endDate.getMonth()+1)
+					+ "/" + Integer.toString(endDate.getYear()+1900);
+			
+			String time = "";
+			int timeH = lg.getEndTimeH();
+			int timeM = lg.getEndTimeM();
+			if (timeH < 10)
+				time = time + "0" + timeH;
+			else
+				time = time + timeH;
+			if (timeM < 10)
+				time = time + "0" + timeM;
+			else
+				time = time + timeM;
+			
+			enddate = enddate + "\t   " + time + " hrs";
 		}
 		
 		textPane7_Summary.setText("\n" +
@@ -2663,7 +2695,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 								  "  To\t\t" + enddate + "\n\n\n" +
 								  
 								  "  No. of Guests\t" + Integer.toString(lg.getGuestList().size()) + "\n\n" +
-								  "  Total expenses\t" + (lg.getExpenseSpent()+lg.getHotelBudgetSpent()) );
+								  "  Total expenses\t$" + (lg.getExpenseSpent()+lg.getHotelBudgetSpent()) );
 	}
 	
 	
