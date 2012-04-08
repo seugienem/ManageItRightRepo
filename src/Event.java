@@ -1,8 +1,17 @@
+/*
+ * Event.java - Collection of all the fields required of a event.
+ * Authors: Team MIR
+ * 
+ * Description: Event.java contains all the fields that are required for a event.
+ * It also includes the various settings that users set, such as the checkboxes.
+ * 
+ * Event.java is serializable, providing facitilies for Manage It Right! to save
+ * and load back the exact same event.
+ * 
+ */
+
 import java.util.*;
 import java.io.*;
-
-//test edit
-// new test
 
 public class Event implements Serializable{
 	private static final long serialVersionUID = 1;
@@ -34,10 +43,7 @@ public class Event implements Serializable{
 	private double remainingBudget;
 	private double costPerHead;
 
-	
-	
 	public Event(){
-		//init all variables here
 		eventName = "";
 		startDateAndTime = new MyCalendar();
 		endDateAndTime = new MyCalendar();
@@ -70,22 +76,6 @@ public class Event implements Serializable{
 		costPerHead = 0.0;
 	}
 	
-/*	public Event(String eventName, Calendar start, Calendar end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
-			Vector<Programme> programmeSchedule, EventType eventType, String eventDescription){
-		this.eventName = eventName; this.startDateAndTime = start; this.endDateAndTime = end; this.eventBudget = budget;
-		this.guestList = guestList; this.suggestedHotels = suggestedHotels; this.programmeSchedule = programmeSchedule;
-		this.eventType = eventType;
-		this.eventDescription = eventDescription;
-	}
-	
-	public Event(String eventName, String start, String end, float budget, Vector<Guest> guestList, Vector<Hotel> suggestedHotels,
-			Vector<Programme> programmeSchedule, EventType eventType, String eventDescription){
-		this.eventName = eventName; this.startDateAndTime = Parser.parseStringToCalendar(start); this.endDateAndTime = Parser.parseStringToCalendar(end); 
-		this.eventBudget = budget; this.guestList = guestList; this.suggestedHotels = suggestedHotels; this.programmeSchedule = programmeSchedule;
-		this.eventType = eventType;
-		this.eventDescription = eventDescription;
-	}
-*/
 	public Vector<Integer> getSeatingArrangementIndex(){
 		return seatingArrangementIndex;
 	}
@@ -124,11 +114,7 @@ public class Event implements Serializable{
 	public void setStartDateAndTime(MyCalendar startDateAndTime) {
 		this.startDateAndTime = startDateAndTime;
 	}
-	
-/*	public void setStartDateAndTime(String startDateAndTime){
-		this.startDateAndTime = Parser.parseStringToCalendar(startDateAndTime);
-	}
-*/
+
 	public MyCalendar getEndDateAndTime() {
 		return endDateAndTime;
 	}
@@ -137,10 +123,6 @@ public class Event implements Serializable{
 		this.endDateAndTime = endDateAndTime;
 	}
 	
-/*	public void setEndDateAndTime(String endDateAndTime){
-		this.endDateAndTime = Parser.parseStringToCalendar(endDateAndTime);
-	}
-*/	
 	public void setDateList(Vector<String> dateList) {
 		this.dateList = dateList;
 	}
@@ -268,15 +250,7 @@ public class Event implements Serializable{
 	public Vector<Expense> getExpense() {
 		return expenseList;
 	}
-
-/*	public void addExpense(Expense expense) {
-		expenseList.add(expense);
-	}
 	
-	public void removeExpense(Expense expense) {
-		expenseList.remove(expense);
-	}
-*/	
 	public boolean getExpenseFinalised(){
 		return expenseFinalised;
 	}
