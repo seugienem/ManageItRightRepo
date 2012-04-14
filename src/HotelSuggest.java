@@ -10,9 +10,10 @@ public class HotelSuggest {
 	private MyCalendar mealDate;
 	private MealType eventMealType;
 	private int numberOfGuests; //assume tables of 10pax each
+	private int numberOfTables;
 	
 	//HotelSuggest constructor
-	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, MyCalendar mealDate, MealType eventMealType, int numberOfGuests){
+	public HotelSuggest(Vector<Hotel> hotelList, int stars, double eventBudget,	int budgetRatio, MyCalendar mealDate, MealType eventMealType, int numberOfGuests, int numberOfTables){
 		this.hotelList = hotelList;
 		this.stars = stars;
 		this.eventBudget = eventBudget;
@@ -20,6 +21,7 @@ public class HotelSuggest {
 		this.mealDate = mealDate;
 		this.eventMealType = eventMealType;
 		this.numberOfGuests = numberOfGuests;
+		this.numberOfTables = numberOfTables;
 	}
 	
 	public HotelSuggest() {
@@ -88,6 +90,13 @@ public class HotelSuggest {
 		this.numberOfGuests = numberOfGuests;
 	}
 	
+	public void setNumberOfTables(int numberOfTables) {
+		this.numberOfTables = numberOfTables;
+	}
+	
+	public int getNumberOfTables() {
+		return numberOfTables;
+	}
 	
 	private DayType getDayType(MyCalendar startDate2){
 		int day = startDate2.getDayOfTheWeek(); 
@@ -136,16 +145,7 @@ public class HotelSuggest {
 		double hotelBudget = (eventBudget * budgetRatio/100.0);
 		if(hotelBudget == 0)
 			exceptionErrorMessage = exceptionErrorMessage + "-Hotel budget\n";
-		
-		//Calculate number of tables required 
-		int numberOfTables;
-		if(numberOfGuests<10 && numberOfGuests != 0)
-			numberOfTables = 1;
-		else if(numberOfGuests%10 != 0)
-			numberOfTables = numberOfGuests/10 + 1;
-		else 
-			numberOfTables = numberOfGuests/10;
-		
+				
 		if(numberOfGuests == 0)
 			exceptionErrorMessage = exceptionErrorMessage + "-Guests\n";
 		

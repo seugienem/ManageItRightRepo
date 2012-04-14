@@ -595,6 +595,20 @@ public class Logic {
 		return event.getGuestList();
 	}
 	
+	int numberOfTables(){
+		int numberOfTables;
+		int numberOfGuests = getGuestList().size();
+		if(numberOfGuests<10 && numberOfGuests > 0)
+			numberOfTables = 1;
+		else if(numberOfGuests%10 != 0)
+			numberOfTables = numberOfGuests/10 + 1;
+		else 
+			numberOfTables = numberOfGuests/10;
+		
+		return numberOfTables;
+	}
+	
+	
 	void setGuestListFinalised(boolean value){
 		saved = false;
 		event.setGuestListFinalised(value);
@@ -758,6 +772,7 @@ public class Logic {
 		hotelSuggester.setMealDate(event.getDateListStoredAsMyCalendarObject().get(event.getMealDateSelected()));
 		hotelSuggester.setEventMealType(event.getMealType());
 		hotelSuggester.setNumberOfGuests(event.getGuestList().size());
+		hotelSuggester.setNumberOfTables(numberOfTables());
 		try{
 			Vector<Hotel> hotelList = hotelSuggester.suggest(dm);
 			event.mergeWithExistingHotels(hotelList);
@@ -846,7 +861,7 @@ public class Logic {
 				if(menuItem.getPricePerTable() > PricePerTable)
 					PricePerTable = menuItem.getPricePerTable();
 			}
-			return PricePerTable * event.getSeatsPerTable().size();
+			return PricePerTable * numberOfTables();
 		}
 		else		//selected index = -1, no hotel selected.
 			return 0;
@@ -861,10 +876,12 @@ public class Logic {
 		event.setSelectedHotelIdx(idx);
 		
 		//set curr hotel price
-		if(idx == -1)
-			event.setHotelBudgetSpent(0.0);
-		else
-			event.setHotelBudgetSpent(getSelectedHotelPrice(idx));
+		if(idx == -1) {
+			event.setHotelBudgetSpent(0.0);	
+		}
+		else {
+			event.setHotelBudgetSpent(getSelectedHotelPrice(idx));			
+		}
 	}
 	
 	boolean[] getcheckBox() {

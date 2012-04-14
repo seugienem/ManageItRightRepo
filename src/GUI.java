@@ -2595,6 +2595,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	}
 	
 	void updateStep6(){
+		
 		double totalBudget = lg.getBudget();
 		double totalExpenses = lg.getHotelBudgetSpent() + lg.getExpenseSpent();
 		double remainingBudget = totalBudget - totalExpenses;
