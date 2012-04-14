@@ -139,14 +139,14 @@ public class HotelSuggest {
 		
 		//Calculate number of tables required 
 		int numberOfTables;
-		if(numberOfGuests<10)
+		if(numberOfGuests<10 && numberOfGuests != 0)
 			numberOfTables = 1;
 		else if(numberOfGuests%10 != 0)
 			numberOfTables = numberOfGuests/10 + 1;
 		else 
 			numberOfTables = numberOfGuests/10;
 		
-		if(numberOfTables == 0)
+		if(numberOfGuests == 0)
 			exceptionErrorMessage = exceptionErrorMessage + "-Guests\n";
 		
 		if(eventMealType == null)

@@ -1,6 +1,5 @@
 import java.awt.Dimension;
 import java.io.IOException;
-import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 class Driver {
@@ -16,11 +15,9 @@ class Driver {
 					tp = new GUI(lg);
 					tp.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		            tp.setSize(800, 600);
-	                tp.setMinimumSize(new Dimension(800, 600));
-	                //tp.setMaximumSize(new Dimension(800, 600));
+	                tp.setMinimumSize(new Dimension(800, 600));	                
 	                tp.setVisible(true);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				} catch (IOException e) {			
 					e.printStackTrace();
 				}
         	}

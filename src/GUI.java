@@ -334,7 +334,8 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				case 5:
 					updateStep5();
 					break;
-				case 6:					
+				case 6:	
+					updateStep6();
 					break;
 				case 7:
 					updateStep7();
@@ -1261,6 +1262,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				textPane4_HotelDetails.setText(lg.getHotelInformation(list.getSelectedIndex()));
 				lg.setSelectedHotelIdx(list4.getSelectedIndex()); 							
 				updateStep6();
+				
 			}
         });
         
