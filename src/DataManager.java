@@ -14,6 +14,7 @@ public class DataManager{
 	ProgrammeDataManager programmeDataManager;
 	HotelDataManager hotelDataManager;
 	GuestDataManager guestDataManager;
+	TableAssignerDataManager tableAssignerDataManager;
 	ExpenseDataManager expenseDataManager;
 	
 	public DataManager(){
@@ -21,6 +22,7 @@ public class DataManager{
 		programmeDataManager = new ProgrammeDataManager();
 		hotelDataManager = new HotelDataManager();
 		guestDataManager = new GuestDataManager();
+		tableAssignerDataManager = new TableAssignerDataManager();
 		expenseDataManager = new ExpenseDataManager();
 	}
 	
@@ -80,6 +82,10 @@ public class DataManager{
 			dataEx.printStackTrace();
 			return new Vector<Programme>();
 		}
+	}
+	
+	public void exportTableAssigner(File out, Vector<Vector<String>> tableAssignerOut){
+		tableAssignerDataManager.saveTableAssignmentList(out, tableAssignerOut);
 	}
 	
 	public void exportExpense(File out, Vector<Expense> expenseOut){

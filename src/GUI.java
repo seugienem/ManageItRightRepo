@@ -128,6 +128,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 	private Vector<String> tableCols;
 	private JButton btn5_Next;
 	private ProgressMonitor progressMonitor5;
+	private JButton btn5_Export;
 	
 	//GUI6 objects
 	private JPanel panel6;
@@ -174,7 +175,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
             setIconImage(logo.getImage());
         } catch (Exception e) {} // does not load logo if logo image is not found.
               
-              
+      
         fileChooser = new JFileChooser(".");
         exportImportButtonsListener = new ExportImportButtonsListener();
         
@@ -560,7 +561,7 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 						JOptionPane.showMessageDialog(new JFrame(), "File loaded!", "", JOptionPane.PLAIN_MESSAGE );
 						
 					} catch (Exception ex){
-						JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.");
+						JOptionPane.showMessageDialog(new JFrame(), "Error importing Event file. Make sure file is valid.","Error", JOptionPane.ERROR_MESSAGE);
 					}
 	           		
 					updateAll();
@@ -1377,7 +1378,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
         btn5_Next.setFont(new Font("Tahoma", Font.BOLD, 12));
         btn5_Next.setBounds(560, 490, 80, 30);
         panel5.add(btn5_Next);
+        
+        btn5_Export = new JButton("Export");     
+        btn5_Export.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btn5_Export.setBounds(10, 490, 80, 30);
+        panel5.add(btn5_Export);
         btn5_Next.addMouseListener(this);
+        btn5_Export.addActionListener(exportImportButtonsListener);
 	}
 	
 	/**************************************************************************************************
@@ -2767,7 +2774,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					File file = fileChooser.getSelectedFile();
 					if(file == null)
 						return;
-					lg.exportGuest(file);
+					try{					
+						lg.exportGuest(file);
+						JOptionPane.showMessageDialog(new JFrame(), "File exported!", "", JOptionPane.PLAIN_MESSAGE );
+						
+					} catch (Exception ex){
+						JOptionPane.showMessageDialog(new JFrame(), "Error exporting CSV file", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 					break;
 				case JFileChooser.CANCEL_OPTION:
 					break;
@@ -2785,8 +2798,39 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 				case JFileChooser.APPROVE_OPTION:
 					File file = fileChooser.getSelectedFile();
 					if(file == null)
+						return;					
+					try{					
+						lg.exportProgramme(file);
+						JOptionPane.showMessageDialog(new JFrame(), "File exported!", "", JOptionPane.PLAIN_MESSAGE );
+						
+					} catch (Exception ex){
+						JOptionPane.showMessageDialog(new JFrame(), "Error exporting CSV file", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					break;
+				case JFileChooser.CANCEL_OPTION:
+					break;
+				case JFileChooser.ERROR_OPTION:
+					System.out.println("fileChooser error");
+					break;
+				}
+			}
+			else if(obj == btn5_Export){
+				fileChooser = new JFileChooser(".");
+				fileChooser.setFileFilter(new csvFilter());
+				int choice = fileChooser.showSaveDialog(frame);
+				
+				switch(choice){
+				case JFileChooser.APPROVE_OPTION:
+					File file = fileChooser.getSelectedFile();
+					if(file == null)
 						return;
-					lg.exportProgramme(file);
+					try{					
+						lg.exportTableAssignment(file);
+						JOptionPane.showMessageDialog(new JFrame(), "File exported!", "", JOptionPane.PLAIN_MESSAGE );
+						
+					} catch (Exception ex){
+						JOptionPane.showMessageDialog(new JFrame(), "Error exporting CSV file", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 					break;
 				case JFileChooser.CANCEL_OPTION:
 					break;
@@ -2805,7 +2849,13 @@ public class GUI extends JFrame implements FocusListener, MouseListener {
 					File file = fileChooser.getSelectedFile();
 					if(file == null)
 						return;
-					lg.exportExpense(file);
+					try{					
+						lg.exportExpense(file);
+						JOptionPane.showMessageDialog(new JFrame(), "File exported!", "", JOptionPane.PLAIN_MESSAGE );
+						
+					} catch (Exception ex){
+						JOptionPane.showMessageDialog(new JFrame(), "Error exporting CSV file", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 					break;
 				case JFileChooser.CANCEL_OPTION:
 					break;

@@ -86,6 +86,13 @@ public class Logic {
 		dm.exportProgramme(out, event.getProgrammeSchedule());
 	}
 	
+	void exportTableAssignment(File out) {
+		if(!out.toString().toUpperCase().endsWith(".CSV")){
+			out = new File(out.toString().concat(".CSV"));
+		}
+		dm.exportTableAssigner(out, getArrangement());
+	}
+	
 	void exportExpense(File out) {
 		if(!out.toString().toUpperCase().endsWith(".CSV")){
 			out = new File(out.toString().concat(".CSV"));
